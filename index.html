@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SineBot — Film & Dizi Öneri Rehberi</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d14;--bg2:#13131f;--bg3:#1c1c2e;--bg4:#252540;
+  --acc:#f5a623;--acc2:#e8485a;--acc3:#4ecdc4;
+  --text:#f0eaff;--text2:#a09cc0;--text3:#6b6890;--card:#1a1a2e;
+}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden}
+.header{background:linear-gradient(180deg,#1a0a2e 0%,#0d0d14 100%);padding:24px 24px 18px;text-align:center;border-bottom:1px solid rgba(245,166,35,0.15);position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:200px;background:radial-gradient(ellipse,rgba(245,166,35,0.12) 0%,transparent 70%);pointer-events:none}
+.logo-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:4px}
+.logo-icon{font-size:34px}
+.logo-text{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:3px;background:linear-gradient(135deg,#f5a623,#ff6b6b,#4ecdc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.logo-sub{font-size:11px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;font-weight:600}
+.nav{display:flex;max-width:900px;margin:14px auto 0;padding:0 20px;gap:8px}
+.nav-btn{flex:1;padding:11px;border:2px solid rgba(255,255,255,0.08);background:transparent;color:var(--text2);font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;border-radius:10px;transition:all .2s}
+.nav-btn.active{background:var(--acc);border-color:var(--acc);color:#000}
+.nav-btn:hover:not(.active){border-color:rgba(245,166,35,0.4);color:var(--text)}
+.main{max-width:900px;margin:0 auto;padding:20px 20px 60px}
+.sec-head{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.sec-head::after{content:'';flex:1;height:1px;background:rgba(245,166,35,0.2)}
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tab{flex:1;padding:12px;border:2px solid rgba(255,255,255,0.08);background:transparent;color:var(--text2);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;border-radius:10px;transition:all .2s}
+.tab.active{background:var(--acc);border-color:var(--acc);color:#000}
+.tab:hover:not(.active){border-color:rgba(245,166,35,0.4);color:var(--text)}
+.genres{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.gchip{padding:7px 15px;border:1.5px solid rgba(255,255,255,0.1);background:var(--bg3);color:var(--text2);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;border-radius:50px;cursor:pointer;transition:all .18s;user-select:none}
+.gchip:hover{border-color:rgba(245,166,35,0.5);color:var(--text)}
+.gchip.on{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:24px}
+.fbox label{display:block;font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--acc3);margin-bottom:6px}
+.fbox select{width:100%;background:var(--bg3);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px 12px;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b6890' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:calc(100% - 12px) center;padding-right:30px}
+.fbox select:focus{border-color:var(--acc3)}
+.fbox select option{background:#1c1c2e}
+.cta{width:100%;padding:18px;background:linear-gradient(135deg,#f5a623 0%,#e8485a 50%,#9b59b6 100%);background-size:200% 100%;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#fff;cursor:pointer;transition:all .3s;box-shadow:0 8px 32px rgba(245,166,35,0.2)}
+.cta:hover:not(:disabled){background-position:100% 0;transform:translateY(-2px);box-shadow:0 14px 40px rgba(232,72,90,0.35)}
+.cta:disabled{opacity:0.5;cursor:not-allowed}
+.err{margin-top:14px;padding:14px 18px;border:1.5px solid rgba(232,72,90,0.5);background:rgba(232,72,90,0.08);border-radius:10px;font-size:14px;color:#ff9999;font-weight:600}
+.loading{padding:70px 20px;text-align:center}
+.reel{font-size:60px;display:inline-block;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(135deg,#f5a623,#e8485a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:14px}
+.load-sub{font-size:12px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:6px;font-weight:600}
+.search-wrap{margin-bottom:20px;position:relative}
+.search-row{display:flex;gap:10px}
+.search-input{flex:1;background:var(--bg3);border:2px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--text);font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;padding:14px 18px;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--acc3)}
+.search-input::placeholder{color:var(--text3)}
+.search-btn{padding:14px 22px;background:linear-gradient(135deg,var(--acc3),#2bb5ad);border:none;border-radius:12px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.search-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(78,205,196,0.35)}
+.stype-row{display:flex;gap:8px;margin-top:10px}
+.stype{padding:7px 16px;border:1.5px solid rgba(255,255,255,0.1);background:transparent;color:var(--text2);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;border-radius:50px;cursor:pointer;transition:all .2s}
+.stype.active{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.search-results{position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;z-index:100;overflow:hidden;margin-top:6px;max-height:340px;overflow-y:auto}
+.sr-item{display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,0.05)}
+.sr-item:last-child{border-bottom:none}
+.sr-item:hover{background:var(--bg3)}
+.sr-poster{width:36px;height:54px;object-fit:cover;border-radius:4px;flex-shrink:0;background:var(--bg3)}
+.sr-info{flex:1;min-width:0}
+.sr-title{font-size:14px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr-meta{font-size:12px;color:var(--text3);font-weight:600;margin-top:2px}
+.sr-score{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--acc);flex-shrink:0}
+.result-wrap{animation:riseIn .5s cubic-bezier(.16,1,.3,1)}
+@keyframes riseIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero{position:relative;min-height:340px;border-radius:18px 18px 0 0;overflow:hidden;background:var(--bg3)}
+.hero-backdrop{position:absolute;inset:0;background-size:cover;background-position:center top;filter:brightness(0.3) saturate(0.7)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,10,20,1) 0%,rgba(10,10,20,0.5) 55%,transparent 100%)}
+.hero-content{position:relative;z-index:2;display:flex;gap:24px;padding:24px;align-items:flex-end;min-height:340px}
+.big-poster{flex:0 0 160px}
+@media(max-width:560px){.big-poster{flex:0 0 110px}}
+.big-poster img{width:100%;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.7);display:block}
+.big-poster-ph{width:100%;aspect-ratio:2/3;background:var(--bg4);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:48px}
+.hero-info{flex:1;min-width:0;padding-bottom:4px}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.hb{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:50px}
+.hb-type{background:rgba(232,72,90,0.25);border:1.5px solid rgba(232,72,90,0.6);color:#ff8fa3}
+.hb-year{background:rgba(78,205,196,0.15);border:1.5px solid rgba(78,205,196,0.4);color:var(--acc3)}
+.hb-extra{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:var(--text2)}
+.hb-award{background:rgba(245,166,35,0.15);border:1.5px solid rgba(245,166,35,0.4);color:var(--acc)}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,5vw,46px);letter-spacing:1px;color:#fff;line-height:1;margin-bottom:6px;text-shadow:0 2px 20px rgba(0,0,0,0.8)}
+.hero-orig{font-size:13px;color:var(--text3);font-weight:600;font-style:italic;margin-bottom:10px}
+.hero-genres{display:flex;flex-wrap:wrap;gap:6px}
+.htag{font-size:12px;font-weight:700;padding:3px 11px;border-radius:50px;background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:var(--acc)}
+.scores-section{background:var(--bg2);padding:14px 20px;display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;border-bottom:1px solid rgba(255,255,255,0.05)}
+.score-card{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px;min-width:80px;flex:1;text-decoration:none;transition:transform .15s,box-shadow .15s;cursor:default}
+.score-card.clickable{cursor:pointer}
+.score-card.clickable:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3)}
+.score-card.tmdb{background:rgba(1,180,228,0.1);border:1.5px solid rgba(1,180,228,0.3)}
+.score-card.imdb{background:rgba(245,197,24,0.1);border:1.5px solid rgba(245,197,24,0.35)}
+.score-card.rt-fresh{background:rgba(60,200,60,0.1);border:1.5px solid rgba(60,200,60,0.35)}
+.score-card.rt-rotten{background:rgba(232,72,90,0.1);border:1.5px solid rgba(232,72,90,0.35)}
+.score-card.mc-good{background:rgba(0,200,100,0.1);border:1.5px solid rgba(0,200,100,0.3)}
+.score-card.mc-mixed{background:rgba(245,166,35,0.1);border:1.5px solid rgba(245,166,35,0.3)}
+.score-card.mc-bad{background:rgba(232,72,90,0.1);border:1.5px solid rgba(232,72,90,0.3)}
+.score-card.pop{background:rgba(155,89,182,0.1);border:1.5px solid rgba(155,89,182,0.3)}
+.sc-logo{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:0.8}
+.sc-icon{font-size:18px;margin-bottom:2px}
+.sc-num{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;line-height:1}
+.sc-sub{font-size:10px;font-weight:600;margin-top:3px;opacity:0.6;text-align:center}
+.score-card.tmdb .sc-logo,.score-card.tmdb .sc-num{color:#01b4e4}
+.score-card.imdb .sc-logo,.score-card.imdb .sc-num{color:#F5C518}
+.score-card.rt-fresh .sc-logo,.score-card.rt-fresh .sc-num{color:#3CC83C}
+.score-card.rt-rotten .sc-logo,.score-card.rt-rotten .sc-num{color:#e8485a}
+.score-card.mc-good .sc-logo,.score-card.mc-good .sc-num{color:#00c864}
+.score-card.mc-mixed .sc-logo,.score-card.mc-mixed .sc-num{color:#f5a623}
+.score-card.mc-bad .sc-logo,.score-card.mc-bad .sc-num{color:#e8485a}
+.score-card.pop .sc-logo,.score-card.pop .sc-num{color:#9b59b6}
+.detail-body{background:var(--card);border-radius:0 0 18px 18px;overflow:hidden}
+.body-section{padding:18px 22px}
+.body-section+.body-section{border-top:1px solid rgba(255,255,255,0.06)}
+.section-title{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+.overview-text{font-size:15px;line-height:1.85;color:var(--text2);font-weight:600;border-left:3px solid var(--acc);padding-left:16px}
+.credit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.credit-item{font-size:14px;color:var(--text2);font-weight:600}
+.credit-item b{color:var(--text);font-weight:800;display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+.cast-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.cast-scroll::-webkit-scrollbar{height:4px}
+.cast-scroll::-webkit-scrollbar-track{background:var(--bg3);border-radius:2px}
+.cast-scroll::-webkit-scrollbar-thumb{background:var(--acc);border-radius:2px}
+.cast-card{flex:0 0 90px;text-align:center;text-decoration:none;transition:transform .2s}
+.cast-card:hover{transform:translateY(-4px)}
+.cast-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px;border:2px solid rgba(255,255,255,0.1);background:var(--bg3)}
+.cast-photo-ph{width:80px;height:80px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 8px;border:2px solid rgba(255,255,255,0.1)}
+.cast-name{font-size:11px;font-weight:800;color:var(--text);line-height:1.3}
+.cast-char{font-size:10px;color:var(--text3);font-weight:600;margin-top:2px}
+.cast-card:hover .cast-name{color:var(--acc)}
+.plat-grid{display:flex;flex-wrap:wrap;gap:10px}
+.plat-chip{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:50px;background:var(--bg3);border:1.5px solid rgba(255,255,255,0.1);font-size:13px;font-weight:700;color:var(--text);transition:all .2s;text-decoration:none}
+.plat-chip:hover{border-color:var(--acc3);color:var(--acc3);transform:translateY(-2px)}
+.plat-chip img{width:22px;height:22px;border-radius:6px;object-fit:cover}
+.plat-type{font-size:10px;opacity:0.55;margin-left:2px}
+.review-card{background:var(--bg3);border-radius:12px;padding:16px 18px;margin-bottom:10px;border-left:3px solid var(--acc2)}
+.review-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.review-avatar{width:34px;height:34px;border-radius:50%;background:var(--acc2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;flex-shrink:0}
+.review-meta{flex:1}
+.review-author{font-size:14px;font-weight:800;color:var(--text)}
+.review-date{font-size:11px;color:var(--text3);font-weight:600}
+.review-score{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--acc)}
+.review-text{font-size:13px;line-height:1.75;color:var(--text2);font-weight:600}
+.actions{padding:16px 22px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:10px;flex-wrap:wrap}
+.btn-primary{flex:1;min-width:120px;padding:13px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,#f5a623,#e8485a);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#fff;transition:all .2s;box-shadow:0 6px 20px rgba(232,72,90,0.2)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.btn-imdb{padding:13px 16px;border-radius:12px;text-decoration:none;background:rgba(245,197,24,0.1);border:2px solid rgba(245,197,24,0.4);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;color:#F5C518;transition:all .2s;display:flex;align-items:center;gap:6px}
+.btn-imdb:hover{background:rgba(245,197,24,0.2);border-color:#F5C518}
+.btn-back{padding:13px 16px;border-radius:12px;cursor:pointer;background:transparent;border:1.5px solid rgba(255,255,255,0.12);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--text2);transition:all .2s}
+.btn-back:hover{border-color:rgba(255,255,255,0.3);color:var(--text)}
+.seen-badge{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:5px 14px;border-radius:50px;background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.3);font-size:12px;font-weight:800;color:var(--acc3);letter-spacing:1px}
+.search-hint{text-align:center;padding:60px 20px;color:var(--text3)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-wrap">
+    <span class="logo-icon">🎬</span>
+    <span class="logo-text">SINEBOT</span>
+  </div>
+  <div class="logo-sub">IMDb · RT · Metacritic · TMDB</div>
+  <div class="nav">
+    <button class="nav-btn active" id="nav-discover" onclick="showSection('discover')">🎲 Keşfet</button>
+    <button class="nav-btn" id="nav-search" onclick="showSection('search')">🔍 Arama</button>
+  </div>
+</div>
+
+<!-- DISCOVER -->
+<div id="section-discover" class="main">
+  <div class="tabs">
+    <button class="tab active" id="tab-movie" onclick="switchType('movie')">🎬 Film</button>
+    <button class="tab" id="tab-tv" onclick="switchType('tv')">📺 Dizi</button>
+  </div>
+  <div class="sec-head">Tür Seç</div>
+  <div class="genres" id="genres-wrap"></div>
+  <div class="sec-head">Filtrele</div>
+  <div class="filters">
+    <div class="fbox">
+      <label>Platform (TR)</label>
+      <select id="f-platform">
+        <option value="">Tüm Platformlar</option>
+        <option value="8">Netflix</option>
+        <option value="119">Amazon Prime</option>
+        <option value="337">Disney+</option>
+        <option value="341">Apple TV+</option>
+        <option value="384">Max (HBO)</option>
+        <option value="283">Crunchyroll</option>
+        <option value="210">Paramount+</option>
+        <option value="188">YouTube Premium</option>
+      </select>
+    </div>
+    <div class="fbox">
+      <label>Min. Puan</label>
+      <select id="f-rating">
+        <option value="0">Tümü</option>
+        <option value="6">6.0+</option>
+        <option value="7">7.0+</option>
+        <option value="7.5">7.5+</option>
+        <option value="8">8.0+</option>
+        <option value="8.5">8.5+</option>
+      </select>
+    </div>
+    <div class="fbox">
+      <label>Başlangıç Yılı</label>
+      <select id="f-from"><option value="">Tümü</option></select>
+    </div>
+    <div class="fbox">
+      <label>Bitiş Yılı</label>
+      <select id="f-to"><option value="">Şimdiye Kadar</option></select>
+    </div>
+  </div>
+  <button class="cta" id="cta-btn" onclick="startDiscover()">🎲 &nbsp; RASTGELE ÖNER</button>
+  <div class="err hidden" id="err-box"></div>
+</div>
+
+<!-- SEARCH -->
+<div id="section-search" class="main hidden">
+  <div class="search-wrap" id="search-wrap">
+    <div class="search-row">
+      <input class="search-input" id="search-input" type="text" placeholder="Film veya dizi ara..." autocomplete="off">
+      <button class="search-btn" onclick="doSearch()">ARA</button>
+    </div>
+    <div class="stype-row">
+      <button class="stype active" id="stype-multi" onclick="setSType('multi')">Hepsi</button>
+      <button class="stype" id="stype-movie" onclick="setSType('movie')">🎬 Film</button>
+      <button class="stype" id="stype-tv" onclick="setSType('tv')">📺 Dizi</button>
+    </div>
+    <div class="search-results hidden" id="search-results"></div>
+  </div>
+  <div class="search-hint" id="search-hint">
+    <div style="font-size:48px;margin-bottom:16px">🔍</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--text2)">Film veya dizi ara</div>
+    <div style="font-size:13px;margin-top:8px;font-weight:600">İsim yazın, sonuçlara tıklayın</div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="view-loading" class="main hidden">
+  <div class="loading">
+    <div class="reel">🎞️</div>
+    <div class="load-title">Yükleniyor...</div>
+    <div class="load-sub" id="load-sub">Hazırlanıyor</div>
+  </div>
+</div>
+
+<!-- DETAIL -->
+<div id="view-detail" class="main hidden">
+  <div class="result-wrap">
+    <div class="seen-badge hidden" id="seen-badge">👁 0 öneri</div>
+    <div class="hero">
+      <div class="hero-backdrop" id="d-backdrop"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="big-poster" id="d-poster-wrap"></div>
+        <div class="hero-info">
+          <div class="hero-badges" id="d-badges"></div>
+          <div class="hero-title" id="d-title"></div>
+          <div class="hero-orig hidden" id="d-orig"></div>
+          <div class="hero-genres" id="d-genres"></div>
+        </div>
+      </div>
+    </div>
+    <div class="scores-section" id="d-scores"></div>
+    <div class="detail-body">
+      <div class="body-section" id="d-overview-sec">
+        <div class="section-title">Konu</div>
+        <div class="overview-text" id="d-overview"></div>
+      </div>
+      <div class="body-section" id="d-credits-sec">
+        <div class="section-title">Künye</div>
+        <div class="credit-grid" id="d-credits"></div>
+      </div>
+      <div class="body-section" id="d-cast-sec">
+        <div class="section-title">Oyuncu Kadrosu</div>
+        <div class="cast-scroll" id="d-cast"></div>
+      </div>
+      <div class="body-section" id="d-plat-sec">
+        <div class="section-title">Türkiye'de İzle</div>
+        <div class="plat-grid" id="d-platforms"></div>
+      </div>
+      <div class="body-section hidden" id="d-reviews-sec">
+        <div class="section-title">Yorumlar</div>
+        <div id="d-reviews"></div>
+      </div>
+      <div class="actions">
+        <button class="btn-primary hidden" id="btn-again" onclick="doDiscover()">🎲 BAŞKA ÖNER</button>
+        <a class="btn-imdb hidden" id="d-imdb" target="_blank" rel="noreferrer">⭐ IMDb</a>
+        <button class="btn-back" onclick="goBack()">← Geri</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TMDB_TOKEN="eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTUwNDQ1MzgyMjVkMTViZTEzNzY5M2ViNWNhZWUyMSIsIm5iZiI6MTc2NjgzNTIyNC4xNjUsInN1YiI6IjY5NGZjNDE4NWQ0ZmE5NmNlMjE1NzBhNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.6FhB66C_5nlGODH2Py47m0ydpK3r5h3zUlFNlmX6sxQ";
+const OMDB_KEY="3490780b";
+const TMDB_BASE="https://api.themoviedb.org/3";
+const OMDB_BASE="https://www.omdbapi.com";
+const TH={"Authorization":"Bearer "+TMDB_TOKEN};
+const IMG="https://image.tmdb.org/t/p/w500";
+const IMG_O="https://image.tmdb.org/t/p/original";
+const IMG_F="https://image.tmdb.org/t/p/w185";
+const CY=new Date().getFullYear();
+
+const PLAT_URLS={
+  8:"https://www.netflix.com/search?q=",
+  119:"https://www.amazon.com.tr/gp/video/search/?phrase=",
+  337:"https://www.disneyplus.com/search/",
+  341:"https://tv.apple.com/tr/search?term=",
+  384:"https://www.max.com/search?q=",
+  283:"https://www.crunchyroll.com/search?q=",
+  210:"https://www.paramountplus.com/search/results/",
+  188:"https://www.youtube.com/results?search_query="
+};
+
+const GM=[{id:28,n:"Aksiyon"},{id:12,n:"Macera"},{id:16,n:"Animasyon"},{id:35,n:"Komedi"},{id:80,n:"Suç"},{id:99,n:"Belgesel"},{id:18,n:"Drama"},{id:14,n:"Fantezi"},{id:36,n:"Tarih"},{id:27,n:"Korku"},{id:9648,n:"Gizem"},{id:10749,n:"Romantik"},{id:878,n:"Bilim Kurgu"},{id:53,n:"Gerilim"},{id:10752,n:"Savaş"},{id:37,n:"Western"}];
+const GT=[{id:10759,n:"Aksiyon"},{id:16,n:"Animasyon"},{id:35,n:"Komedi"},{id:80,n:"Suç"},{id:99,n:"Belgesel"},{id:18,n:"Drama"},{id:10751,n:"Aile"},{id:9648,n:"Gizem"},{id:10765,n:"Sci-Fi & Fantezi"},{id:10768,n:"Politika"},{id:37,n:"Western"}];
+
+let mediaType="movie",selGenres=[],searchType="multi",fromSection="discover";
+const memory={};
+
+(function(){
+  const fy=document.getElementById("f-from"),ty=document.getElementById("f-to");
+  for(let y=CY;y>=1970;y--){
+    fy.innerHTML+=`<option value="${y}">${y}</option>`;
+    ty.innerHTML+=`<option value="${y}">${y}</option>`;
+  }
+})();
+
+function showSection(s){
+  fromSection=s;
+  ["discover","search"].forEach(n=>document.getElementById("section-"+n).classList.toggle("hidden",s!==n));
+  ["nav-discover","nav-search"].forEach(n=>document.getElementById(n).classList.toggle("active",n==="nav-"+s));
+  document.getElementById("view-loading").classList.add("hidden");
+  document.getElementById("view-detail").classList.add("hidden");
+}
+function showView(v){
+  ["discover","search"].forEach(n=>document.getElementById("section-"+n).classList.add("hidden"));
+  document.getElementById("view-loading").classList.toggle("hidden",v!=="loading");
+  document.getElementById("view-detail").classList.toggle("hidden",v!=="detail");
+}
+function goBack(){showSection(fromSection)}
+function setSub(t){document.getElementById("load-sub").textContent=t}
+function switchType(t){
+  mediaType=t;selGenres=[];
+  document.getElementById("tab-movie").className="tab"+(t==="movie"?" active":"");
+  document.getElementById("tab-tv").className="tab"+(t==="tv"?" active":"");
+  renderGenres();
+}
+function renderGenres(){
+  const list=mediaType==="movie"?GM:GT;
+  document.getElementById("genres-wrap").innerHTML=list.map(g=>
+    `<button class="gchip${selGenres.includes(g.id)?" on":""}" onclick="toggleGenre(${g.id},this)">${g.n}</button>`
+  ).join("");
+}
+function toggleGenre(id,el){
+  selGenres.includes(id)?selGenres=selGenres.filter(x=>x!==id):selGenres.push(id);
+  el.classList.toggle("on");
+}
+function setSType(t){
+  searchType=t;
+  ["multi","movie","tv"].forEach(x=>document.getElementById("stype-"+x).classList.toggle("active",x===t));
+}
+function showErr(msg){const el=document.getElementById("err-box");el.textContent="⚠ "+msg;el.classList.remove("hidden")}
+function hideErr(){document.getElementById("err-box").classList.add("hidden")}
+
+async function tmdb(path){
+  const r=await fetch(TMDB_BASE+path,{headers:TH});
+  if(!r.ok)throw new Error("TMDB "+r.status);
+  return r.json();
+}
+async function omdbFetch(imdbId){
+  try{
+    const r=await fetch(`${OMDB_BASE}/?i=${imdbId}&apikey=${OMDB_KEY}`);
+    const d=await r.json();
+    return d.Response==="True"?d:null;
+  }catch(e){return null}
+}
+
+let sTimer=null;
+const sInp=document.getElementById("search-input");
+sInp.addEventListener("input",()=>{
+  clearTimeout(sTimer);
+  const q=sInp.value.trim();
+  if(q.length<2){document.getElementById("search-results").classList.add("hidden");return}
+  sTimer=setTimeout(doSearch,420);
+});
+sInp.addEventListener("keydown",e=>{if(e.key==="Enter")doSearch()});
+document.addEventListener("click",e=>{
+  if(!document.getElementById("search-wrap").contains(e.target))
+    document.getElementById("search-results").classList.add("hidden");
+});
+
+async function doSearch(){
+  const q=sInp.value.trim();if(!q)return;
+  const sr=document.getElementById("search-results");
+  sr.innerHTML=`<div style="padding:14px;text-align:center;color:var(--text3);font-weight:700">Aranıyor...</div>`;
+  sr.classList.remove("hidden");
+  document.getElementById("search-hint").classList.add("hidden");
+  try{
+    const ep=searchType==="multi"?"search/multi":`search/${searchType}`;
+    const d=await tmdb(`/${ep}?language=tr-TR&query=${encodeURIComponent(q)}&page=1`);
+    const items=(d.results||[]).filter(x=>x.media_type!=="person"&&(searchType!=="multi"||(x.media_type==="movie"||x.media_type==="tv"))).slice(0,9);
+    if(!items.length){sr.innerHTML=`<div style="padding:14px;text-align:center;color:var(--text3);font-weight:700">Sonuç bulunamadı</div>`;return}
+    sr.innerHTML=items.map(x=>{
+      const t=x.title||x.name||"";
+      const y=(x.release_date||x.first_air_date||"").slice(0,4);
+      const mt=x.media_type||(searchType!=="multi"?searchType:"movie");
+      const score=x.vote_average?x.vote_average.toFixed(1):"—";
+      const poster=x.poster_path?`<img class="sr-poster" src="${IMG}${x.poster_path}" alt="" onerror="this.style.background='var(--bg4)'">`:`<div class="sr-poster" style="display:flex;align-items:center;justify-content:center;font-size:20px">🎬</div>`;
+      return `<div class="sr-item" onclick="openDetail(${x.id},'${mt}',false)">
+        ${poster}
+        <div class="sr-info"><div class="sr-title">${t}</div><div class="sr-meta">${mt==="movie"?"🎬 Film":"📺 Dizi"}${y?" · "+y:""}</div></div>
+        <div class="sr-score">⭐${score}</div>
+      </div>`;
+    }).join("");
+  }catch(e){sr.innerHTML=`<div style="padding:14px;text-align:center;color:#ff9999;font-weight:700">Hata: ${e.message}</div>`}
+}
+
+function makeKey(){
+  return `${mediaType}|${[...selGenres].sort().join(",")}|${document.getElementById("f-platform").value}|${document.getElementById("f-rating").value}|${document.getElementById("f-from").value}|${document.getElementById("f-to").value}`;
+}
+function getMem(key){
+  if(!memory[key])memory[key]={seenIds:new Set(),pagePool:[],pagesDone:new Set(),totalPages:null};
+  return memory[key];
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function buildUrl(page,usePlat){
+  const isM=mediaType==="movie";
+  const p=document.getElementById("f-platform").value;
+  const minR=parseFloat(document.getElementById("f-rating").value)||0;
+  const yf=document.getElementById("f-from").value;
+  const yt=document.getElementById("f-to").value;
+  const vc=minR>=8?200:minR>=7?100:30;
+  let url=`/discover/${mediaType}?language=tr-TR&sort_by=popularity.desc&include_adult=false&page=${page}&vote_count.gte=${vc}`;
+  if(minR>0)url+=`&vote_average.gte=${minR}`;
+  if(selGenres.length)url+=`&with_genres=${selGenres.join(",")}`;
+  if(usePlat&&p)url+=`&with_watch_providers=${p}&watch_region=TR`;
+  if(yf)url+=isM?`&primary_release_date.gte=${yf}-01-01`:`&first_air_date.gte=${yf}-01-01`;
+  if(yt)url+=isM?`&primary_release_date.lte=${yt}-12-31`:`&first_air_date.lte=${yt}-12-31`;
+  return url;
+}
+
+async function startDiscover(){hideErr();await doDiscover()}
+
+async function doDiscover(){
+  document.getElementById("cta-btn").disabled=true;
+  document.getElementById("btn-again").disabled=true;
+  fromSection="discover";
+  setSub("İçerik aranıyor...");
+  showView("loading");
+  const key=makeKey();
+  const mem=getMem(key);
+  const hasPlatFilter=!!document.getElementById("f-platform").value;
+  try{
+    let found=null,attempts=0,usePlat=hasPlatFilter;
+    if(mem.totalPages===null){
+      setSub("Havuz hesaplanıyor...");
+      for(const up of hasPlatFilter?[true,false]:[false]){
+        const d=await tmdb(buildUrl(1,up));
+        if(d.results?.length){
+          mem.totalPages=Math.min(d.total_pages||1,500);
+          mem.pagePool=shuffle(Array.from({length:mem.totalPages},(_,i)=>i+1));
+          const u=d.results.filter(x=>!mem.seenIds.has(x.id));
+          if(u.length){found=u[Math.floor(Math.random()*u.length)];mem.pagesDone.add(1);usePlat=up;break}
+        }
+      }
+    }
+    while(!found&&attempts<20){
+      attempts++;
+      if(!mem.pagePool.length){
+        mem.pagePool=shuffle(Array.from({length:mem.totalPages||10},(_,i)=>i+1));
+        mem.pagesDone.clear();
+      }
+      const pg=mem.pagePool.shift();
+      mem.pagesDone.add(pg);
+      setSub(`Sayfa ${pg} taranıyor · ${mem.seenIds.size} öneri yapıldı`);
+      try{
+        for(const up of hasPlatFilter?[true,false]:[false]){
+          const d=await tmdb(buildUrl(pg,up));
+          if(d.results?.length){
+            if(!mem.totalPages){
+              mem.totalPages=Math.min(d.total_pages||1,500);
+              const ex=new Set(mem.pagesDone);
+              mem.pagePool=shuffle(Array.from({length:mem.totalPages},(_,i)=>i+1).filter(p=>!ex.has(p)));
+            }
+            const u=d.results.filter(x=>!mem.seenIds.has(x.id));
+            if(u.length){found=u[Math.floor(Math.random()*u.length)];usePlat=up;break}
+          }
+        }
+      }catch(e){console.warn(e)}
+    }
+    if(!found)throw new Error("exhausted");
+    mem.seenIds.add(found.id);
+    setSub("Detaylar ve puanlar yükleniyor...");
+    await openDetail(found.id,mediaType,true,mem.seenIds.size);
+  }catch(e){
+    showSection("discover");
+    showErr(e.message==="exhausted"?`${getMem(makeKey()).seenIds.size} içerik gösterildi, tükendi. Filtreleri değiştirin.`:"Sonuç bulunamadı — filtreleri genişletin");
+  }finally{
+    document.getElementById("cta-btn").disabled=false;
+    document.getElementById("btn-again").disabled=false;
+  }
+}
+
+async function openDetail(id,type,fromDiscover=false,seenCount=0){
+  if(!fromDiscover){
+    fromSection=fromSection||"search";
+    setSub("Detaylar yükleniyor...");
+    showView("loading");
+  }
+  try{
+    setSub("TMDB verisi alınıyor...");
+    const [detail,watchData,reviews,extIds]=await Promise.all([
+      tmdb(`/${type}/${id}?language=tr-TR&append_to_response=credits`),
+      tmdb(`/${type}/${id}/watch/providers`),
+      tmdb(`/${type}/${id}/reviews?language=tr&page=1`).catch(()=>({results:[]})),
+      tmdb(`/${type}/${id}/external_ids`).catch(()=>({}))
+    ]);
+    let revData=reviews;
+    if(!reviews.results?.length){try{revData=await tmdb(`/${type}/${id}/reviews?language=en&page=1`)}catch(_){}}
+    let omdbData=null;
+    if(extIds?.imdb_id){setSub("IMDb · RT · Metacritic yükleniyor...");omdbData=await omdbFetch(extIds.imdb_id)}
+    renderDetail(detail,watchData,revData,extIds,omdbData,type,fromDiscover,seenCount);
+    showView("detail");
+    const sb=document.getElementById("seen-badge");
+    if(fromDiscover&&seenCount>0){sb.textContent=`👁 ${seenCount} öneri gösterildi`;sb.classList.remove("hidden")}
+    else sb.classList.add("hidden");
+    document.getElementById("btn-again").classList.toggle("hidden",!fromDiscover);
+  }catch(e){
+    console.error(e);showSection(fromSection);showErr("Yüklenemedi: "+e.message);
+  }
+}
+
+function renderDetail(d,watch,reviews,ext,omdb,type,fromDiscover,seenCount){
+  const isM=type==="movie";
+  const title=isM?d.title:d.name;
+  const orig=isM?d.original_title:d.original_name;
+  const year=((isM?d.release_date:d.first_air_date)||"").slice(0,4);
+  const score=d.vote_average||0;
+  const runtime=isM?(d.runtime?d.runtime+" dk":""):(d.episode_run_time?.[0]?"~"+d.episode_run_time[0]+" dk/bölüm":"");
+  const seasons=!isM?(d.number_of_seasons||0):0;
+
+  document.getElementById("d-backdrop").style.backgroundImage=d.backdrop_path?`url(${IMG_O}${d.backdrop_path})`:"none";
+  const pw=document.getElementById("d-poster-wrap");
+  pw.innerHTML=d.poster_path?`<img src="${IMG}${d.poster_path}" alt="${title}" style="width:100%;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.7)" onerror="this.parentElement.innerHTML='<div class=big-poster-ph>🎬</div>'">`:`<div class="big-poster-ph">🎬</div>`;
+
+  let badges=`<span class="hb hb-type">${isM?"🎬 Film":"📺 Dizi"}</span>`;
+  if(year)badges+=`<span class="hb hb-year">${year}</span>`;
+  if(runtime)badges+=`<span class="hb hb-extra">${runtime}</span>`;
+  if(seasons>0)badges+=`<span class="hb hb-extra">${seasons} Sezon</span>`;
+  if(omdb?.Awards&&omdb.Awards!=="N/A"&&omdb.Awards.toLowerCase().includes("oscar"))badges+=`<span class="hb hb-award">🏆 Oscar</span>`;
+  document.getElementById("d-badges").innerHTML=badges;
+  document.getElementById("d-title").textContent=title;
+  const oe=document.getElementById("d-orig");
+  if(orig&&orig!==title){oe.textContent=orig;oe.classList.remove("hidden")}else oe.classList.add("hidden");
+  document.getElementById("d-genres").innerHTML=(d.genres||[]).slice(0,5).map(g=>`<span class="htag">${g.name}</span>`).join("");
+
+  let scHTML="";
+  scHTML+=`<div class="score-card tmdb"><div class="sc-logo">TMDB</div><div class="sc-icon">🎬</div><div class="sc-num">${score.toFixed(1)}<span style="font-size:14px">/10</span></div><div class="sc-sub">${(d.vote_count||0).toLocaleString("tr-TR")} oy</div></div>`;
+
+  const imdbId=ext?.imdb_id;
+  const imdbRating=omdb?.imdbRating&&omdb.imdbRating!=="N/A"?omdb.imdbRating:null;
+  const imdbVotes=omdb?.imdbVotes&&omdb.imdbVotes!=="N/A"?omdb.imdbVotes:null;
+  if(imdbId){
+    scHTML+=`<a class="score-card imdb clickable" href="https://www.imdb.com/title/${imdbId}" target="_blank" rel="noreferrer"><div class="sc-logo">IMDb</div><div class="sc-icon">⭐</div><div class="sc-num">${imdbRating?imdbRating+"/10":"↗"}</div><div class="sc-sub">${imdbVotes?imdbVotes+" oy":"Sayfaya git"}</div></a>`;
+    document.getElementById("d-imdb").href="https://www.imdb.com/title/"+imdbId;
+    document.getElementById("d-imdb").classList.remove("hidden");
+  }else document.getElementById("d-imdb").classList.add("hidden");
+
+  const rtRating=omdb?.Ratings?.find(r=>r.Source==="Rotten Tomatoes");
+  if(rtRating){
+    const rtVal=parseInt(rtRating.Value);
+    const rtClass=rtVal>=60?"rt-fresh":"rt-rotten";
+    scHTML+=`<div class="score-card ${rtClass}"><div class="sc-logo">Rotten Tomatoes</div><div class="sc-icon">${rtVal>=60?"🍅":"🤢"}</div><div class="sc-num">${rtRating.Value}</div><div class="sc-sub">${rtVal>=60?"Taze":"Çürük"}</div></div>`;
+  }
+  const mcScore=omdb?.Metascore&&omdb.Metascore!=="N/A"?parseInt(omdb.Metascore):null;
+  if(mcScore!==null){
+    const mcClass=mcScore>=61?"mc-good":mcScore>=40?"mc-mixed":"mc-bad";
+    scHTML+=`<div class="score-card ${mcClass}"><div class="sc-logo">Metacritic</div><div class="sc-icon">🎯</div><div class="sc-num">${mcScore}<span style="font-size:13px">/100</span></div><div class="sc-sub">${mcScore>=61?"Olumlu":mcScore>=40?"Karışık":"Olumsuz"}</div></div>`;
+  }
+  if(d.popularity)scHTML+=`<div class="score-card pop"><div class="sc-logo">Popülerlik</div><div class="sc-icon">📈</div><div class="sc-num">${Math.round(d.popularity)}</div><div class="sc-sub">TMDB skor</div></div>`;
+  document.getElementById("d-scores").innerHTML=scHTML;
+
+  const ov=d.overview||"";
+  if(ov){document.getElementById("d-overview").textContent=ov;document.getElementById("d-overview-sec").classList.remove("hidden")}
+  else document.getElementById("d-overview-sec").classList.add("hidden");
+
+  const crew=d.credits?.crew||[];
+  const dirs=crew.filter(c=>c.job==="Director").slice(0,3).map(c=>c.name);
+  const writers=crew.filter(c=>["Writer","Screenplay","Story"].includes(c.job)).slice(0,3).map(c=>c.name);
+  const prods=crew.filter(c=>["Producer","Executive Producer"].includes(c.job)).slice(0,2).map(c=>c.name);
+  let cr="";
+  if(dirs.length)cr+=`<div class="credit-item"><b>Yönetmen</b>${dirs.join(", ")}</div>`;
+  if(writers.length)cr+=`<div class="credit-item"><b>Senaryo</b>${writers.join(", ")}</div>`;
+  if(prods.length)cr+=`<div class="credit-item"><b>Yapımcı</b>${prods.join(", ")}</div>`;
+  if(d.production_countries?.length)cr+=`<div class="credit-item"><b>Ülke</b>${d.production_countries.map(c=>c.name).join(", ")}</div>`;
+  if(d.spoken_languages?.length)cr+=`<div class="credit-item"><b>Dil</b>${d.spoken_languages.map(l=>l.name).join(", ")}</div>`;
+  if(omdb?.Rated&&omdb.Rated!=="N/A")cr+=`<div class="credit-item"><b>Yaş Sınırı</b>${omdb.Rated}</div>`;
+  if(omdb?.Awards&&omdb.Awards!=="N/A")cr+=`<div class="credit-item"><b>Ödüller</b>${omdb.Awards}</div>`;
+  if(d.budget>0)cr+=`<div class="credit-item"><b>Bütçe</b>$${d.budget.toLocaleString()}</div>`;
+  if(d.revenue>0)cr+=`<div class="credit-item"><b>Hasılat</b>$${d.revenue.toLocaleString()}</div>`;
+  if(omdb?.BoxOffice&&omdb.BoxOffice!=="N/A")cr+=`<div class="credit-item"><b>Gişe (ABD)</b>${omdb.BoxOffice}</div>`;
+  const crSec=document.getElementById("d-credits-sec");
+  if(cr){document.getElementById("d-credits").innerHTML=cr;crSec.classList.remove("hidden")}else crSec.classList.add("hidden");
+
+  const cast=(d.credits?.cast||[]).slice(0,16);
+  const castSec=document.getElementById("d-cast-sec");
+  if(cast.length){
+    document.getElementById("d-cast").innerHTML=cast.map(c=>{
+      const lnk=`https://www.imdb.com/find?q=${encodeURIComponent(c.name)}&s=nm`;
+      const photo=c.profile_path?`<img class="cast-photo" src="${IMG_F}${c.profile_path}" alt="${c.name}" onerror="this.outerHTML='<div class=cast-photo-ph>👤</div>'">`:`<div class="cast-photo-ph">👤</div>`;
+      return `<a class="cast-card" href="${lnk}" target="_blank" rel="noreferrer">${photo}<div class="cast-name">${c.name}</div><div class="cast-char">${(c.character||"").slice(0,20)}</div></a>`;
+    }).join("");
+    castSec.classList.remove("hidden");
+  }else castSec.classList.add("hidden");
+
+  const trP=watch.results?.TR;
+  const flatrate=trP?.flatrate||[];
+  const rent=trP?.rent||[];
+  const buy=trP?.buy||[];
+  const allProvs=[...flatrate,...rent,...buy].filter((p,i,a)=>a.findIndex(x=>x.provider_id===p.provider_id)===i);
+  const platSec=document.getElementById("d-plat-sec");
+  if(allProvs.length){
+    document.getElementById("d-platforms").innerHTML=allProvs.map(p=>{
+      const pUrl=(PLAT_URLS[p.provider_id]||"https://www.google.com/search?q=")+encodeURIComponent(title);
+      const rType=flatrate.find(x=>x.provider_id===p.provider_id)?"📺 Abonelik":rent.find(x=>x.provider_id===p.provider_id)?"💰 Kiralık":"🛒 Satın Al";
+      const logo=p.logo_path?`<img src="https://image.tmdb.org/t/p/w45${p.logo_path}" alt="" style="width:22px;height:22px;border-radius:6px" onerror="this.style.display='none'">`:"";
+      return `<a class="plat-chip" href="${pUrl}" target="_blank" rel="noreferrer">${logo}${p.provider_name}<span class="plat-type">${rType}</span></a>`;
+    }).join("");
+  }else{
+    document.getElementById("d-platforms").innerHTML=`<span style="color:var(--text3);font-weight:600;font-style:italic;font-size:14px">Türkiye'de platform bilgisi bulunamadı</span>`;
+  }
+  platSec.classList.remove("hidden");
+
+  const revItems=(reviews.results||[]).slice(0,3);
+  const revSec=document.getElementById("d-reviews-sec");
+  if(revItems.length){
+    document.getElementById("d-reviews").innerHTML=revItems.map(r=>{
+      const auth=r.author||"Anonim";
+      const initials=auth.replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,"").slice(0,2).toUpperCase()||"?";
+      const rawScore=r.author_details?.rating;
+      const scoreHTML=rawScore?`<div class="review-score">⭐ ${rawScore}/10</div>`:"";
+      const date=r.created_at?new Date(r.created_at).toLocaleDateString("tr-TR",{year:"numeric",month:"long",day:"numeric"}):"";
+      const content=(r.content||"").replace(/[*_#`]/g,"").slice(0,420)+(r.content?.length>420?"…":"");
+      const isEng=!r.content?.match(/[çğışöüÇĞİŞÖÜ]/);
+      const langNote=isEng?` <span style="font-size:10px;color:var(--text3)">(İngilizce)</span>`:"";
+      return `<div class="review-card"><div class="review-header"><div class="review-avatar">${initials}</div><div class="review-meta"><div class="review-author">${auth}${langNote}</div><div class="review-date">${date}</div></div>${scoreHTML}</div><div class="review-text">${content}</div></div>`;
+    }).join("");
+    revSec.classList.remove("hidden");
+  }else revSec.classList.add("hidden");
+}
+
+renderGenres();
+</script>
+</body>
+</html>
