@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SineBot">
+<meta name="theme-color" content="#111318">
+<link rel="manifest" href="manifest.json">
 <title>SineBot</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -206,6 +212,15 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-hei
 .cast-ph{width:76px;height:76px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 8px;border:2px solid var(--b1)}
 .cast-name{font-size:11px;font-weight:600;color:var(--t1);line-height:1.3}
 .cast-char{font-size:10px;color:var(--t3);margin-top:2px}
+.sim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+@media(max-width:480px){.sim-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}}
+.sim-card{background:var(--s2);border:1px solid var(--b1);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .18s}
+.sim-card:hover{border-color:var(--b2);transform:translateY(-2px)}
+.sim-poster{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3)}
+.sim-poster-ph{width:100%;aspect-ratio:2/3;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:24px}
+.sim-info{padding:8px 9px}
+.sim-title{font-size:12px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sim-score{font-size:11px;color:var(--amber);margin-top:3px;font-weight:600}
 
 /* DETAIL LAYOUT - two col on wide */
 .detail-cols{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px;align-items:start}
@@ -226,8 +241,66 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-hei
 .plat-type{font-size:11px;color:var(--t3);margin-top:1px}
 .no-plat{font-size:14px;color:var(--t3);font-style:italic;padding:8px 0}
 
+.trend-btn{width:100%;margin-top:10px;padding:14px;border:1.5px solid var(--b2);border-radius:14px;background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:-.2px}
+.trend-btn:hover{background:var(--s2);color:var(--t1);border-color:var(--blue)}
+.trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
+@media(max-width:500px){.trend-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}}
+.trend-card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}
+.trend-card:hover{border-color:var(--b2);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.trend-poster{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3)}
+.trend-poster-ph{width:100%;aspect-ratio:2/3;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:32px}
+.trend-info{padding:10px 11px}
+.trend-rank{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:4px}
+.trend-name{font-size:13px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.trend-score{font-size:12px;color:var(--amber);font-weight:600;margin-top:4px}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
 .hidden{display:none!important}
+
+/* ── MOBİL OPTİMİZASYON ── */
+@media(max-width:480px){
+  .header-inner{padding:0 14px}
+  .logo-name{font-size:17px}
+  .nav-tabs{gap:2px}
+  .ntab{padding:6px 12px;font-size:13px}
+  .tbtn{padding:12px;font-size:14px}
+  .gchip{padding:8px 13px;font-size:13px}
+  .lchip{padding:8px 13px;font-size:13px}
+  .rbtn{padding:9px 13px;font-size:13px}
+  .platbtn{padding:10px 6px;font-size:11px}
+  .platbtn-ic{font-size:22px}
+  .cta{padding:15px;font-size:15px}
+  .trend-btn{padding:13px;font-size:14px}
+  .stbtn{padding:9px;font-size:13px}
+  .hero-title{font-size:22px}
+  .card{padding:16px}
+  .ov-text{font-size:14px}
+  .watch-a{padding:11px 13px}
+  .watch-label{font-size:14px}
+  .btn-again{padding:8px 14px;font-size:13px}
+  .btn-back{padding:8px 12px;font-size:13px}
+  .seen-pill{font-size:11px;padding:5px 8px}
+  .sticky-bar{padding:10px 0}
+  .sticky-title{font-size:14px}
+  .scores{grid-template-columns:repeat(2,1fr)}
+  .st-val{font-size:22px}
+  .detail-cols{gap:12px}
+}
+/* Dokunma hedefleri büyüt */
+button,a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+/* Input zoom engelle iOS */
+input,select{font-size:16px!important}
+@media(max-width:480px){
+  .fbox select{font-size:16px!important}
+}
 </style>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  });
+}
+</script>
 </head>
 <body>
 
@@ -310,7 +383,23 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-hei
   </div>
 
   <button class="cta" id="cta-btn" onclick="startDiscover()">🎲 Rastgele Öner</button>
+  <button class="trend-btn" id="trend-btn" onclick="showTrends()">📈 Haftanın Trend Filmleri</button>
   <div class="err hidden" id="err-box"></div>
+</div>
+
+<!-- ══ TRENDS ══ -->
+<div id="section-trends" class="page hidden">
+  <div class="sticky-bar">
+    <div class="sticky-title" id="trend-title">📈 Haftanın Trend Filmleri</div>
+    <div class="sticky-right">
+      <button class="btn-back" onclick="showSection('discover')">← Geri</button>
+    </div>
+  </div>
+  <div id="trend-loading" style="text-align:center;padding:60px 0">
+    <div class="spinner" style="margin:0 auto 16px"></div>
+    <div style="font-size:15px;font-weight:600;color:var(--t2)">Yükleniyor...</div>
+  </div>
+  <div class="trend-grid hidden" id="trend-grid"></div>
 </div>
 
 <!-- ══ SEARCH ══ -->
@@ -376,6 +465,10 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-hei
         <div class="card hidden" id="d-ov-card"><div class="card-h">Konu</div><div class="ov-text" id="d-ov"></div></div>
         <div class="card hidden" id="d-cr-card"><div class="card-h">Künye</div><div class="cred-grid" id="d-cred"></div></div>
         <div class="card hidden" id="d-ca-card"><div class="card-h">Oyuncular</div><div class="cast-scroll" id="d-cast"></div></div>
+        <div class="card hidden" id="d-sim-card">
+          <div class="card-h">Benzer İçerikler</div>
+          <div class="sim-grid" id="d-sim"></div>
+        </div>
       </div>
       <div>
         <div class="card">
@@ -459,15 +552,18 @@ function tL(c){LS[c]=LS[c]==="inc"?null:"inc";rLangs()}
 
 function showSection(s){
   FS=s;
-  ["discover","search"].forEach(n=>document.getElementById("section-"+n).classList.toggle("hidden",s!==n));
+  ["discover","search","trends"].forEach(n=>document.getElementById("section-"+n).classList.toggle("hidden",s!==n));
   ["nav-discover","nav-search"].forEach(n=>document.getElementById(n).classList.toggle("active",n==="nav-"+s));
   document.getElementById("view-loading").classList.add("hidden");
   document.getElementById("view-detail").classList.add("hidden");
+  window.scrollTo({top:0,behavior:"instant"});
 }
 function showView(v){
-  ["discover","search"].forEach(n=>document.getElementById("section-"+n).classList.add("hidden"));
+  ["discover","search","trends"].forEach(n=>document.getElementById("section-"+n).classList.add("hidden"));
   document.getElementById("view-loading").classList.toggle("hidden",v!=="loading");
   document.getElementById("view-detail").classList.toggle("hidden",v!=="detail");
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
 }
 function goBack(){showSection(FS)}
 function setSub(t){document.getElementById("load-sub").textContent=t}
@@ -479,6 +575,7 @@ function switchType(t){
   document.getElementById("tab-movie").className="tbtn"+(t==="movie"?" active":"");
   document.getElementById("tab-tv").className="tbtn"+(t==="tv"?" active":"");
   document.getElementById("tv-extra").classList.toggle("hidden",t!=="tv");
+  document.getElementById("trend-btn").textContent=t==="movie"?"📈 Haftanın Trend Filmleri":"📈 Haftanın Trend Dizileri";
   rGenres();
 }
 function setStatus(s){
@@ -502,7 +599,14 @@ function togglePlat(pid,el){
 function setSType(t){ST=t;["multi","movie","tv"].forEach(x=>document.getElementById("stype-"+x).classList.toggle("active",x===t))}
 
 async function tmdb(p){const r=await fetch(TB+p,{headers:TH});if(!r.ok)throw new Error("TMDB "+r.status);return r.json()}
-async function omdbF(id){try{const r=await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${OK}`);const d=await r.json();return d.Response==="True"?d:null}catch(e){return null}}
+async function omdbF(id){
+  try{
+    const r=await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${OK}`);
+    const d=await r.json();
+    if(d.Response==="True"){return d}
+    return null;
+  }catch(e){return null}
+}
 
 let sT=null;
 const sI=document.getElementById("search-input");
@@ -538,9 +642,12 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 
 function buildUrl(page,usePlat){
   const iM=MT==="movie";
-  const mR=CR;const tM=mR>0?Math.max(0,mR-0.35):0;const vc=mR>=8?200:mR>=7?100:40;
+  const mR=CR;const tM=mR>0?Math.max(0,mR-0.35):0;
+  // Daha geniş havuz için düşük vote_count eşiği
+  const vc=mR>=8?50:mR>=7?30:10;
   const yf=document.getElementById("f-from").value;const yt=document.getElementById("f-to").value;
-  let u=`/discover/${MT}?language=tr-TR&sort_by=popularity.desc&include_adult=false&page=${page}&vote_count.gte=${vc}`;
+  // vote_average.desc — daha çeşitli sonuçlar, popularity.desc gibi sürekli aynı filmler gelmiyor
+  let u=`/discover/${MT}?language=tr-TR&sort_by=vote_average.desc&include_adult=false&page=${page}&vote_count.gte=${vc}`;
   if(tM>0)u+=`&vote_average.gte=${tM}`;
   if(getSG().length)u+=`&with_genres=${getSG().join(",")}`;
   if(usePlat&&CP)u+=`&with_watch_providers=${CP}&watch_region=TR`;
@@ -630,17 +737,27 @@ async function doDiscover(){
   }finally{document.getElementById("cta-btn").disabled=false;document.getElementById("btn-again").disabled=false}
 }
 
-async function openDetail(id,type,fromD=false,cnt=0){
+const CACHE={};
+
+async function openDetail(id,type,fromD=false,cnt=0,prefetch=null){
   if(!fromD){FS=FS||"search";setSub("Yükleniyor...");showView("loading")}
   try{
-    const[det,wd,ext]=await Promise.all([
-      tmdb(`/${type}/${id}?language=tr-TR&append_to_response=credits`),
+    // Önce credits+providers+ext paralel çek, detail için cache kontrol et
+    const cacheKey=`${type}_${id}`;
+    const detPromise=CACHE[cacheKey]?.credits
+      ?Promise.resolve(CACHE[cacheKey])
+      :tmdb(`/${type}/${id}?language=tr-TR&append_to_response=credits`).then(d=>{CACHE[cacheKey]=d;return d});
+
+    const[det,wd,ext,recs]=await Promise.all([
+      detPromise,
       tmdb(`/${type}/${id}/watch/providers`),
-      tmdb(`/${type}/${id}/external_ids`).catch(()=>({}))
+      tmdb(`/${type}/${id}/external_ids`).catch(()=>({})),
+      tmdb(`/${type}/${id}/recommendations?language=tr-TR&page=1`).catch(()=>({results:[]}))
     ]);
-    let omdb=null;if(ext?.imdb_id){setSub("IMDb · RT · MC...");omdb=await omdbF(ext.imdb_id)}
-    rDetail(det,wd,ext,omdb,type);
-    showView("detail");window.scrollTo(0,0);
+    let omdb=null;
+    if(ext?.imdb_id){setSub("IMDb · RT · MC...");omdb=await omdbF(ext.imdb_id)}
+    rDetail(det,wd,ext,omdb,type,recs?.results||[]);
+    showView("detail");
     document.getElementById("sticky-title").textContent=(type==="movie"?det.title:det.name)||"";
     const sc=document.getElementById("seen-count"),ba=document.getElementById("btn-again");
     if(fromD&&cnt>0){sc.textContent=`👁 ${cnt}`;sc.classList.remove("hidden")}else sc.classList.add("hidden");
@@ -648,14 +765,13 @@ async function openDetail(id,type,fromD=false,cnt=0){
   }catch(e){console.error(e);showSection(FS);showErr("Yüklenemedi: "+e.message)}
 }
 
-function rDetail(d,watch,ext,omdb,type){
+function rDetail(d,watch,ext,omdb,type,recs=[]){
   const iM=type==="movie";
   const title=iM?d.title:d.name;const orig=iM?d.original_title:d.original_name;
   const year=((iM?d.release_date:d.first_air_date)||"").slice(0,4);
   const score=d.vote_average||0;
   const runtime=iM?(d.runtime?d.runtime+" dk":""):(d.episode_run_time?.[0]?"~"+d.episode_run_time[0]+" dk/bölüm":"");
   const seasons=!iM?(d.number_of_seasons||0):0;const status=!iM?(d.status||""):"";
-
   document.getElementById("d-bg").style.backgroundImage=d.backdrop_path?`url(${IO}${d.backdrop_path})`:"none";
   document.getElementById("d-poster").innerHTML=d.poster_path?`<img class="poster-img" src="${IM}${d.poster_path}" alt="${title}" onerror="this.parentElement.innerHTML='<div class=poster-ph>🎬</div>'">`:`<div class="poster-ph">🎬</div>`;
 
@@ -719,6 +835,22 @@ function rDetail(d,watch,ext,omdb,type){
     caC.classList.remove("hidden");
   }else caC.classList.add("hidden");
 
+  // Benzer İçerikler
+  const simC=document.getElementById("d-sim-card");
+  const simItems=recs.slice(0,12);
+  if(simItems.length){
+    document.getElementById("d-sim").innerHTML=simItems.map(x=>{
+      const t=x.title||x.name||"";
+      const mt=x.media_type||type;
+      const sc=x.vote_average?x.vote_average.toFixed(1):"—";
+      const po=x.poster_path
+        ?`<img class="sim-poster" src="${IM}${x.poster_path}" alt="${t}" onerror="this.outerHTML='<div class=sim-poster-ph>🎬</div>'">`
+        :`<div class="sim-poster-ph">🎬</div>`;
+      return`<div class="sim-card" onclick="openDetail(${x.id},'${mt}',false)">${po}<div class="sim-info"><div class="sim-title">${t}</div><div class="sim-score">★ ${sc}</div></div></div>`;
+    }).join("");
+    simC.classList.remove("hidden");
+  }else simC.classList.add("hidden");
+
   // Platforms
   const trP=watch.results?.TR;
   const fl=trP?.flatrate||[];const re=trP?.rent||[];const bu=trP?.buy||[];
@@ -746,6 +878,44 @@ function rDetail(d,watch,ext,omdb,type){
 }
 
 rGenres();rLangs();
+
+
+async function showTrends(){
+  const type=MT;
+  document.getElementById("trend-title").textContent=type==="movie"?"📈 Haftanın Trend Filmleri":"📈 Haftanın Trend Dizileri";
+  document.getElementById("trend-loading").classList.remove("hidden");
+  document.getElementById("trend-grid").classList.add("hidden");
+  showSection("trends");
+  try{
+    const d=await tmdb(`/trending/${type}/week?language=tr-TR`);
+    const items=(d.results||[]).slice(0,20);
+    // Temel veriyi önbelleğe alma — credits eksik olduğu için künye çekerken yine gidecek
+    // Sadece önceden tam çekilmiş detayları cache'te tut
+
+    document.getElementById("trend-grid").innerHTML=items.map((x,i)=>{
+      const title=type==="movie"?x.title:x.name;
+      const year=((type==="movie"?x.release_date:x.first_air_date)||"").slice(0,4);
+      const score=x.vote_average?x.vote_average.toFixed(1):"—";
+      const poster=x.poster_path
+        ?`<img class="trend-poster" src="${IM}${x.poster_path}" alt="${title}" onerror="this.outerHTML='<div class=trend-poster-ph>🎬</div>'">`
+        :`<div class="trend-poster-ph">🎬</div>`;
+      return`<div class="trend-card" onclick="openDetail(${x.id},'${type}',false)">
+        ${poster}
+        <div class="trend-info">
+          <div class="trend-rank">#${i+1}</div>
+          <div class="trend-name">${title}</div>
+          <div class="trend-score">★ ${score}${year?" · "+year:""}</div>
+        </div>
+      </div>`;
+    }).join("");
+    document.getElementById("trend-loading").classList.add("hidden");
+    document.getElementById("trend-grid").classList.remove("hidden");
+  }catch(e){
+    document.getElementById("trend-loading").innerHTML=`<div style="color:var(--red);font-size:14px">Yüklenemedi: ${e.message}</div>`;
+  }
+}
+
+
 </script>
 </body>
 </html>
