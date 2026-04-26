@@ -3,513 +3,637 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#14181c">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SineBot">
-<meta name="theme-color" content="#111318">
 <link rel="manifest" href="manifest.json">
 <title>SineBot</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#111318;
-  --s1:#1a1d24;
-  --s2:#21252f;
-  --s3:#2a2f3d;
+  --bg:#14181c;
+  --s1:#1b2228;
+  --s2:#222b33;
+  --s3:#2c3740;
   --b1:rgba(255,255,255,0.06);
   --b2:rgba(255,255,255,0.12);
-  --blue:#4f8ef7;
-  --blue2:#3a7bd5;
-  --red:#f05050;
-  --green:#3dd68c;
+  --grn:#00c030;
+  --grn2:#00a028;
+  --red:#e05050;
   --amber:#f5a623;
-  --purple:#9f7aea;
-  --t1:#f0f2f5;
-  --t2:#9aa0b0;
-  --t3:#555d70;
+  --blue:#4f8ef7;
+  --t1:#e8eaed;
+  --t2:#8a9bb0;
+  --t3:#4a5568;
+  --r:8px;--r2:12px;--r3:16px;
 }
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;font-size:16px}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--s1)}::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-height:100vh;font-size:15px;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--s1)}::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
+button,a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+input,select{font-size:16px!important}
+
+/* More consistent base UX across devices */
+:where(button,[role="button"],a,input,select,textarea){font:inherit}
+:where(button,[role="button"],a,input,select,textarea):focus{outline:none}
+:where(button,[role="button"],a,input,select,textarea):focus-visible{outline:2px solid rgba(0,192,48,.65);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+
+/* Safe areas (notch/home bar) */
+body{padding-bottom:env(safe-area-inset-bottom)}
+.hdr{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
 
 /* ── HEADER ── */
-.header{background:var(--s1);border-bottom:1px solid var(--b1);padding:0 32px;position:sticky;top:0;z-index:200}
-.header-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;height:64px;gap:16px}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-box{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.logo-txt{font-size:20px;font-weight:800;letter-spacing:-0.5px}
-.logo-txt b{color:var(--blue)}
-.nav-tabs{display:flex;gap:4px;margin-left:auto;background:var(--bg);border:1px solid var(--b1);border-radius:10px;padding:3px}
-.ntab{padding:7px 18px;border:none;background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border-radius:8px;transition:all .15s}
-.ntab.active{background:var(--s2);color:var(--t1);box-shadow:0 1px 4px rgba(0,0,0,0.4)}
-.ntab:hover:not(.active){color:var(--t1)}
+.hdr{background:var(--s1);border-bottom:1px solid var(--b1);padding:0 20px;position:sticky;top:0;z-index:200;backdrop-filter:blur(10px)}
+.hdr-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;height:58px;gap:14px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
+.logo-ic{font-size:20px}
+.logo-tx{font-size:18px;font-weight:800;color:var(--grn);letter-spacing:-.3px}
+.logo-tx span{color:var(--t1)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.ntab{padding:6px 14px;border:none;background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border-radius:var(--r);transition:all .15s}
+.ntab.on{background:rgba(0,192,48,0.12);color:var(--grn)}
+.ntab:hover:not(.on){color:var(--t1);background:var(--s2)}
 
-/* ── PAGE WRAPPER ── */
-.page{max-width:860px;margin:0 auto;padding:32px 24px 100px}
-@media(max-width:600px){.page{padding:20px 14px 80px}}
+/* ── LAYOUT ── */
+.wrap{max-width:1280px;margin:0 auto;padding:20px 20px 80px}
 
-/* ── SECTION TITLE ── */
-.stitle{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:12px}
+/* PC: sidebar + main */
+.app-grid{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
+.sidebar{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r3);padding:18px;position:sticky;top:76px;max-height:calc(100vh - 90px);overflow-y:auto}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--s3)}
+.main-panel{min-width:0}
 
-/* ── TYPE TOGGLE ── */
-.type-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px}
-.tbtn{padding:14px;border:2px solid var(--b1);background:var(--s1);color:var(--t2);font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;border-radius:12px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.tbtn.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 20px rgba(79,142,247,0.3)}
-.tbtn:hover:not(.active){border-color:var(--b2);color:var(--t1)}
+/* Mobil: tek kolon */
+@media(max-width:860px){
+  .app-grid{grid-template-columns:1fr}
+  .sidebar{position:static;max-height:none}
+}
 
-/* ── GENRE CHIPS ── */
-.genres{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.gchip{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:var(--s1);border:1.5px solid var(--b1);border-radius:50px;color:var(--t2);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none}
-.gchip:hover{border-color:var(--b2);color:var(--t1);background:var(--s2)}
-.gchip.on{background:rgba(79,142,247,0.15);border-color:rgba(79,142,247,0.5);color:#93c5fd}
-.gchip-ic{font-size:16px}
+/* ── FILTER ELEMENTS ── */
+.flabel{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin:14px 0 8px}
+.flabel:first-child{margin-top:0}
 
-/* ── LANG CHIPS ── */
-.langs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.lchip{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;background:var(--s1);border:1.5px solid var(--b1);border-radius:50px;color:var(--t2);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none}
-.lchip:hover{border-color:var(--b2);color:var(--t1);background:var(--s2)}
-.lchip.inc{background:rgba(61,214,140,0.1);border-color:rgba(61,214,140,0.45);color:#6ee7b7}
+/* Type toggle */
+.ftype{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:4px}
+.ftbtn{padding:9px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:var(--r);transition:all .15s;text-align:center}
+.ftbtn.on{background:rgba(0,192,48,0.12);border-color:rgba(0,192,48,0.4);color:var(--grn)}
+.ftbtn:hover:not(.on){border-color:var(--b2);color:var(--t1)}
 
-/* ── PLATFORM GRID ── */
-.plat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:28px}
-@media(max-width:600px){.plat-grid{grid-template-columns:repeat(3,1fr)}}
-.platbtn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--s1);border:1.5px solid var(--b1);border-radius:12px;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;text-align:center}
-.platbtn:hover{border-color:var(--b2);color:var(--t1);background:var(--s2)}
-.platbtn.on{background:rgba(79,142,247,0.12);border-color:rgba(79,142,247,0.5);color:#93c5fd}
-.platbtn-logo{width:36px;height:36px;border-radius:8px;object-fit:cover;background:var(--s3)}
-.platbtn-ic{font-size:28px;line-height:1}
+/* Genre chips */
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:var(--s2);border:1px solid var(--b1);border-radius:50px;color:var(--t2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;user-select:none}
+.chip:hover{border-color:var(--b2);color:var(--t1)}
+.chip.on{background:rgba(0,192,48,0.1);border-color:rgba(0,192,48,0.4);color:var(--grn)}
+.chip-ic{font-size:13px}
 
-/* ── RATING BUTTONS ── */
-.rating-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.rbtn{padding:10px 18px;background:var(--s1);border:1.5px solid var(--b1);border-radius:50px;color:var(--t2);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+/* Lang chips */
+.lchip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:var(--s2);border:1px solid var(--b1);border-radius:50px;color:var(--t2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;user-select:none}
+.lchip:hover{border-color:var(--b2);color:var(--t1)}
+.lchip.on{background:rgba(0,192,48,0.1);border-color:rgba(0,192,48,0.4);color:var(--grn)}
+
+/* Platform */
+.plats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.platbtn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;background:var(--s2);border:1.5px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;text-align:center}
+.platbtn:hover{border-color:var(--b2);color:var(--t1)}
+.platbtn.on{background:rgba(0,192,48,0.1);border-color:rgba(0,192,48,0.4);color:var(--grn)}
+.plat-logo{width:28px;height:28px;border-radius:6px;object-fit:cover}
+.plat-ic{font-size:22px;line-height:1}
+
+/* Rating */
+.rbtns{display:flex;flex-wrap:wrap;gap:4px}
+.rbtn{padding:5px 10px;background:var(--s2);border:1px solid var(--b1);border-radius:50px;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s}
 .rbtn:hover{border-color:var(--b2);color:var(--t1)}
-.rbtn.on{background:rgba(245,166,35,0.15);border-color:rgba(245,166,35,0.5);color:#fcd34d}
+.rbtn.on{background:rgba(245,166,35,0.12);border-color:rgba(245,166,35,0.4);color:var(--amber)}
 
-/* ── STATUS BUTTONS ── */
-.status-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.stbtn{flex:1;padding:10px;background:var(--s1);border:1.5px solid var(--b1);border-radius:10px;color:var(--t2);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;text-align:center}
+/* Status */
+.stbtns{display:flex;gap:4px;flex-wrap:wrap}
+.stbtn{flex:1;padding:6px 8px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:11px;font-weight:600;cursor:pointer;transition:all .12s;text-align:center;white-space:nowrap}
 .stbtn:hover{border-color:var(--b2);color:var(--t1)}
-.stbtn.on{background:rgba(79,142,247,0.12);border-color:rgba(79,142,247,0.45);color:#93c5fd}
+.stbtn.on{background:rgba(0,192,48,0.1);border-color:rgba(0,192,48,0.4);color:var(--grn)}
 
-/* ── SELECT ── */
-.sel-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
-.fbox{display:flex;flex-direction:column;gap:6px}
-.fbox label{font-size:12px;font-weight:600;color:var(--t3)}
-.fbox select{background:var(--s1);border:1.5px solid var(--b1);border-radius:10px;color:var(--t1);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:11px 14px;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23555d70' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:calc(100% - 12px) center;padding-right:32px;transition:border-color .15s}
-.fbox select:focus{border-color:var(--blue)}
-.fbox select option{background:var(--s2)}
+/* Selects */
+.sel-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fbox{display:flex;flex-direction:column;gap:4px}
+.fbox-lbl{font-size:10px;font-weight:600;color:var(--t3)}
+.fsel{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t1);font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:7px 10px;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a5568' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:calc(100% - 8px) center;padding-right:24px;transition:border-color .12s}
+.fsel:focus{border-color:var(--grn)}
+.fsel option{background:var(--s2)}
 
-/* ── DIVIDER ── */
-.divider{height:1px;background:var(--b1);margin:0 0 24px}
-
-/* ── CTA ── */
-.cta{width:100%;padding:16px;border:none;border-radius:14px;background:var(--blue);color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:-.2px}
-.cta:hover:not(:disabled){background:var(--blue2);transform:translateY(-1px);box-shadow:0 8px 28px rgba(79,142,247,0.35)}
+/* CTA */
+.cta{width:100%;padding:12px;border:none;border-radius:var(--r2);background:var(--grn);color:#000;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:14px;letter-spacing:-.2px}
+.cta:hover:not(:disabled){background:var(--grn2);transform:translateY(-1px)}
 .cta:disabled{opacity:0.4;cursor:not-allowed;transform:none}
-.err{margin-top:12px;padding:12px 16px;border:1px solid rgba(240,80,80,0.3);background:rgba(240,80,80,0.08);border-radius:10px;font-size:14px;color:#fca5a5}
+.trend-btn{width:100%;padding:9px;border:1px solid var(--b2);border-radius:var(--r);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;margin-top:7px}
+.trend-btn:hover{border-color:var(--grn);color:var(--grn)}
+.err{margin-top:10px;padding:10px 12px;border:1px solid rgba(224,80,80,0.3);background:rgba(224,80,80,0.07);border-radius:var(--r);font-size:12px;color:#fca5a5}
 
-/* ── SEARCH ── */
-.search-wrap{position:relative;max-width:680px}
-.s-row{display:flex;gap:10px;margin-bottom:12px}
-.s-input{flex:1;background:var(--s1);border:1.5px solid var(--b1);border-radius:14px;color:var(--t1);font-family:'Inter',sans-serif;font-size:16px;font-weight:500;padding:14px 18px;outline:none;transition:all .2s}
-.s-input:focus{border-color:var(--blue);background:var(--s2);box-shadow:0 0 0 3px rgba(79,142,247,0.12)}
-.s-input::placeholder{color:var(--t3)}
-.s-btn{padding:14px 24px;background:var(--blue);border:none;border-radius:14px;color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap}
-.s-btn:hover{background:var(--blue2)}
-.stype-row{display:flex;gap:6px}
-.stype{padding:7px 16px;background:transparent;border:1.5px solid var(--b1);border-radius:50px;color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
-.stype.active{background:rgba(240,80,80,0.12);border-color:rgba(240,80,80,0.4);color:#fca5a5}
-.s-results{position:absolute;top:100%;left:0;right:0;background:var(--s1);border:1px solid var(--b2);border-radius:14px;z-index:100;overflow:hidden;margin-top:6px;max-height:380px;overflow-y:auto;box-shadow:0 16px 40px rgba(0,0,0,0.5)}
-.sri{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--b1);transition:background .12s}
-.sri:last-child{border-bottom:none}
-.sri:hover{background:var(--s2)}
-.sri-poster{width:38px;height:57px;object-fit:cover;border-radius:6px;flex-shrink:0;background:var(--s3)}
-.sri-title{font-size:15px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sri-meta{font-size:12px;color:var(--t3);margin-top:3px}
-.sri-score{font-size:15px;font-weight:700;color:var(--amber);margin-left:auto;flex-shrink:0;padding-left:10px}
+/* ── MAIN PANEL STATES ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;text-align:center;border:1px dashed var(--b1);border-radius:var(--r3)}
+.empty-ic{font-size:52px;opacity:.12;margin-bottom:16px}
+.empty-t{font-size:17px;font-weight:700;color:var(--t2);margin-bottom:6px}
+.empty-s{font-size:13px;color:var(--t3);line-height:1.7}
 
-/* ── LOADING ── */
-.load-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55vh;gap:18px;text-align:center}
-.spinner{width:44px;height:44px;border:3px solid var(--s3);border-top-color:var(--blue);border-radius:50%;animation:spin .75s linear infinite}
+/* Loading */
+.load-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;gap:14px}
+.spinner{width:40px;height:40px;border:3px solid var(--s3);border-top-color:var(--grn);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.load-title{font-size:18px;font-weight:700;color:var(--t1)}
-.load-sub{font-size:14px;color:var(--t3);max-width:300px}
+.load-t{font-size:15px;font-weight:600;color:var(--t1)}
+.load-s{font-size:12px;color:var(--t3)}
 
-/* ── DETAIL ── */
-.detail-anim{animation:rise .4s ease}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
-/* STICKY */
-.sticky-bar{position:sticky;top:64px;z-index:100;background:rgba(17,19,24,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--b1);padding:12px 0;margin-bottom:24px;display:flex;align-items:center;gap:10px}
-.sticky-title{font-size:16px;font-weight:700;color:var(--t1);flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.sticky-right{display:flex;gap:8px;align-items:center;flex-shrink:0}
-.btn-again{padding:9px 20px;border:none;background:var(--blue);color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;border-radius:10px;cursor:pointer;transition:all .15s;white-space:nowrap}
-.btn-again:hover{background:var(--blue2)}
-.btn-again:disabled{opacity:0.4;cursor:not-allowed}
-.btn-back{padding:9px 16px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;transition:all .15s;white-space:nowrap}
+/* ── DETAIL CARD (in main panel) ── */
+.det-wrap{animation:rise .35s ease}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.det-actions{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.btn-again{padding:9px 18px;border:none;background:var(--grn);color:#000;font-family:'Inter',sans-serif;font-size:13px;font-weight:800;border-radius:var(--r);cursor:pointer;transition:all .15s}
+.btn-again:hover{background:var(--grn2)}
+.btn-again:disabled{opacity:.4;cursor:not-allowed}
+.btn-back{padding:9px 14px;border:1px solid var(--b2);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border-radius:var(--r);cursor:pointer;transition:all .15s}
 .btn-back:hover{border-color:var(--b2);color:var(--t1)}
-.seen-pill{font-size:13px;color:var(--t3);font-weight:500;background:var(--s2);padding:6px 12px;border-radius:50px;white-space:nowrap}
+.seen-pill{font-size:12px;color:var(--t3);font-weight:500;background:var(--s2);padding:5px 10px;border-radius:50px}
 
-/* HERO */
-.hero{position:relative;border-radius:20px;overflow:hidden;margin-bottom:20px;min-height:420px;background:var(--s1)}
-.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 20%;filter:brightness(0.2) saturate(0.5)}
-.hero-grad{position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,rgba(17,19,24,.75) 45%,transparent 100%)}
-.hero-body{position:relative;z-index:2;display:flex;gap:28px;padding:32px;align-items:flex-end;min-height:420px}
-@media(max-width:600px){.hero-body{gap:16px;padding:20px;min-height:320px}}
-.poster-wrap{flex:0 0 180px}
-@media(max-width:700px){.poster-wrap{flex:0 0 130px}}
-@media(max-width:480px){.poster-wrap{flex:0 0 100px}}
-.poster-img{width:100%;border-radius:14px;display:block;box-shadow:0 16px 48px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.08)}
-.poster-ph{width:100%;aspect-ratio:2/3;background:var(--s2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:40px}
-.hero-info{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column;gap:12px;padding-bottom:2px}
-.hbadges{display:flex;flex-wrap:wrap;gap:6px}
-.hbadge{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 11px;border-radius:50px}
-.hb-m{background:rgba(79,142,247,.18);border:1px solid rgba(79,142,247,.4);color:#93c5fd}
-.hb-y{background:rgba(61,214,140,.12);border:1px solid rgba(61,214,140,.35);color:#6ee7b7}
+/* Hero */
+.hero{position:relative;border-radius:var(--r3);overflow:hidden;margin-bottom:12px;min-height:320px;background:var(--s1)}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 20%;filter:brightness(0.18) saturate(0.4)}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,rgba(20,24,28,.7) 40%,transparent 100%)}
+.hero-body{position:relative;z-index:2;display:flex;gap:18px;padding:20px;align-items:flex-end;min-height:320px}
+.poster-w{flex:0 0 170px}
+@media(max-width:500px){.poster-w{flex:0 0 110px}}
+.poster-img{width:100%;border-radius:var(--r2);display:block;box-shadow:0 12px 40px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.08)}
+.poster-ph{width:100%;aspect-ratio:2/3;background:var(--s2);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;font-size:32px}
+.hero-info{flex:1;min-width:0;overflow:hidden}
+.hbadges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.hbadge{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:50px}
+.hb-t{background:rgba(0,192,48,.15);border:1px solid rgba(0,192,48,.3);color:var(--grn)}
+.hb-y{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--t2)}
 .hb-i{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--t2)}
-.hb-aw{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.35);color:#fcd34d}
-.hb-on{background:rgba(61,214,140,.12);border:1px solid rgba(61,214,140,.35);color:#6ee7b7}
+.hb-on{background:rgba(0,192,48,.12);border:1px solid rgba(0,192,48,.3);color:var(--grn)}
 .hb-off{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--t3)}
-.hero-title{font-size:clamp(24px,4vw,52px);font-weight:800;color:#fff;line-height:1.05;letter-spacing:-.5px;text-shadow:0 2px 20px rgba(0,0,0,.6);word-break:break-word}
-.hero-orig{font-size:14px;color:var(--t3);font-style:italic}
-.hero-tags{display:flex;flex-wrap:wrap;gap:5px}
-.htag{font-size:12px;font-weight:500;padding:3px 10px;border-radius:50px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--t2)}
+.hb-aw{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--amber)}
+.hero-title{font-size:clamp(20px,3.5vw,44px);font-weight:800;color:#fff;line-height:1.05;letter-spacing:-.5px;word-break:break-word;text-shadow:0 2px 16px rgba(0,0,0,.6);margin-bottom:5px}
+.hero-orig{font-size:12px;color:var(--t3);font-style:italic;margin-bottom:8px}
+.hero-tags{display:flex;flex-wrap:wrap;gap:4px}
+.htag{font-size:11px;padding:2px 8px;border-radius:50px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--t2)}
 
-/* SCORES */
-.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-bottom:20px;overflow:hidden}
-.stile{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:16px 14px;text-align:center;transition:all .15s}
-.stile.link{cursor:pointer;text-decoration:none;display:block}
-.stile.link:hover{background:var(--s2);border-color:var(--b2)}
-.st-src{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
-.st-val{font-size:28px;font-weight:800;line-height:1;letter-spacing:-.5px}
-.st-sub{font-size:11px;color:var(--t3);margin-top:5px}
+/* Scores */
+.scores{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;-webkit-overflow-scrolling:touch}
+.scores::-webkit-scrollbar{height:2px}
+.scores::-webkit-scrollbar-thumb{background:var(--s3);border-radius:2px}
+.stile{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:9px 10px;text-align:center;transition:all .12s;flex:0 0 auto;min-width:126px}
+.stile.lnk{cursor:pointer;text-decoration:none;display:block}
+.stile.lnk:hover{background:var(--s2);border-color:var(--b2)}
+.st-src{font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.st-val{font-size:20px;font-weight:800;line-height:1.05;letter-spacing:-.4px}
+.st-sub{font-size:10px;color:var(--t3);margin-top:2px;line-height:1.2}
 .si .st-val{color:var(--amber)}
 .st .st-val{color:#01b4e4}
-.rg .st-val{color:var(--green)}
+.rg .st-val{color:var(--grn)}
 .rb .st-val{color:var(--red)}
-.mg .st-val{color:var(--green)}
+.mg .st-val{color:var(--grn)}
 .mm .st-val{color:var(--amber)}
 .mb .st-val{color:var(--red)}
 
-/* CARDS */
-.card{background:var(--s1);border:1px solid var(--b1);border-radius:16px;padding:20px 22px;margin-bottom:14px}
+/* Seasons pill row */
+.szn-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:12px 16px;margin-bottom:12px}
+.szn-pills{display:flex;flex-wrap:wrap;gap:5px}
+.szn-pill{padding:4px 10px;border:1px solid var(--b1);border-radius:50px;font-size:11px;font-weight:600;color:var(--t2);background:var(--s2)}
+.szn-pill.up{border-color:rgba(245,166,35,.4);color:var(--amber)}
+.szn-btn{padding:7px 14px;border:1px solid var(--b2);border-radius:var(--r);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .12s}
+.szn-btn:hover{border-color:var(--grn);color:var(--grn)}
+
+/* Two column detail */
+.det-cols{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:12px;align-items:start}
+@media(max-width:700px){.det-cols{grid-template-columns:minmax(0,1fr)}}
+.det-cols>*{min-width:0}
+
+/* Cards */
+.card{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:16px 18px;margin-bottom:10px}
 .card:last-child{margin-bottom:0}
-.card-h{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-h{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .card-h::after{content:'';flex:1;height:1px;background:var(--b1)}
-.ov-text{font-size:16px;line-height:1.85;color:var(--t2);border-left:2px solid var(--blue);padding-left:16px;word-break:break-word;overflow-wrap:break-word}
-.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:500px){.cred-grid{grid-template-columns:1fr}}
-.cred-item{background:var(--s2);border-radius:10px;padding:11px 14px;min-width:0}
-.cred-k{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
-.cred-v{font-size:14px;font-weight:500;color:var(--t1);word-break:break-word;overflow-wrap:break-word}
-.cast-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
-.cast-scroll::-webkit-scrollbar{height:3px}
-.cast-scroll::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
-.cast-item{flex:0 0 84px;text-align:center}
-.cast-photo{width:76px;height:76px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px;border:2px solid var(--b1);background:var(--s3)}
-.cast-ph{width:76px;height:76px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 8px;border:2px solid var(--b1)}
-.cast-name{font-size:11px;font-weight:600;color:var(--t1);line-height:1.3}
-.cast-char{font-size:10px;color:var(--t3);margin-top:2px}
-.sim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
-@media(max-width:480px){.sim-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}}
-.sim-card{background:var(--s2);border:1px solid var(--b1);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .18s}
-.sim-card:hover{border-color:var(--b2);transform:translateY(-2px)}
+.ov{font-size:14px;line-height:1.85;color:var(--t2);border-left:2px solid var(--grn);padding-left:14px;word-break:break-word}
+
+/* ── NEW DETAIL LAYOUT (tabs) ── */
+.detail-card{background:rgba(27,34,40,.95);border:1px solid var(--b1);border-radius:18px;overflow:hidden}
+.detail-top{padding:10px 12px;border-bottom:1px solid var(--b1);background:linear-gradient(180deg,rgba(255,255,255,.02),transparent)}
+.detail-tabs{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--b1);background:rgba(0,0,0,.18);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.detail-tabs::-webkit-scrollbar{height:2px}
+.detail-tabs::-webkit-scrollbar-thumb{background:var(--s3);border-radius:2px}
+.detail-tab{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--t2);font-weight:800;font-size:12px;cursor:pointer;white-space:nowrap;flex:0 0 auto;transition:background .12s,border-color .12s,color .12s}
+.detail-tab:hover{background:rgba(255,255,255,.04);color:var(--t1)}
+.detail-tab.on{background:rgba(0,192,48,.12);border-color:rgba(0,192,48,.35);color:var(--grn)}
+.dt-ic{font-size:13px;line-height:1}
+.detail-panels{padding:12px}
+.detail-panel{display:none}
+.detail-panel.on{display:block}
+.detail-card .card{background:transparent;border-color:rgba(255,255,255,.06)}
+
+/* Make watch/platform lists look like tiles */
+.watch-list.watch-tiles .watch-a{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.06)}
+.plat-list.plat-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.plat-list.plat-tiles .plat-row{background:rgba(255,255,255,.03)}
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+@media(max-width:480px){.cred-grid{grid-template-columns:1fr}}
+.cred-item{background:var(--s2);border-radius:var(--r);padding:9px 12px;min-width:0}
+.cred-k{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:3px}
+.cred-v{font-size:12px;font-weight:500;color:var(--t1);word-break:break-word}
+.cast-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.cast-scroll::-webkit-scrollbar{height:2px}
+.cast-scroll::-webkit-scrollbar-thumb{background:var(--grn);border-radius:2px}
+.cast-item{flex:0 0 72px;text-align:center}
+.cast-ph{width:64px;height:64px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 6px;border:2px solid var(--b1)}
+.cast-photo{width:64px;height:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 6px;border:2px solid var(--b1);background:var(--s3)}
+.cast-name{font-size:10px;font-weight:600;color:var(--t1);line-height:1.2}
+.cast-char{font-size:9px;color:var(--t3);margin-top:1px}
+
+/* Vertical cast list (detail tab) */
+.cast-scroll.cast-vert{display:grid;grid-template-columns:1fr;gap:10px;overflow-x:hidden;padding-bottom:0}
+.cast-scroll.cast-vert .cast-item{display:flex;align-items:center;gap:10px;flex:initial;text-align:left}
+.cast-scroll.cast-vert .cast-photo,
+.cast-scroll.cast-vert .cast-ph{width:44px;height:44px;margin:0;font-size:18px;border-width:1px}
+.cast-scroll.cast-vert .cast-tx{display:flex;flex-direction:column;min-width:0}
+.cast-scroll.cast-vert .cast-name{font-size:13px;font-weight:700}
+.cast-scroll.cast-vert .cast-char{font-size:11px;margin-top:2px}
+
+/* Sim grid */
+.sim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+.sim-card{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .15s}
+.sim-card:hover{border-color:var(--grn);transform:translateY(-2px)}
 .sim-poster{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3)}
-.sim-poster-ph{width:100%;aspect-ratio:2/3;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:24px}
-.sim-info{padding:8px 9px}
-.sim-title{font-size:12px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sim-score{font-size:11px;color:var(--amber);margin-top:3px;font-weight:600}
+.sim-ph{width:100%;aspect-ratio:2/3;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:20px}
+.sim-info{padding:6px 7px}
+.sim-title{font-size:11px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;line-clamp:2;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;max-height:calc(1.3em * 2)}
+.sim-sc{font-size:10px;color:var(--amber);margin-top:2px}
 
-/* DETAIL LAYOUT - two col on wide */
-.detail-cols{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px;align-items:start}
-@media(max-width:760px){.detail-cols{grid-template-columns:minmax(0,1fr)}}
-.detail-cols>*{min-width:0;overflow:hidden}
-
-/* WATCH */
-.watch-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
-.watch-a{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--s2);border:1px solid var(--b1);border-radius:12px;text-decoration:none;color:var(--t1);transition:all .15s}
+/* Sidebar watch card */
+.watch-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.watch-a{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);text-decoration:none;color:var(--t1);transition:all .12s}
 .watch-a:hover{background:var(--s3);border-color:var(--b2)}
-.watch-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.watch-label{font-size:15px;font-weight:600}
-.watch-sub{font-size:12px;color:var(--t3);margin-top:2px}
-.plat-list{display:flex;flex-direction:column;gap:7px}
-.plat-row{display:flex;align-items:center;gap:11px;padding:12px 14px;background:var(--s2);border:1px solid var(--b1);border-radius:12px}
-.plat-logo{width:28px;height:28px;border-radius:7px;object-fit:cover;background:var(--s3);flex-shrink:0}
-.plat-name{font-size:14px;font-weight:600;color:var(--t1)}
-.plat-type{font-size:11px;color:var(--t3);margin-top:1px}
-.no-plat{font-size:14px;color:var(--t3);font-style:italic;padding:8px 0}
+.w-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.w-lbl{font-size:13px;font-weight:600}
+.w-sub{font-size:10px;color:var(--t3);margin-top:1px}
+.plat-list{display:flex;flex-direction:column;gap:5px}
+.plat-row{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r)}
+.plat-logo-sm{width:24px;height:24px;border-radius:5px;object-fit:cover;background:var(--s3);flex-shrink:0}
+.plat-name{font-size:12px;font-weight:600;color:var(--t1)}
+.plat-type{font-size:10px;color:var(--t3)}
+.no-plat{font-size:12px;color:var(--t3);font-style:italic;padding:6px 0}
 
-.trend-btn{width:100%;margin-top:10px;padding:14px;border:1.5px solid var(--b2);border-radius:14px;background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:-.2px}
-.trend-btn:hover{background:var(--s2);color:var(--t1);border-color:var(--blue)}
-.trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
-@media(max-width:500px){.trend-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}}
-.trend-card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}
-.trend-card:hover{border-color:var(--b2);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.trend-poster{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3)}
-.trend-poster-ph{width:100%;aspect-ratio:2/3;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:32px}
-.trend-info{padding:10px 11px}
-.trend-rank{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:4px}
-.trend-name{font-size:13px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.trend-score{font-size:12px;color:var(--amber);font-weight:600;margin-top:4px}
-.trend-badge{position:absolute;bottom:6px;left:6px;right:6px;font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;text-align:center;letter-spacing:.3px;backdrop-filter:blur(4px)}
-.trend-badge-now{background:rgba(79,142,247,0.88);color:#fff}
-.trend-badge-ep{background:rgba(34,197,94,0.88);color:#fff}
-.trend-badge-on{background:rgba(34,197,94,0.75);color:#fff}
-.trend-badge-end{background:rgba(80,80,100,0.85);color:#ccc}
+/* ── SEARCH ── */
+.search-wrap{position:relative;max-width:720px;margin:0 auto}
+.s-row{display:flex;gap:8px;margin-bottom:10px}
+.s-input{flex:1;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);color:var(--t1);font-family:'Inter',sans-serif;font-size:15px;padding:13px 16px;outline:none;transition:all .2s}
+.s-input:focus{border-color:var(--grn);box-shadow:0 0 0 2px rgba(0,192,48,.12)}
+.s-input::placeholder{color:var(--t3)}
+.s-btn{padding:13px 20px;background:var(--grn);border:none;border-radius:var(--r2);color:#000;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:background .15s}
+.s-btn:hover{background:var(--grn2)}
+.stype-row{display:flex;gap:5px}
+.stype{padding:6px 14px;background:transparent;border:1px solid var(--b1);border-radius:50px;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s}
+.stype.on{background:rgba(0,192,48,.12);border-color:rgba(0,192,48,.4);color:var(--grn)}
+.s-results{position:absolute;top:100%;left:0;right:0;background:var(--s1);border:1px solid var(--b2);border-radius:var(--r2);z-index:100;overflow:hidden;margin-top:5px;max-height:360px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,.5)}
+.sri{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--b1);transition:background .1s}
+.sri:last-child{border-bottom:none}
+.sri:hover{background:var(--s2)}
+.sri-poster{width:34px;height:51px;object-fit:cover;border-radius:5px;flex-shrink:0;background:var(--s3)}
+.sri-title{font-size:13px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sri-meta{font-size:11px;color:var(--t3);margin-top:2px}
+.sri-sc{font-size:13px;font-weight:700;color:var(--amber);margin-left:auto;flex-shrink:0;padding-left:8px}
 
-@keyframes pulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
-.season-pill{padding:5px 12px;border:1px solid var(--b1);border-radius:50px;font-size:12px;font-weight:600;color:var(--t2);background:var(--s2)}
-.season-pill.upcoming{border-color:rgba(245,158,11,0.4);color:var(--amber)}
-.modal-s-btn{display:block;width:100%;padding:10px 12px;border:none;background:transparent;color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;border-radius:8px}
+/* ── TRENDS ── */
+.trend-tabs{display:flex;gap:6px;margin-bottom:16px}
+.ttab{padding:8px 18px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border-radius:var(--r);transition:all .15s}
+.ttab.on{background:rgba(0,192,48,.12);border-color:rgba(0,192,48,.4);color:var(--grn)}
+.ttab:hover:not(.on){border-color:var(--b2);color:var(--t1)}
+.trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
+@media(max-width:480px){.trend-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}}
+.tcard{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .18s}
+.tcard:hover{border-color:var(--grn);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.tposter{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3)}
+.tposter-ph{width:100%;aspect-ratio:2/3;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:28px}
+.tinfo{padding:9px 10px}
+.trank{font-size:10px;font-weight:700;color:var(--grn);margin-bottom:3px}
+.tname{font-size:12px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;line-clamp:2;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;max-height:calc(1.3em * 2)}
+.tsc{font-size:11px;color:var(--amber);font-weight:600;margin-top:3px}
+.tbadge{position:absolute;bottom:5px;left:5px;right:5px;font-size:10px;font-weight:700;padding:3px 6px;border-radius:5px;text-align:center;backdrop-filter:blur(4px)}
+.tbadge-now{background:rgba(79,142,247,.85);color:#fff}
+.tbadge-ep{background:rgba(0,192,48,.85);color:#000}
+.tbadge-on{background:rgba(0,192,48,.65);color:#000}
+.tbadge-end{background:rgba(60,70,80,.85);color:var(--t2)}
+
+/* ── MODAL ── */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-box{background:var(--s1);border:1px solid var(--b2);border-radius:20px;width:100%;max-width:680px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--b1);flex-shrink:0}
+.modal-title{font-size:15px;font-weight:700;color:var(--t1)}
+.modal-x{width:30px;height:30px;border-radius:50%;border:1px solid var(--b1);background:transparent;color:var(--t2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-body{display:flex;flex:1;overflow:hidden;min-height:0}
+.modal-seasons{flex:0 0 88px;border-right:1px solid var(--b1);overflow-y:auto;padding:6px 0}
+.modal-s-btn{display:block;width:100%;padding:9px 8px;border:none;background:transparent;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .12s;border-radius:6px}
 .modal-s-btn:hover{background:var(--s2);color:var(--t1)}
-.modal-s-btn.active{background:var(--blue);color:#fff}
-.modal-ep{padding:10px 12px;border-radius:10px;margin-bottom:4px;cursor:default;border:1px solid transparent;transition:background .12s}
-.modal-ep:hover{background:var(--s2);border-color:var(--b1)}
-.modal-ep-top{display:flex;align-items:flex-start;gap:10px}
-.modal-ep-num{font-size:11px;font-weight:700;color:var(--t3);min-width:28px;padding-top:2px;flex-shrink:0}
-.modal-ep-info{flex:1;min-width:0}
-.modal-ep-title{font-size:14px;font-weight:600;color:var(--t1);line-height:1.3}
-.modal-ep-orig{font-size:11px;color:var(--t3);font-style:italic;margin-top:2px}
-.modal-ep-meta{display:flex;gap:10px;margin-top:4px;flex-wrap:wrap}
-.modal-ep-date{font-size:11px;color:var(--t3)}
-.modal-ep-dur{font-size:11px;color:var(--t3)}
-.modal-ep-upcoming{font-size:11px;font-weight:700;color:var(--amber)}
-.modal-ep-overview{font-size:13px;color:var(--t2);line-height:1.65;margin-top:8px;padding-left:38px}
-.modal-ep-loading{padding:24px;text-align:center;color:var(--t3);font-size:14px}
-.hidden{display:none!important}
+.modal-s-btn.on{background:var(--grn);color:#000}
+.modal-s-btn .sc{font-size:9px;opacity:.7;margin-top:1px}
+.modal-eps{flex:1;overflow-y:auto;padding:6px}
+.ep{padding:9px 10px;border-radius:var(--r);margin-bottom:3px;border:1px solid transparent;transition:background .1s}
+.ep:hover{background:var(--s2);border-color:var(--b1)}
+.ep-top{display:flex;align-items:flex-start;gap:8px}
+.ep-n{font-size:10px;font-weight:700;color:var(--t3);min-width:24px;padding-top:2px;flex-shrink:0}
+.ep-info{flex:1;min-width:0}
+.ep-title{font-size:13px;font-weight:600;color:var(--t1);line-height:1.3}
+.ep-orig{font-size:10px;color:var(--t3);font-style:italic;margin-top:1px}
+.ep-meta{display:flex;gap:8px;margin-top:3px;flex-wrap:wrap}
+.ep-date{font-size:10px;color:var(--t3)}
+.ep-dur{font-size:10px;color:var(--t3)}
+.ep-up{font-size:10px;font-weight:700;color:var(--amber)}
+.ep-ov{font-size:12px;color:var(--t2);line-height:1.6;margin-top:6px;padding-left:32px}
+.ep-load{padding:20px;text-align:center;color:var(--t3);font-size:13px}
 
-/* ── MOBİL OPTİMİZASYON ── */
-@media(max-width:480px){
-  .header-inner{padding:0 14px}
-  .logo-name{font-size:17px}
-  .nav-tabs{gap:2px}
-  .ntab{padding:6px 12px;font-size:13px}
-  .tbtn{padding:12px;font-size:14px}
-  .gchip{padding:8px 13px;font-size:13px}
-  .lchip{padding:8px 13px;font-size:13px}
-  .rbtn{padding:9px 13px;font-size:13px}
-  .platbtn{padding:10px 6px;font-size:11px}
-  .platbtn-ic{font-size:22px}
-  .cta{padding:15px;font-size:15px}
-  .trend-btn{padding:13px;font-size:14px}
-  .stbtn{padding:9px;font-size:13px}
-  .hero-title{font-size:22px}
-  .card{padding:16px}
-  .ov-text{font-size:14px}
-  .watch-a{padding:11px 13px}
-  .watch-label{font-size:14px}
-  .btn-again{padding:8px 14px;font-size:13px}
-  .btn-back{padding:8px 12px;font-size:13px}
-  .seen-pill{font-size:11px;padding:5px 8px}
-  .sticky-bar{padding:10px 0}
-  .sticky-title{font-size:14px}
-  .scores{grid-template-columns:repeat(2,1fr)}
-  .st-val{font-size:22px}
-  .detail-cols{gap:12px}
+/* ── MOBILE STICKY BAR (full-page detail) ── */
+.mob-sticky{position:sticky;top:58px;z-index:90;background:rgba(20,24,28,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--b1);padding:10px 0;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.mob-sticky-title{font-size:14px;font-weight:700;color:var(--t1);flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.mob-sticky-r{display:flex;gap:6px;flex-shrink:0;align-items:center}
+
+
+/* ── MOBİL BOTTOM SHEET ── */
+.mob-filter-btn{
+  display:none;align-items:center;gap:6px;
+  padding:8px 14px;background:var(--s2);border:1px solid var(--b2);
+  border-radius:var(--r);color:var(--t1);font-family:'Inter',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
+  margin-left:8px;transition:all .15s;flex-shrink:0;
 }
-/* Dokunma hedefleri büyüt */
-button,a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-/* Input zoom engelle iOS */
-input,select{font-size:16px!important}
+.mob-filter-btn:hover{border-color:var(--grn);color:var(--grn)}
+.mob-filter-btn.active{background:rgba(0,192,48,.12);border-color:rgba(0,192,48,.4);color:var(--grn)}
+
+/* Bottom sheet overlay */
+.sheet-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.sheet-overlay.open{opacity:1;pointer-events:all}
+
+/* Bottom sheet panel */
+.sheet-panel{
+  position:fixed;bottom:0;left:0;right:0;z-index:301;
+  background:var(--s1);border-top:1px solid var(--b2);
+  border-radius:20px 20px 0 0;
+  max-height:82vh;overflow-y:auto;
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+  padding:0 16px max(32px,env(safe-area-inset-bottom));
+  -webkit-overflow-scrolling:touch;
+}
+.sheet-panel.open{transform:translateY(0)}
+.sheet-handle{width:40px;height:4px;background:var(--s3);border-radius:2px;margin:12px auto 16px}
+.sheet-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:var(--s1);padding:12px 0 8px;border-bottom:1px solid var(--b1)}
+.sheet-title{font-size:16px;font-weight:800;color:var(--t1)}
+.sheet-close{width:30px;height:30px;border-radius:50%;border:1px solid var(--b1);background:transparent;color:var(--t2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* Mobil main panel — tam ekran kart */
+@media(max-width:860px){
+  .mob-filter-btn{display:flex}
+  .sidebar{
+    display:none;
+    /* Bottom sheet modunda override edilecek */
+  }
+  .sidebar.sheet-mode{
+    display:block;
+    position:static;max-height:none;
+    background:transparent;border:none;border-radius:0;
+    padding:0;
+  }
+  .app-grid{grid-template-columns:1fr!important}
+  /* Mobil discover main panel full height feel */
+  .main-panel{min-height:calc(100vh - 140px)}
+  .empty-state{min-height:calc(100vh - 200px);border:none;background:var(--s1);border-radius:var(--r3)}
+  /* Mobil detail — tam ekran hissi */
+  .mob-sticky{padding:10px 0}
+}
+
+/* PC: font boyutları büyüt */
+@media(min-width:861px){
+  .flabel{font-size:11px;letter-spacing:1.5px}
+  .chip{font-size:13px;padding:7px 13px}
+  .lchip{font-size:13px;padding:7px 13px}
+  .rbtn{font-size:13px;padding:7px 14px}
+  .ftbtn{font-size:14px;padding:11px}
+  .stbtn{font-size:12px;padding:8px}
+  .cta{font-size:15px;padding:13px;font-weight:800}
+  .trend-btn{font-size:13px;padding:10px}
+  .platbtn{font-size:11px}
+  /* Detail PC font */
+  .ov{font-size:15px;line-height:1.9}
+  .cred-v{font-size:13px}
+  .cast-name{font-size:11px}
+  .w-lbl{font-size:14px}
+  .plat-name{font-size:13px}
+  .hero-title{font-size:clamp(26px,3vw,48px)}
+  .st-val{font-size:22px}
+  .st-src{font-size:10px}
+  .hbadge{font-size:11px;padding:4px 11px}
+}
+
+/* PC geniş */
+@media(min-width:1100px){
+  .wrap{padding:24px 28px 80px}
+  .app-grid{grid-template-columns:280px 1fr}
+}
+@media(min-width:1400px){
+  .app-grid{grid-template-columns:300px 1fr}
+  .wrap{max-width:1440px}
+}
+
+/* Mobil action butonları büyüt */
 @media(max-width:480px){
-  .fbox select{font-size:16px!important}
+  .btn-again{padding:11px 20px;font-size:14px}
+  .btn-back{padding:11px 16px;font-size:14px}
+  .hero-title{font-size:clamp(20px,5vw,32px)}
+  .scores{gap:7px;margin-bottom:8px}
+  .stile{min-width:118px;padding:8px 9px}
+  .det-cols{grid-template-columns:1fr!important}
+  .card{padding:14px 15px}
+  .detail-panels{padding:10px}
+  .detail-tabs{padding:10px}
+}
+
+.hidden{display:none!important}
+/* Mobile adjustments */
+@media(max-width:480px){
+  .hdr{padding:0 14px}
+  .wrap{padding:14px 12px 80px}
+  .sidebar{padding:14px}
+  .scores{gap:7px}
+  .st-val{font-size:20px}
+  .det-cols{gap:10px}
+  .hero-body{gap:12px;padding:16px}
 }
 </style>
-
-<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/sw.js').catch(()=>{});
-  });
-}
-</script>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-inner">
-    <div class="logo">
-      <div class="logo-box">🎬</div>
-      <div class="logo-txt">Sine<b>Bot</b></div>
-    </div>
-    <div class="nav-tabs">
-      <button class="ntab active" id="nav-discover" onclick="showSection('discover')">🎲 Keşfet</button>
-      <button class="ntab" id="nav-search" onclick="showSection('search')">🔍 Arama</button>
-    </div>
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="logo" href="#">
+      <span class="logo-ic">🎬</span>
+      <span class="logo-tx">Sine<span>Bot</span></span>
+    </a>
+    <nav class="nav">
+      <button class="ntab on" id="nav-disc" onclick="goSec('disc')">Keşfet</button>
+      <button class="ntab" id="nav-search" onclick="goSec('search')">Arama</button>
+    </nav>
+    <!-- Mobilde filtre butonu -->
+    <button class="mob-filter-btn" id="mob-filter-btn" onclick="toggleMobFilter()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      Filtrele
+    </button>
   </div>
-</div>
+</header>
 
 <!-- ══ DISCOVER ══ -->
-<div id="section-discover" class="page">
+<div id="sec-disc" class="wrap">
+  <div class="app-grid">
 
-  <div class="stitle">İçerik Türü</div>
-  <div class="type-row">
-    <button class="tbtn active" id="tab-movie" onclick="switchType('movie')">🎬 Film</button>
-    <button class="tbtn" id="tab-tv" onclick="switchType('tv')">📺 Dizi</button>
-  </div>
+    <!-- Sidebar Filtreler -->
+    <aside class="sidebar" id="sidebar">
 
-  <div class="stitle">Tür</div>
-  <div class="genres" id="genres-wrap"></div>
+      <div class="flabel">İçerik Türü</div>
+      <div class="ftype">
+        <button class="ftbtn on" id="ft-movie" onclick="switchType('movie')">🎬 Film</button>
+        <button class="ftbtn" id="ft-tv" onclick="switchType('tv')">📺 Dizi</button>
+      </div>
 
-  <div id="tv-extra" class="hidden">
-    <div class="stitle">Durum</div>
-    <div class="status-row">
-      <button class="stbtn on" id="st-all" onclick="setStatus('')">Tümü</button>
-      <button class="stbtn" id="st-on" onclick="setStatus('on')">▶ Devam Ediyor</button>
-      <button class="stbtn" id="st-off" onclick="setStatus('ended')">✓ Tamamlandı</button>
+      <div class="flabel">Tür</div>
+      <div class="chips" id="genres-wrap"></div>
+
+      <div id="tv-extra" class="hidden">
+        <div class="flabel">Durum</div>
+        <div class="stbtns">
+          <button class="stbtn on" id="st-all" onclick="setStatus('')">Tümü</button>
+          <button class="stbtn" id="st-on" onclick="setStatus('on')">▶ Devam</button>
+          <button class="stbtn" id="st-off" onclick="setStatus('ended')">✓ Bitti</button>
+        </div>
+        <div class="flabel">Sezon</div>
+        <div class="sel-row" style="margin-bottom:4px">
+          <div class="fbox"><div class="fbox-lbl">Min</div>
+            <select class="fsel" id="f-seasons-min"><option value="">—</option><option value="1">1+</option><option value="2">2+</option><option value="3">3+</option><option value="5">5+</option></select></div>
+          <div class="fbox" id="seasons-max-wrap"><div class="fbox-lbl">Max</div>
+            <select class="fsel" id="f-seasons-max"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="10">10</option></select></div>
+        </div>
+      </div>
+
+      <div class="flabel">Yapım Dili</div>
+      <div class="chips" id="lang-wrap"></div>
+
+      <div class="flabel">Platform (TR)</div>
+      <div class="plats" id="plat-grid">
+        <button class="platbtn on" data-pid="0" onclick="togglePlat(0,this)"><span class="plat-ic">🌐</span>Tümü</button>
+        <button class="platbtn" data-pid="8" onclick="togglePlat(8,this)" id="pb-8"><span class="plat-ic" id="pb-ic-8">🔴</span>Netflix</button>
+        <button class="platbtn" data-pid="119" onclick="togglePlat(119,this)" id="pb-119"><span class="plat-ic" id="pb-ic-119">🔵</span>Prime</button>
+        <button class="platbtn" data-pid="337" onclick="togglePlat(337,this)" id="pb-337"><span class="plat-ic" id="pb-ic-337">🔷</span>Disney+</button>
+      </div>
+
+      <div class="flabel">Min. IMDb Puanı</div>
+      <div class="rbtns">
+        <button class="rbtn on" onclick="setRating(0,this)">Tümü</button>
+        <button class="rbtn" onclick="setRating(5.5,this)">5+</button>
+        <button class="rbtn" onclick="setRating(6,this)">6+</button>
+        <button class="rbtn" onclick="setRating(6.5,this)">6.5+</button>
+        <button class="rbtn" onclick="setRating(7,this)">7+</button>
+        <button class="rbtn" onclick="setRating(7.5,this)">7.5+</button>
+        <button class="rbtn" onclick="setRating(8,this)">8+</button>
+        <button class="rbtn" onclick="setRating(8.5,this)">8.5+</button>
+      </div>
+
+      <div class="flabel">Yıl Aralığı</div>
+      <div class="sel-row">
+        <div class="fbox"><div class="fbox-lbl">Başlangıç</div><select class="fsel" id="f-from"><option value="">Tümü</option></select></div>
+        <div class="fbox"><div class="fbox-lbl">Bitiş</div><select class="fsel" id="f-to"><option value="">Şimdiye</option></select></div>
+      </div>
+
+      <button class="cta" id="cta-btn" onclick="startDiscover()">🎲 Rastgele Öner</button>
+      <button class="trend-btn" onclick="showTrends()">📈 Haftanın Trendleri</button>
+      <div class="err hidden" id="err-box"></div>
+
+    </aside><!-- /sidebar -->
+
+    <!-- Main panel -->
+    <div class="main-panel" id="main-panel">
+      <div class="empty-state" id="disc-empty">
+        <div class="empty-ic">🎬</div>
+        <div class="empty-t">Ne izleyeceksin?</div>
+        <div class="empty-s">Filtreleri ayarla ve rastgele öneri al</div>
+        <button onclick="startDiscover()" style="margin-top:20px;padding:13px 28px;background:var(--grn);border:none;border-radius:var(--r2);color:#000;font-family:'Inter',sans-serif;font-size:15px;font-weight:800;cursor:pointer">🎲 Rastgele Öner</button>
+      </div>
     </div>
-    <div class="stitle">Sezon Sayısı</div>
-    <div class="sel-row" style="margin-bottom:28px">
-      <div class="fbox"><label>Minimum</label>
-        <select id="f-seasons-min"><option value="">—</option><option value="1">1+</option><option value="2">2+</option><option value="3">3+</option><option value="5">5+</option></select></div>
-      <div class="fbox" id="seasons-max-wrap"><label>Maximum</label>
-        <select id="f-seasons-max"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="10">10</option></select></div>
-    </div>
-  </div>
 
-  <div class="stitle">Yapım Dili</div>
-  <div class="langs" id="lang-wrap"></div>
-
-  <div class="stitle">Platform (Türkiye)</div>
-  <div class="plat-grid" id="plat-grid">
-    <button class="platbtn on" data-pid="0" onclick="togglePlat(0,this)">
-      <span class="platbtn-ic">🌐</span>Tümü
-    </button>
-    <button class="platbtn" data-pid="8" onclick="togglePlat(8,this)" id="pb-8">
-      <img class="platbtn-logo" src="https://image.tmdb.org/t/p/w92/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg" id="pb-img-8" alt="Netflix" onerror="this.outerHTML='<span class=platbtn-ic>🔴</span>'">Netflix
-    </button>
-    <button class="platbtn" data-pid="119" onclick="togglePlat(119,this)" id="pb-119">
-      <img class="platbtn-logo" src="https://image.tmdb.org/t/p/w92/ifhbNuuVnlwYy5oXA5VIb2YR8AZ.jpg" id="pb-img-119" alt="Prime" onerror="this.outerHTML='<span class=platbtn-ic>🔵</span>'">Prime
-    </button>
-    <button class="platbtn" data-pid="337" onclick="togglePlat(337,this)" id="pb-337">
-      <img class="platbtn-logo" src="https://image.tmdb.org/t/p/w92/7rwgEs15tFwyR9NPQ5vpzxTj19d.jpg" id="pb-img-337" alt="Disney+" onerror="this.outerHTML='<span class=platbtn-ic>🔷</span>'">Disney+
-    </button>
   </div>
-
-  <div class="stitle">Min. IMDb Puanı</div>
-  <div class="rating-row">
-    <button class="rbtn on" onclick="setRating(0,this)">Tümü</button>
-    <button class="rbtn" onclick="setRating(5.5,this)">5+</button>
-    <button class="rbtn" onclick="setRating(6,this)">6+</button>
-    <button class="rbtn" onclick="setRating(6.5,this)">6.5+</button>
-    <button class="rbtn" onclick="setRating(7,this)">7+</button>
-    <button class="rbtn" onclick="setRating(7.5,this)">7.5+</button>
-    <button class="rbtn" onclick="setRating(8,this)">8+</button>
-    <button class="rbtn" onclick="setRating(8.5,this)">8.5+</button>
-  </div>
-
-  <div class="stitle">Yıl Aralığı</div>
-  <div class="sel-row">
-    <div class="fbox"><label>Başlangıç Yılı</label><select id="f-from"><option value="">Tümü</option></select></div>
-    <div class="fbox"><label>Bitiş Yılı</label><select id="f-to"><option value="">Şimdiye Kadar</option></select></div>
-  </div>
-
-  <button class="cta" id="cta-btn" onclick="startDiscover()">🎲 Rastgele Öner</button>
-  <button class="trend-btn" id="trend-btn" onclick="showTrends()">📈 Haftanın Trend Filmleri</button>
-  <div class="err hidden" id="err-box"></div>
-</div>
-
-<!-- ══ TRENDS ══ -->
-<div id="section-trends" class="page hidden">
-  <div class="sticky-bar">
-    <div class="sticky-title" id="trend-title">📈 Haftanın Trendleri</div>
-    <div class="sticky-right">
-      <button class="btn-back" onclick="showSection('discover')">← Geri</button>
-    </div>
-  </div>
-  <div style="display:flex;gap:8px;margin-bottom:20px">
-    <button class="tbtn active" id="trend-tab-movie" onclick="switchTrendTab('movie')">🎬 Filmler</button>
-    <button class="tbtn" id="trend-tab-tv" onclick="switchTrendTab('tv')">📺 Diziler</button>
-  </div>
-  <div id="trend-loading" style="text-align:center;padding:60px 0">
-    <div class="spinner" style="margin:0 auto 16px"></div>
-    <div style="font-size:15px;font-weight:600;color:var(--t2)">Yükleniyor...</div>
-  </div>
-  <div class="trend-grid hidden" id="trend-grid"></div>
 </div>
 
 <!-- ══ SEARCH ══ -->
-<div id="section-search" class="page hidden">
+<div id="sec-search" class="wrap hidden">
   <div class="search-wrap">
     <div class="s-row">
       <input class="s-input" id="search-input" type="text" placeholder="Film veya dizi adı..." autocomplete="off">
       <button class="s-btn" onclick="doSearch()">Ara</button>
     </div>
     <div class="stype-row">
-      <button class="stype active" id="stype-multi" onclick="setSType('multi')">Hepsi</button>
-      <button class="stype" id="stype-movie" onclick="setSType('movie')">🎬 Film</button>
-      <button class="stype" id="stype-tv" onclick="setSType('tv')">📺 Dizi</button>
+      <button class="stype on" id="stype-multi" onclick="setST('multi')">Hepsi</button>
+      <button class="stype" id="stype-movie" onclick="setST('movie')">🎬 Film</button>
+      <button class="stype" id="stype-tv" onclick="setST('tv')">📺 Dizi</button>
     </div>
-    <div class="s-results hidden" id="search-results"></div>
+    <div class="s-results hidden" id="s-results"></div>
   </div>
-  <div id="search-hint" style="text-align:center;padding:60px 0;color:var(--t3)">
-    <div style="font-size:52px;margin-bottom:14px;opacity:.25">🔍</div>
-    <div style="font-size:18px;font-weight:700;color:var(--t2);margin-bottom:8px">Film veya dizi ara</div>
-    <div style="font-size:14px">İsim yaz, sonuçlara tıkla</div>
+  <div id="s-hint" style="text-align:center;padding:60px 0;color:var(--t3)">
+    <div style="font-size:48px;opacity:.15;margin-bottom:12px">🔍</div>
+    <div style="font-size:17px;font-weight:700;color:var(--t2);margin-bottom:6px">Film veya dizi ara</div>
+    <div style="font-size:13px">İsim yaz, sonuçlara tıkla</div>
   </div>
+  <!-- Arama sonucu detail -->
+  <div id="search-detail" class="hidden" style="margin-top:20px;max-width:900px;margin-left:auto;margin-right:auto"></div>
 </div>
 
-<!-- ══ LOADING ══ -->
-<div id="view-loading" class="page hidden">
-  <div class="load-screen">
-    <div class="spinner"></div>
-    <div class="load-title">Aranıyor...</div>
-    <div class="load-sub" id="load-sub">TMDB taranıyor</div>
+<!-- ══ TRENDS ══ -->
+<div id="sec-trends" class="wrap hidden">
+  <div class="sticky-bar-trends" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div style="font-size:18px;font-weight:800">📈 Haftanın Trendleri</div>
+    <button class="btn-back" onclick="goSec('disc')">← Geri</button>
   </div>
+  <div class="trend-tabs">
+    <button class="ttab on" id="tt-movie" onclick="switchTrend('movie')">🎬 Filmler</button>
+    <button class="ttab" id="tt-tv" onclick="switchTrend('tv')">📺 Diziler</button>
+  </div>
+  <div id="trend-loading" style="text-align:center;padding:60px 0">
+    <div class="spinner" style="margin:0 auto 14px"></div>
+    <div style="font-size:14px;font-weight:600;color:var(--t2)">Yükleniyor...</div>
+  </div>
+  <div class="trend-grid hidden" id="trend-grid"></div>
 </div>
 
-<!-- ══ DETAIL ══ -->
-<div id="view-detail" class="page hidden">
-  <div class="detail-anim">
-    <div class="sticky-bar">
-      <div class="sticky-title" id="sticky-title">—</div>
-      <div class="sticky-right">
-        <span class="seen-pill hidden" id="seen-count"></span>
-        <button class="btn-again hidden" id="btn-again" onclick="doDiscover()">🎲 Başka Öner</button>
-        <button class="btn-back" onclick="goBack()">← Geri</button>
-      </div>
+<!-- ══ FULL-PAGE DETAIL (mobil / arama) ══ -->
+<div id="sec-detail" class="wrap hidden">
+  <div class="mob-sticky">
+    <div class="mob-sticky-title" id="mob-title">—</div>
+    <div class="mob-sticky-r">
+      <span class="seen-pill hidden" id="seen-count"></span>
+      <button class="btn-again hidden" id="btn-again" onclick="doDiscover()">🎲 Başka</button>
+      <button class="btn-back" onclick="goBack()">← Geri</button>
     </div>
-    <div class="hero">
-      <div class="hero-bg" id="d-bg"></div>
-      <div class="hero-grad"></div>
-      <div class="hero-body">
-        <div class="poster-wrap" id="d-poster"></div>
-        <div class="hero-info">
-          <div class="hbadges" id="d-badges"></div>
-          <div class="hero-title" id="d-title"></div>
-          <div class="hero-orig hidden" id="d-orig"></div>
-          <div class="hero-tags" id="d-tags"></div>
-        </div>
-      </div>
+  </div>
+  <div id="detail-content"></div>
+</div>
+
+<!-- ══ SEASON MODAL ══ -->
+<div id="modal-ov" class="modal-ov hidden" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-top">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-x" onclick="closeModal()">✕</button>
     </div>
-    <div class="scores" id="d-scores"></div>
-    <div class="card hidden" id="d-seasons-card" style="margin-bottom:16px">
-      <div class="card-h">Sezonlar & Bölümler</div>
-      <div id="d-seasons-summary" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-        <div id="d-seasons-pills" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-        <button onclick="openSeasonModal()" style="padding:8px 16px;border:1px solid var(--b2);border-radius:var(--r);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap" onmouseover="this.style.color='var(--t1)';this.style.borderColor='var(--blue)'" onmouseout="this.style.color='var(--t2)';this.style.borderColor='var(--b2)'">Tüm bölümler →</button>
-      </div>
-    </div>
-    <div class="detail-cols">
-      <div>
-        <div class="card hidden" id="d-ov-card"><div class="card-h">Konu</div><div class="ov-text" id="d-ov"></div></div>
-        <div class="card hidden" id="d-cr-card"><div class="card-h">Künye</div><div class="cred-grid" id="d-cred"></div></div>
-        <div class="card hidden" id="d-ca-card"><div class="card-h">Oyuncular</div><div class="cast-scroll" id="d-cast"></div></div>
-        <div class="card hidden" id="d-sim-card">
-          <div class="card-h">Benzer İçerikler</div>
-          <div class="sim-grid" id="d-sim"></div>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <div class="card-h">İzle</div>
-          <div class="watch-list" id="d-watch"></div>
-          <div class="card-h">Türkiye'de</div>
-          <div class="plat-list" id="d-plat"></div>
-        </div>
-      </div>
+    <div class="modal-body">
+      <div class="modal-seasons" id="modal-seasons"></div>
+      <div class="modal-eps" id="modal-eps"></div>
     </div>
   </div>
 </div>
@@ -523,24 +647,23 @@ const IM="https://image.tmdb.org/t/p/w500";
 const IO="https://image.tmdb.org/t/p/original";
 const IF="https://image.tmdb.org/t/p/w185";
 const CY=new Date().getFullYear();
+const RELIABLE=[8,119,337];
 
 const GM=[
   {id:28,ic:"⚔️",n:"Aksiyon"},{id:12,ic:"🗺️",n:"Macera"},{id:16,ic:"✏️",n:"Animasyon"},
   {id:35,ic:"😂",n:"Komedi"},{id:80,ic:"🔫",n:"Suç"},{id:99,ic:"🎥",n:"Belgesel"},
   {id:18,ic:"🎭",n:"Drama"},{id:14,ic:"🧙",n:"Fantezi"},{id:36,ic:"🏛️",n:"Tarih"},
   {id:27,ic:"👻",n:"Korku"},{id:9648,ic:"🔍",n:"Gizem"},{id:10749,ic:"❤️",n:"Romantik"},
-  {id:878,ic:"🚀",n:"Bil. Kurgu"},{id:53,ic:"😨",n:"Gerilim"},{id:10752,ic:"💂",n:"Savaş"},
+  {id:878,ic:"🚀",n:"Bil.Kurgu"},{id:53,ic:"😨",n:"Gerilim"},{id:10752,ic:"💂",n:"Savaş"},
   {id:37,ic:"🤠",n:"Western"}
 ];
 const GT=[
-  {id:10759,ic:"⚔️",n:"Aksiyon & Macera"},{id:16,ic:"✏️",n:"Animasyon"},{id:35,ic:"😂",n:"Komedi"},
+  {id:10759,ic:"⚔️",n:"Aksiyon"},{id:16,ic:"✏️",n:"Animasyon"},{id:35,ic:"😂",n:"Komedi"},
   {id:80,ic:"🔫",n:"Suç"},{id:99,ic:"🎥",n:"Belgesel"},{id:18,ic:"🎭",n:"Drama"},
   {id:10751,ic:"👨‍👩‍👧",n:"Aile"},{id:14,ic:"🧙",n:"Fantezi"},{id:36,ic:"🏛️",n:"Tarih"},
   {id:27,ic:"👻",n:"Korku"},{id:9648,ic:"🔍",n:"Gizem"},{id:10749,ic:"❤️",n:"Romantik"},
-  {id:10765,ic:"🚀",n:"Sci-Fi & Fantezi"},{id:53,ic:"😨",n:"Gerilim"},
-  {id:10768,ic:"🏛️",n:"Savaş & Politika"},{id:37,ic:"🤠",n:"Western"},
-  {id:10762,ic:"🧒",n:"Çocuk"},{id:10763,ic:"📰",n:"Haber"},
-  {id:10764,ic:"🎤",n:"Reality"},{id:10767,ic:"🎙️",n:"Talk Show"}
+  {id:10765,ic:"🚀",n:"Sci-Fi"},{id:53,ic:"😨",n:"Gerilim"},
+  {id:10768,ic:"🏛️",n:"Savaş"},{id:37,ic:"🤠",n:"Western"}
 ];
 const LL=[
   {c:"tr",f:"🇹🇷",n:"Türkçe"},{c:"en",f:"🇺🇸",n:"İngilizce"},{c:"ko",f:"🇰🇷",n:"Korece"},
@@ -550,70 +673,93 @@ const LL=[
 ];
 const LS={};LL.forEach(l=>LS[l.c]=null);
 
-let MT="movie",SGM=[],SGT=[],ST="multi",TVS="",FS="discover",CR=0,CP=0;
-const MEM={};
-// Aktif tür seçimini döndür
-function getSG(){return MT==="movie"?SGM:SGT}
-function setSG(arr){if(MT==="movie")SGM=arr;else SGT=arr}
+let MT="movie",SGM=[],SGT=[],ST_="multi",TVS="",FS="disc",CR=0,CP=0;
+let trendType="movie";
+const MEM={},CACHE={},EP_CACHE={},WD_CACHE={},EXT_CACHE={},RECS_CACHE={},OMDB_CACHE={};
+const PREFETCHING=new Set();
+const TV_MINI_CACHE={};
+let modalTvId=null,modalSeasons=[];
 
+function prefetchDetail(id,type){
+  const ck=`${type}_${id}`;
+  if(PREFETCHING.has(ck))return;
+  if(CACHE[ck]?.credits&&WD_CACHE[ck]&&EXT_CACHE[ck]&&RECS_CACHE[ck])return;
+  PREFETCHING.add(ck);
+  (async()=>{
+    try{
+      const detP=CACHE[ck]?.credits?Promise.resolve(CACHE[ck]):tmdb(`/${type}/${id}?language=tr-TR&append_to_response=credits`).then(d=>{CACHE[ck]=d;return d});
+      const wdP=WD_CACHE[ck]?Promise.resolve(WD_CACHE[ck]):tmdb(`/${type}/${id}/watch/providers`).then(x=>{WD_CACHE[ck]=x;return x});
+      const extP=EXT_CACHE[ck]?Promise.resolve(EXT_CACHE[ck]):tmdb(`/${type}/${id}/external_ids`).catch(()=>({})).then(x=>{EXT_CACHE[ck]=x;return x});
+      const recsP=RECS_CACHE[ck]?Promise.resolve(RECS_CACHE[ck]):tmdb(`/${type}/${id}/recommendations?language=tr-TR&page=1`).catch(()=>({results:[]})).then(x=>{RECS_CACHE[ck]=x;return x});
+      await Promise.all([detP,wdP,extP,recsP]);
+      const imdbId=EXT_CACHE[ck]?.imdb_id;
+      if(imdbId && OMDB_CACHE[imdbId]===undefined){
+        OMDB_CACHE[imdbId]=await omdbF(imdbId);
+      }
+    }catch(e){}
+    finally{PREFETCHING.delete(ck)}
+  })();
+}
+
+function getSG(){return MT==="movie"?SGM:SGT}
+function setSG(a){MT==="movie"?SGM=a:SGT=a}
+const isPC=()=>window.innerWidth>860;
+
+// Year selects
 (()=>{
   const f=document.getElementById("f-from"),t=document.getElementById("f-to");
-  for(let y=CY;y>=1970;y--){f.innerHTML+=`<option value="${y}">${y}</option>`;t.innerHTML+=`<option value="${y}">${y}</option>`}
+  for(let y=CY;y>=1970;y--){
+    f.innerHTML+=`<option value="${y}">${y}</option>`;
+    t.innerHTML+=`<option value="${y}">${y}</option>`;
+  }
 })();
 
+// Platform logo yükleme
+[{pid:8,logo:"/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg"},{pid:119,logo:"/ifhbNuuVnlwYy5oXA5VIb2YR8AZ.jpg"},{pid:337,logo:"/7rwgEs15tFwyR9NPQ5vpzxTj19d.jpg"}].forEach(({pid,logo})=>{
+  const ic=document.getElementById("pb-ic-"+pid);
+  if(ic){
+    const img=new Image();
+    img.onload=()=>ic.outerHTML=`<img class="plat-logo" src="https://image.tmdb.org/t/p/w92${logo}" alt="">`;
+    img.src="https://image.tmdb.org/t/p/w92"+logo;
+  }
+});
+
 function rGenres(){
-  const L=MT==="movie"?GM:GT;
-  const sg=getSG();
+  const L=MT==="movie"?GM:GT,sg=getSG();
   document.getElementById("genres-wrap").innerHTML=L.map(g=>
-    `<button class="gchip${sg.includes(g.id)?" on":""}" onclick="tG(${g.id},this)"><span class="gchip-ic">${g.ic}</span>${g.n}</button>`
+    `<button class="chip${sg.includes(g.id)?" on":""}" onclick="tG(${g.id},this)"><span class="chip-ic">${g.ic}</span>${g.n}</button>`
   ).join("");
 }
-function tG(id,el){
-  const sg=getSG();
-  setSG(sg.includes(id)?sg.filter(x=>x!==id):[...sg,id]);
-  el.classList.toggle("on");
-}
+function tG(id,el){const sg=getSG();setSG(sg.includes(id)?sg.filter(x=>x!==id):[...sg,id]);el.classList.toggle("on")}
 
 function rLangs(){
-  document.getElementById("lang-wrap").innerHTML=LL.map(l=>{
-    const on=LS[l.c]==="inc";
-    return`<button class="lchip${on?" inc":""}" onclick="tL('${l.c}')">${l.f} ${l.n}</button>`;
-  }).join("");
+  document.getElementById("lang-wrap").innerHTML=LL.map(l=>
+    `<button class="lchip${LS[l.c]==="inc"?" on":""}" onclick="tL('${l.c}')">${l.f} ${l.n}</button>`
+  ).join("");
 }
 function tL(c){LS[c]=LS[c]==="inc"?null:"inc";rLangs()}
 
-function showSection(s){
+// Navigation
+function goSec(s){
   FS=s;
-  ["discover","search","trends"].forEach(n=>document.getElementById("section-"+n).classList.toggle("hidden",s!==n));
-  ["nav-discover","nav-search"].forEach(n=>document.getElementById(n).classList.toggle("active",n==="nav-"+s));
-  document.getElementById("view-loading").classList.add("hidden");
-  document.getElementById("view-detail").classList.add("hidden");
+  ["disc","search","trends","detail"].forEach(n=>document.getElementById("sec-"+n)?.classList.toggle("hidden",n!==s));
+  ["disc","search"].forEach(n=>document.getElementById("nav-"+n)?.classList.toggle("on",n===s));
+  document.getElementById("err-box")?.classList.add("hidden");
   window.scrollTo({top:0,behavior:"instant"});
 }
-function showView(v){
-  ["discover","search","trends"].forEach(n=>document.getElementById("section-"+n).classList.add("hidden"));
-  document.getElementById("view-loading").classList.toggle("hidden",v!=="loading");
-  document.getElementById("view-detail").classList.toggle("hidden",v!=="detail");
-  document.documentElement.scrollTop=0;
-  document.body.scrollTop=0;
-}
-function goBack(){showSection(FS)}
-function setSub(t){document.getElementById("load-sub").textContent=t}
-function showErr(m){const e=document.getElementById("err-box");e.textContent="⚠ "+m;e.classList.remove("hidden")}
-function hideErr(){document.getElementById("err-box").classList.add("hidden")}
+function goBack(){goSec(FS==="detail"?"disc":FS)}
 
 function switchType(t){
   MT=t;
-  document.getElementById("tab-movie").className="tbtn"+(t==="movie"?" active":"");
-  document.getElementById("tab-tv").className="tbtn"+(t==="tv"?" active":"");
+  document.getElementById("ft-movie").className="ftbtn"+(t==="movie"?" on":"");
+  document.getElementById("ft-tv").className="ftbtn"+(t==="tv"?" on":"");
   document.getElementById("tv-extra").classList.toggle("hidden",t!=="tv");
-  document.getElementById("trend-btn").textContent="📈 Haftanın Trendleri";
   rGenres();
 }
 function setStatus(s){
   TVS=s;
-  ["st-all","st-on","st-off"].forEach(id=>document.getElementById(id).classList.remove("on"));
-  document.getElementById({"":"st-all","on":"st-on","ended":"st-off"}[s]).classList.add("on");
+  ["st-all","st-on","st-off"].forEach(id=>document.getElementById(id)?.classList.remove("on"));
+  document.getElementById({"":"st-all","on":"st-on","ended":"st-off"}[s])?.classList.add("on");
   const mw=document.getElementById("seasons-max-wrap");
   if(mw)mw.style.display=s==="on"?"none":"";
   if(s==="on")document.getElementById("f-seasons-max").value="";
@@ -625,63 +771,62 @@ function setRating(v,el){
 }
 function togglePlat(pid,el){
   if(pid===0){CP=0;document.querySelectorAll(".platbtn").forEach(b=>b.classList.remove("on"));el.classList.add("on");return}
-  if(CP===pid){CP=0;el.classList.remove("on");document.querySelector(".platbtn[data-pid='0']").classList.add("on")}
-  else{CP=pid;document.querySelectorAll(".platbtn").forEach(b=>b.classList.remove("on"));el.classList.add("on")}
+  CP=CP===pid?0:pid;
+  document.querySelectorAll(".platbtn").forEach(b=>b.classList.remove("on"));
+  if(CP)el.classList.add("on");
+  else document.querySelector(".platbtn[data-pid='0']").classList.add("on");
 }
-function setSType(t){ST=t;["multi","movie","tv"].forEach(x=>document.getElementById("stype-"+x).classList.toggle("active",x===t))}
+function setST(t){ST_=t;["multi","movie","tv"].forEach(x=>document.getElementById("stype-"+x)?.classList.toggle("on",x===t))}
 
+// API
 async function tmdb(p){const r=await fetch(TB+p,{headers:TH});if(!r.ok)throw new Error("TMDB "+r.status);return r.json()}
-async function omdbF(id){
-  try{
-    const r=await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${OK}`);
-    const d=await r.json();
-    if(d.Response==="True"){return d}
-    return null;
-  }catch(e){return null}
-}
+async function omdbF(id){try{const r=await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${OK}`);const d=await r.json();return d.Response==="True"?d:null}catch(e){return null}}
 
+// Search
 let sT=null;
 const sI=document.getElementById("search-input");
-sI.addEventListener("input",()=>{clearTimeout(sT);const q=sI.value.trim();if(q.length<2){document.getElementById("search-results").classList.add("hidden");return}sT=setTimeout(doSearch,380)});
+sI.addEventListener("input",()=>{clearTimeout(sT);const q=sI.value.trim();if(q.length<2){document.getElementById("s-results").classList.add("hidden");return}sT=setTimeout(doSearch,350)});
 sI.addEventListener("keydown",e=>{if(e.key==="Enter")doSearch()});
-document.addEventListener("click",e=>{if(!document.getElementById("section-search")?.contains(e.target))document.getElementById("search-results").classList.add("hidden")});
+document.addEventListener("click",e=>{if(!document.getElementById("sec-search")?.contains(e.target))document.getElementById("s-results").classList.add("hidden")});
 
 async function doSearch(){
   const q=sI.value.trim();if(!q)return;
-  const sr=document.getElementById("search-results");
-  sr.innerHTML=`<div style="padding:14px;text-align:center;color:var(--t3)">Aranıyor...</div>`;
-  sr.classList.remove("hidden");document.getElementById("search-hint").classList.add("hidden");
+  const sr=document.getElementById("s-results");
+  sr.innerHTML=`<div style="padding:12px;text-align:center;color:var(--t3)">Aranıyor...</div>`;
+  sr.classList.remove("hidden");
+  document.getElementById("s-hint").classList.add("hidden");
   try{
-    const ep=ST==="multi"?"search/multi":`search/${ST}`;
+    const ep=ST_==="multi"?"search/multi":`search/${ST_}`;
     const d=await tmdb(`/${ep}?language=tr-TR&query=${encodeURIComponent(q)}&page=1`);
-    const items=(d.results||[]).filter(x=>ST==="multi"?(x.media_type==="movie"||x.media_type==="tv"):true).slice(0,8);
-    if(!items.length){sr.innerHTML=`<div style="padding:14px;text-align:center;color:var(--t3)">Sonuç bulunamadı</div>`;return}
+    const items=(d.results||[]).filter(x=>ST_==="multi"?(x.media_type==="movie"||x.media_type==="tv"):true).slice(0,8);
+    if(!items.length){sr.innerHTML=`<div style="padding:12px;text-align:center;color:var(--t3)">Sonuç bulunamadı</div>`;return}
     sr.innerHTML=items.map(x=>{
-      const t=x.title||x.name||"";const y=(x.release_date||x.first_air_date||"").slice(0,4);
-      const mt=x.media_type||(ST!=="multi"?ST:"movie");const sc=x.vote_average?x.vote_average.toFixed(1):"—";
-      const po=x.poster_path?`<img class="sri-poster" src="${IM}${x.poster_path}" alt="" onerror="this.style.background='var(--s3)'">`:`<div class="sri-poster" style="display:flex;align-items:center;justify-content:center">🎬</div>`;
-      return`<div class="sri" onclick="openDetail(${x.id},'${mt}',false)">${po}<div style="flex:1;min-width:0"><div class="sri-title">${t}</div><div class="sri-meta">${mt==="movie"?"Film":"Dizi"}${y?" · "+y:""}</div></div><div class="sri-score">★ ${sc}</div></div>`;
+      const t=x.title||x.name||"",y=(x.release_date||x.first_air_date||"").slice(0,4);
+      const mt=x.media_type||(ST_!=="multi"?ST_:"movie"),sc=x.vote_average?x.vote_average.toFixed(1):"—";
+      const po=x.poster_path?`<img class="sri-poster" src="${IM}${x.poster_path}" alt="" loading="lazy">`:`<div class="sri-poster" style="display:flex;align-items:center;justify-content:center">🎬</div>`;
+      return`<div class="sri" onclick="openDetail(${x.id},'${mt}',false)">${po}<div style="flex:1;min-width:0"><div class="sri-title">${t}</div><div class="sri-meta">${mt==="movie"?"Film":"Dizi"}${y?" · "+y:""}</div></div><div class="sri-sc">★ ${sc}</div></div>`;
     }).join("");
-  }catch(e){sr.innerHTML=`<div style="padding:14px;text-align:center;color:var(--red)">${e.message}</div>`}
+  }catch(e){sr.innerHTML=`<div style="padding:12px;text-align:center;color:var(--red)">${e.message}</div>`}
 }
 
+// Discover
 function makeKey(){
   const lk=Object.entries(LS).filter(([k,v])=>v==="inc").map(([k])=>k).sort().join(",");
-  return`${MT}|${[...getSG()].sort().join(",")}|${CP}|${CR}|${document.getElementById("f-from").value}|${document.getElementById("f-to").value}|${TVS}|${document.getElementById("f-seasons-min")?.value||""}|${document.getElementById("f-seasons-max")?.value||""}|${lk}`;
+  return`${MT}|${[...getSG()].sort()}|${CP}|${CR}|${document.getElementById("f-from").value}|${document.getElementById("f-to").value}|${TVS}|${document.getElementById("f-seasons-min")?.value||""}|${document.getElementById("f-seasons-max")?.value||""}|${lk}`;
 }
-function getMem(k){if(!MEM[k])MEM[k]={seenIds:new Set(),pagePool:[],pagesDone:new Set(),totalPages:null};return MEM[k]}
+function getMem(k){if(!MEM[k])MEM[k]={seenIds:new Set(),pool:[],done:new Set(),total:null};return MEM[k]}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
 function buildUrl(page,usePlat){
   const iM=MT==="movie";
-  const mR=CR;const tM=mR>0?Math.max(0,mR-0.35):0;
-  // Daha geniş havuz için düşük vote_count eşiği
+  const mR=CR,tM=mR>0?Math.max(0,mR-0.35):0;
+  // İlk sayfa popularity (hızlı), sonrası vote_average (çeşitli)
+  const sort=page===1?"popularity.desc":"vote_average.desc";
   const vc=mR>=8?50:mR>=7?30:10;
-  const yf=document.getElementById("f-from").value;const yt=document.getElementById("f-to").value;
-  // vote_average.desc — daha çeşitli sonuçlar, popularity.desc gibi sürekli aynı filmler gelmiyor
-  let u=`/discover/${MT}?language=tr-TR&sort_by=vote_average.desc&include_adult=false&page=${page}&vote_count.gte=${vc}`;
+  const yf=document.getElementById("f-from").value,yt=document.getElementById("f-to").value;
+  let u=`/discover/${MT}?language=tr-TR&sort_by=${sort}&include_adult=false&page=${page}&vote_count.gte=${vc}`;
   if(tM>0)u+=`&vote_average.gte=${tM}`;
-  if(getSG().length)u+=`&with_genres=${getSG().join(",")}`;
+  const sg=getSG();if(sg.length)u+=`&with_genres=${sg.join(",")}`;
   if(usePlat&&CP)u+=`&with_watch_providers=${CP}&watch_region=TR`;
   const incL=Object.entries(LS).filter(([k,v])=>v==="inc").map(([k])=>k);
   if(incL.length===1)u+=`&with_original_language=${incL[0]}`;
@@ -692,439 +837,465 @@ function buildUrl(page,usePlat){
   return u;
 }
 
-async function startDiscover(){hideErr();await doDiscover()}
+function showLoad(txt="Aranıyor..."){
+  if(isPC()){
+    document.getElementById("main-panel").innerHTML=`<div class="load-state"><div class="spinner"></div><div class="load-t">${txt}</div><div class="load-s" id="load-sub"></div></div>`;
+  }else{
+    goSec("detail");
+    document.getElementById("detail-content").innerHTML=`<div class="load-state"><div class="spinner"></div><div class="load-t">${txt}</div><div class="load-s" id="load-sub"></div></div>`;
+  }
+}
+function setSub(t){const el=document.getElementById("load-sub");if(el)el.textContent=t}
+function showErr(m){const e=document.getElementById("err-box");e.textContent="⚠ "+m;e.classList.remove("hidden")}
+
+async function startDiscover(){document.getElementById("err-box").classList.add("hidden");closeMobFilter();await doDiscover()}
+
 async function doDiscover(){
   document.getElementById("cta-btn").disabled=true;
-  document.getElementById("btn-again").disabled=true;
-  FS="discover";setSub("Aranıyor...");showView("loading");
-  const key=makeKey();const mem=getMem(key);const hasPL=!!CP;
+  const ba=document.getElementById("btn-again");if(ba)ba.disabled=true;
+  showLoad();
+  const key=makeKey(),mem=getMem(key);
   const sMin=parseInt(document.getElementById("f-seasons-min")?.value)||0;
   const sMax=parseInt(document.getElementById("f-seasons-max")?.value)||999;
   const incL=Object.entries(LS).filter(([k,v])=>v==="inc").map(([k])=>k);
+  const hasPL=!!CP;
   try{
     let found=null,att=0;
-    const RELIABLE_PLATS=[8,119,337]; // Netflix, Prime, Disney+ — ikili kontrol yapılacak
     const tryF=async(pg,up)=>{
       const d=await tmdb(buildUrl(pg,up));if(!d.results?.length)return null;
-      if(mem.totalPages===null){mem.totalPages=Math.min(d.total_pages||1,500);const ex=new Set(mem.pagesDone);mem.pagePool=shuffle(Array.from({length:mem.totalPages},(_,i)=>i+1).filter(p=>!ex.has(p)))}
+      if(mem.total===null){
+        mem.total=Math.min(d.total_pages||1,500);
+        mem.pool=shuffle(Array.from({length:mem.total},(_,i)=>i+1).filter(p=>!mem.done.has(p)));
+      }
       let res=d.results.filter(x=>!mem.seenIds.has(x.id));
       if(incL.length>1)res=res.filter(x=>incL.includes(x.original_language));
       if(!res.length)return null;
-      // İkili kontrol: güvenilir platform seçiliyse watch/providers ile doğrula — paralel
-      if(up&&CP&&RELIABLE_PLATS.includes(CP)){
+      // İkili platform doğrulama
+      if(up&&CP&&RELIABLE.includes(CP)){
         shuffle(res);
-        const candidates=res.slice(0,12).filter(c=>!mem.seenIds.has(c.id));
-        const results=await Promise.all(candidates.map(async c=>{
+        const pick=res.slice(0,6).filter(c=>!mem.seenIds.has(c.id));
+        const results=await Promise.all(pick.map(async c=>{
           try{
-            const wp=await tmdb(`/${MT}/${c.id}/watch/providers`);
-            const trP=wp.results?.TR;
-            const allP=[...(trP?.flatrate||[]),...(trP?.rent||[]),...(trP?.buy||[])];
-            if(!allP.some(p=>p.provider_id===CP))return null;
+            const wp=WD_CACHE[`${MT}_${c.id}`] || await tmdb(`/${MT}/${c.id}/watch/providers`);
+            WD_CACHE[`${MT}_${c.id}`]=wp;
+            const trP=wp?.results?.TR;
+            const all=[...(trP?.flatrate||[]),...(trP?.rent||[]),...(trP?.buy||[])];
+            if(!all.some(p=>p.provider_id===CP))return null;
             if(MT==="tv"&&(sMin>1||sMax<999)){
-              const det=await tmdb(`/tv/${c.id}?language=tr-TR`);
-              const s=det.number_of_seasons||0;
-              return(s>=sMin&&s<=sMax)?c:null;
+              const mini=TV_MINI_CACHE[c.id] || await tmdb(`/tv/${c.id}?language=tr-TR`);
+              TV_MINI_CACHE[c.id]=mini;
+              const s=mini.number_of_seasons||0;return(s>=sMin&&s<=sMax)?c:null;
             }
             return c;
           }catch(e){return null}
         }));
-        const valid=results.filter(Boolean);
-        return valid.length?valid[Math.floor(Math.random()*valid.length)]:null;
+        const v=results.filter(Boolean);return v.length?v[Math.floor(Math.random()*v.length)]:null;
       }
-      // Sezon filtresi (platform kontrolü olmadan) — paralel kontrol
+      // Sezon filtresi
       if(MT==="tv"&&(sMin>1||sMax<999)){
         shuffle(res);
-        const candidates=res.slice(0,8);
-        const results=await Promise.all(candidates.map(async c=>{
+        const results=await Promise.all(res.slice(0,6).map(async c=>{
           try{
-            const det=await tmdb(`/tv/${c.id}?language=tr-TR`);
-            const s=det.number_of_seasons||0;
-            return(s>=sMin&&s<=sMax&&!mem.seenIds.has(c.id))?c:null;
+            const mini=TV_MINI_CACHE[c.id] || await tmdb(`/tv/${c.id}?language=tr-TR`);
+            TV_MINI_CACHE[c.id]=mini;
+            const s=mini.number_of_seasons||0;
+            return(s>=sMin&&s<=sMax&&!mem.seenIds.has(c.id))?c:null
           }catch(e){return null}
         }));
-        const valid=results.filter(Boolean);
-        return valid.length?valid[Math.floor(Math.random()*valid.length)]:null;
+        const v=results.filter(Boolean);return v.length?v[Math.floor(Math.random()*v.length)]:null;
       }
       return res[Math.floor(Math.random()*res.length)];
     };
-    // Güvenilir platform seçiliyse fallback yok (yanlış öneri gelmesin)
-    const platModes=hasPL?[true]:[false];
-    if(mem.totalPages===null){
+    const modes=hasPL?[true]:[false];
+    if(mem.total===null){
       setSub("Havuz hazırlanıyor...");
-      for(const up of platModes){const r=await tryF(1,up);if(r){found=r;mem.pagesDone.add(1);break}}
+      for(const up of modes){const r=await tryF(1,up);if(r){found=r;mem.done.add(1);break}}
     }
     while(!found&&att<30){
       att++;
-      if(!mem.pagePool.length){mem.pagePool=shuffle(Array.from({length:mem.totalPages||10},(_,i)=>i+1));mem.pagesDone.clear()}
-      const pg=mem.pagePool.shift();mem.pagesDone.add(pg);
-      setSub(`Sayfa ${pg} · ${mem.seenIds.size} öneri`);
-      try{for(const up of platModes){const r=await tryF(pg,up);if(r){found=r;break}}}catch(e){console.warn(e)}
+      if(!mem.pool.length){mem.pool=shuffle(Array.from({length:mem.total||10},(_,i)=>i+1));mem.done.clear()}
+      // Fetch a small batch of pages in parallel to reduce waiting.
+      const batch=[];
+      while(batch.length<3 && mem.pool.length){
+        const pg=mem.pool.shift();
+        mem.done.add(pg);
+        batch.push(pg);
+      }
+      if(!batch.length)break;
+      setSub(`Sayfa ${batch[0]}..${batch[batch.length-1]} · ${mem.seenIds.size} öneri`);
+      try{
+        const tries=batch.map(async pg=>{
+          for(const up of modes){
+            const r=await tryF(pg,up);
+            if(r) return r;
+          }
+          return null;
+        });
+        const results=await Promise.all(tries);
+        found=results.find(Boolean)||null;
+      }catch(e){console.warn(e)}
     }
     if(!found)throw new Error("exhausted");
-    mem.seenIds.add(found.id);setSub("Yükleniyor...");
+    mem.seenIds.add(found.id);
+    setSub("Yükleniyor...");
     await openDetail(found.id,MT,true,mem.seenIds.size);
   }catch(e){
-    showSection("discover");
-    showErr(e.message==="exhausted"?(CP?`Bu platformda eşleşen içerik bulunamadı — platform filtresini kaldırın veya filtreleri genişletin.`:`${getMem(makeKey()).seenIds.size} öneri yapıldı, tükendi. Filtreleri değiştirin.`):"Sonuç bulunamadı — filtreleri genişletin");
-  }finally{document.getElementById("cta-btn").disabled=false;document.getElementById("btn-again").disabled=false}
+    if(isPC()){
+      document.getElementById("main-panel").innerHTML=`<div class="empty-state"><div class="empty-ic">😕</div><div class="empty-t">Sonuç bulunamadı</div><div class="empty-s">${e.message==="exhausted"?`${getMem(makeKey()).seenIds.size} içerik gösterildi. Filtreleri değiştirin.`:"Filtreleri genişletin"}</div></div>`;
+    }else{
+      goSec("disc");
+      showErr(e.message==="exhausted"?`${getMem(makeKey()).seenIds.size} öneri tükendi. Filtreleri değiştirin.`:"Sonuç bulunamadı");
+    }
+  }finally{
+    document.getElementById("cta-btn").disabled=false;
+    const ba2=document.getElementById("btn-again");if(ba2)ba2.disabled=false;
+  }
 }
 
-const CACHE={};
-
-async function openDetail(id,type,fromD=false,cnt=0,prefetch=null){
-  if(!fromD){FS=FS||"search";setSub("Yükleniyor...");showView("loading")}
+async function openDetail(id,type,fromD=false,cnt=0){
+  const ck=`${type}_${id}`;
+  if(!fromD&&!isPC()){FS=FS||"search";goSec("detail");document.getElementById("detail-content").innerHTML=`<div class="load-state"><div class="spinner"></div><div class="load-t">Yükleniyor...</div></div>`;}
   try{
-    // Önce credits+providers+ext paralel çek, detail için cache kontrol et
-    const cacheKey=`${type}_${id}`;
-    const detPromise=CACHE[cacheKey]?.credits
-      ?Promise.resolve(CACHE[cacheKey])
-      :tmdb(`/${type}/${id}?language=tr-TR&append_to_response=credits`).then(d=>{CACHE[cacheKey]=d;return d});
+    const detP=CACHE[ck]?.credits?Promise.resolve(CACHE[ck]):tmdb(`/${type}/${id}?language=tr-TR&append_to_response=credits`).then(d=>{CACHE[ck]=d;return d});
+    const wdP=WD_CACHE[ck]?Promise.resolve(WD_CACHE[ck]):tmdb(`/${type}/${id}/watch/providers`).then(x=>{WD_CACHE[ck]=x;return x});
+    const extP=EXT_CACHE[ck]?Promise.resolve(EXT_CACHE[ck]):tmdb(`/${type}/${id}/external_ids`).catch(()=>({})).then(x=>{EXT_CACHE[ck]=x;return x});
+    const recsP=RECS_CACHE[ck]?Promise.resolve(RECS_CACHE[ck]):tmdb(`/${type}/${id}/recommendations?language=tr-TR&page=1`).catch(()=>({results:[]})).then(x=>{RECS_CACHE[ck]=x;return x});
 
-    const[det,wd,ext,recs]=await Promise.all([
-      detPromise,
-      tmdb(`/${type}/${id}/watch/providers`),
-      tmdb(`/${type}/${id}/external_ids`).catch(()=>({})),
-      tmdb(`/${type}/${id}/recommendations?language=tr-TR&page=1`).catch(()=>({results:[]}))
-    ]);
+    const[det,wd,ext,recs]=await Promise.all([detP,wdP,extP,recsP]);
     let omdb=null;
-    if(ext?.imdb_id){setSub("IMDb · RT · MC...");omdb=await omdbF(ext.imdb_id)}
-    rDetail(det,wd,ext,omdb,type,recs?.results||[]);
-    showView("detail");
-    document.getElementById("sticky-title").textContent=(type==="movie"?det.title:det.name)||"";
-    const sc=document.getElementById("seen-count"),ba=document.getElementById("btn-again");
-    if(fromD&&cnt>0){sc.textContent=`👁 ${cnt}`;sc.classList.remove("hidden")}else sc.classList.add("hidden");
-    ba.classList.toggle("hidden",!fromD);
-  }catch(e){console.error(e);showSection(FS);showErr("Yüklenemedi: "+e.message)}
+    if(ext?.imdb_id){
+      if(OMDB_CACHE[ext.imdb_id]!==undefined) omdb=OMDB_CACHE[ext.imdb_id];
+      else{setSub("IMDb · RT · MC...");omdb=await omdbF(ext.imdb_id);OMDB_CACHE[ext.imdb_id]=omdb}
+    }
+    const html=renderDetail(det,wd,ext,omdb,type,recs?.results||[]);
+    if(isPC()&&FS==="disc"){
+      document.getElementById("main-panel").innerHTML=`<div class="det-wrap">${html}</div>`;
+      const ba=document.getElementById("btn-again");
+      if(ba){ba.classList.toggle("hidden",!fromD);ba.disabled=false}
+      const sc=document.getElementById("seen-count");
+      if(sc){sc.classList.toggle("hidden",!(fromD&&cnt>0));if(fromD&&cnt>0)sc.textContent=`👁 ${cnt}`}
+    }else{
+      document.getElementById("detail-content").innerHTML=`<div class="det-wrap">${html}</div>`;
+      document.getElementById("mob-title").textContent=(type==="movie"?det.title:det.name)||"";
+      const ba=document.getElementById("btn-again");if(ba){ba.classList.toggle("hidden",!fromD);ba.disabled=false}
+      const sc=document.getElementById("seen-count");
+      if(sc){sc.classList.toggle("hidden",!(fromD&&cnt>0));if(fromD&&cnt>0)sc.textContent=`👁 ${cnt}`}
+      if(fromD)FS="disc";
+      goSec("detail");
+    }
+    window.scrollTo({top:0,behavior:"instant"});
+    // Modal init
+    if(det.seasons?.length){
+      const real=det.seasons.filter(s=>s.season_number>0);
+      modalTvId=id;modalSeasons=real;
+      document.getElementById("modal-title").textContent=(type==="movie"?det.title:det.name)+" — Bölümler";
+    }
+  }catch(e){console.error(e);if(!isPC())goSec("disc");showErr("Yüklenemedi: "+e.message)}
 }
 
-function rDetail(d,watch,ext,omdb,type,recs=[]){
+function renderDetail(d,watch,ext,omdb,type,recs){
   const iM=type==="movie";
-  const title=iM?d.title:d.name;const orig=iM?d.original_title:d.original_name;
+  const title=iM?d.title:d.name,orig=iM?d.original_title:d.original_name;
   const year=((iM?d.release_date:d.first_air_date)||"").slice(0,4);
-  const score=d.vote_average||0;
+  const score=d.vote_average||0,seasons=!iM?(d.number_of_seasons||0):0,status=!iM?(d.status||""):"";
   const runtime=iM?(d.runtime?d.runtime+" dk":""):(d.episode_run_time?.[0]?"~"+d.episode_run_time[0]+" dk/bölüm":"");
-  const seasons=!iM?(d.number_of_seasons||0):0;const status=!iM?(d.status||""):"";
-  document.getElementById("d-bg").style.backgroundImage=d.backdrop_path?`url(${IO}${d.backdrop_path})`:"none";
-  document.getElementById("d-poster").innerHTML=d.poster_path?`<img class="poster-img" src="${IM}${d.poster_path}" alt="${title}" onerror="this.parentElement.innerHTML='<div class=poster-ph>🎬</div>'">`:`<div class="poster-ph">🎬</div>`;
+  const imdbId=ext?.imdb_id;
 
-  let bdg=`<span class="hbadge hb-m">${iM?"Film":"Dizi"}</span>`;
+  // Badges
+  let bdg=`<span class="hbadge hb-t">${iM?"Film":"Dizi"}</span>`;
   if(year)bdg+=`<span class="hbadge hb-y">${year}</span>`;
   if(runtime)bdg+=`<span class="hbadge hb-i">${runtime}</span>`;
   if(seasons>0)bdg+=`<span class="hbadge hb-i">${seasons} Sezon</span>`;
-  if(!iM&&status){const on=status==="Returning Series"||status==="In Production";bdg+=`<span class="hbadge ${on?"hb-on":"hb-off"}">${on?"▶ Devam Ediyor":"✓ Tamamlandı"}</span>`}
-  if(omdb?.Awards&&omdb.Awards!=="N/A"&&omdb.Awards.toLowerCase().includes("oscar"))bdg+=`<span class="hbadge hb-aw">🏆 Oscar</span>`;
-  document.getElementById("d-badges").innerHTML=bdg;
-  document.getElementById("d-title").textContent=title;
-  const oe=document.getElementById("d-orig");
-  if(orig&&orig!==title){oe.textContent=orig;oe.classList.remove("hidden")}else oe.classList.add("hidden");
-  document.getElementById("d-tags").innerHTML=(d.genres||[]).slice(0,5).map(g=>`<span class="htag">${g.name}</span>`).join("");
+  if(!iM&&status){const on=status==="Returning Series"||status==="In Production";bdg+=`<span class="hbadge ${on?"hb-on":"hb-off"}">${on?"▶ Devam":"✓ Bitti"}</span>`}
+  if(omdb?.Awards?.toLowerCase().includes("oscar"))bdg+=`<span class="hbadge hb-aw">🏆 Oscar</span>`;
 
   // Scores
-  const imdbId=ext?.imdb_id;
   const imdbR=omdb?.imdbRating&&omdb.imdbRating!=="N/A"?omdb.imdbRating:null;
   const imdbV=omdb?.imdbVotes&&omdb.imdbVotes!=="N/A"?omdb.imdbVotes:null;
   const rtR=omdb?.Ratings?.find(r=>r.Source==="Rotten Tomatoes");
   const mcS=omdb?.Metascore&&omdb.Metascore!=="N/A"?parseInt(omdb.Metascore):null;
   let sc="";
-  if(imdbR){const lnk=imdbId?`href="https://www.imdb.com/title/${imdbId}" target="_blank" rel="noreferrer"`:"";sc+=`<a class="stile si${imdbId?" link":""}" ${lnk}><div class="st-src">IMDb</div><div class="st-val">★ ${imdbR}</div><div class="st-sub">${imdbV||""}</div></a>`}
+  if(imdbR){const lnk=imdbId?`href="https://www.imdb.com/title/${imdbId}" target="_blank" rel="noreferrer"`:"";sc+=`<a class="stile si${imdbId?" lnk":""}" ${lnk}><div class="st-src">IMDb</div><div class="st-val">★ ${imdbR}</div><div class="st-sub">${imdbV||""}</div></a>`}
   sc+=`<div class="stile st"><div class="st-src">TMDB</div><div class="st-val">${score.toFixed(1)}</div><div class="st-sub">${(d.vote_count||0).toLocaleString("tr-TR")} oy</div></div>`;
   if(rtR){const rv=parseInt(rtR.Value);sc+=`<div class="stile ${rv>=60?"rg":"rb"}"><div class="st-src">Rotten Tomatoes</div><div class="st-val">${rv>=60?"🍅":"🤢"} ${rtR.Value}</div><div class="st-sub">${rv>=60?"Taze":"Çürük"}</div></div>`}
-  if(mcS!==null){const mc=mcS>=61?"mg":mcS>=40?"mm":"mb";sc+=`<div class="stile ${mc}"><div class="st-src">Metacritic</div><div class="st-val">${mcS}/100</div><div class="st-sub">${mcS>=61?"Olumlu":mcS>=40?"Karışık":"Olumsuz"}</div></div>`}
-  document.getElementById("d-scores").innerHTML=sc;
+  if(mcS!==null){const mc=mcS>=61?"mg":mcS>=40?"mm":"mb";sc+=`<div class="stile ${mc}"><div class="st-src">Metacritic</div><div class="st-val">${mcS}/100</div></div>`}
 
-  // Overview
-  const ov=d.overview||"";
-  if(ov){document.getElementById("d-ov").textContent=ov;document.getElementById("d-ov-card").classList.remove("hidden")}
-  else document.getElementById("d-ov-card").classList.add("hidden");
+  // Seasons pills
+  const today=new Date();
+  let sznHtml="";
+  if(!iM&&d.seasons?.length){
+    const real=d.seasons.filter(s=>s.season_number>0);
+    const pills=real.map(s=>{const ad=s.air_date?new Date(s.air_date):null;const up=ad&&ad>today;return`<span class="szn-pill${up?" up":""}">${up?"📅 ":""}S${s.season_number} · ${up?s.air_date?.slice(0,7)+" yakında":s.episode_count+" bölüm"}</span>`}).join("");
+    sznHtml=`<div class="szn-row"><div class="szn-pills">${pills}</div><button class="szn-btn" onclick="openModal()">Tüm bölümler →</button></div>`;
+  }
 
   // Credits
-  const crew=d.credits?.crew||[];const crd=[];
+  const crew=d.credits?.crew||[];
   const dirs=crew.filter(c=>c.job==="Director").slice(0,3).map(c=>c.name);
   const wrs=crew.filter(c=>["Writer","Screenplay","Story"].includes(c.job)).slice(0,3).map(c=>c.name);
   const prs=crew.filter(c=>["Producer","Executive Producer"].includes(c.job)).slice(0,2).map(c=>c.name);
+  const crd=[];
   if(dirs.length)crd.push({k:"Yönetmen",v:dirs.join(", ")});
   if(wrs.length)crd.push({k:"Senaryo",v:wrs.join(", ")});
   if(prs.length)crd.push({k:"Yapımcı",v:prs.join(", ")});
   if(d.production_countries?.length)crd.push({k:"Ülke",v:d.production_countries.map(c=>c.name).join(", ")});
   if(d.spoken_languages?.length)crd.push({k:"Dil",v:d.spoken_languages.map(l=>l.name).join(", ")});
-  if(omdb?.Rated&&omdb.Rated!=="N/A")crd.push({k:"Yaş Sınırı",v:omdb.Rated});
+  if(omdb?.Rated&&omdb.Rated!=="N/A")crd.push({k:"Yaş",v:omdb.Rated});
   if(omdb?.Awards&&omdb.Awards!=="N/A")crd.push({k:"Ödüller",v:omdb.Awards});
   if(d.budget>0)crd.push({k:"Bütçe",v:"$"+d.budget.toLocaleString()});
   if(d.revenue>0)crd.push({k:"Hasılat",v:"$"+d.revenue.toLocaleString()});
-  if(omdb?.BoxOffice&&omdb.BoxOffice!=="N/A")crd.push({k:"Gişe",v:omdb.BoxOffice});
-  const crC=document.getElementById("d-cr-card");
-  if(crd.length){document.getElementById("d-cred").innerHTML=crd.map(c=>`<div class="cred-item"><div class="cred-k">${c.k}</div><div class="cred-v">${c.v}</div></div>`).join("");crC.classList.remove("hidden")}
-  else crC.classList.add("hidden");
 
   // Cast
-  const cast=(d.credits?.cast||[]).slice(0,16);
-  const caC=document.getElementById("d-ca-card");
-  if(cast.length){
-    document.getElementById("d-cast").innerHTML=cast.map(c=>{
-      const ph=c.profile_path?`<img class="cast-photo" src="${IF}${c.profile_path}" alt="${c.name}" onerror="this.outerHTML='<div class=cast-ph>👤</div>'">`:`<div class="cast-ph">👤</div>`;
-      return`<div class="cast-item">${ph}<div class="cast-name">${c.name}</div><div class="cast-char">${(c.character||"").slice(0,20)}</div></div>`;
-    }).join("");
-    caC.classList.remove("hidden");
-  }else caC.classList.add("hidden");
+  const cast=(d.credits?.cast||[]).slice(0,14);
+  const castHtml=cast.map(c=>{
+    const ph=c.profile_path?`<img class="cast-photo" src="${IF}${c.profile_path}" alt="${c.name}" loading="lazy" onerror="this.outerHTML='<div class=cast-ph>👤</div>'">`:`<div class="cast-ph">👤</div>`;
+    return`<div class="cast-item">${ph}<div class="cast-tx"><div class="cast-name">${c.name}</div><div class="cast-char">${(c.character||"").slice(0,18)}</div></div></div>`;
+  }).join("");
 
-  // Benzer İçerikler
-  const simC=document.getElementById("d-sim-card");
-  const simItems=recs.slice(0,12);
-  if(simItems.length){
-    document.getElementById("d-sim").innerHTML=simItems.map(x=>{
-      const t=x.title||x.name||"";
-      const mt=x.media_type||type;
-      const sc=x.vote_average?x.vote_average.toFixed(1):"—";
-      const po=x.poster_path
-        ?`<img class="sim-poster" src="${IM}${x.poster_path}" alt="${t}" onerror="this.outerHTML='<div class=sim-poster-ph>🎬</div>'">`
-        :`<div class="sim-poster-ph">🎬</div>`;
-      return`<div class="sim-card" onclick="openDetail(${x.id},'${mt}',false)">${po}<div class="sim-info"><div class="sim-title">${t}</div><div class="sim-score">★ ${sc}</div></div></div>`;
-    }).join("");
-    simC.classList.remove("hidden");
-  }else simC.classList.add("hidden");
-
-  // Sezonlar (sadece dizi) — modal trigger
-  const seasonsCard=document.getElementById("d-seasons-card");
-  if(!iM&&d.seasons?.length){
-    const realSeasons=d.seasons.filter(s=>s.season_number>0);
-    const today=new Date();
-    // Pills
-    document.getElementById("d-seasons-pills").innerHTML=realSeasons.map(s=>{
-      const airDate=s.air_date?new Date(s.air_date):null;
-      const isFuture=airDate&&airDate>today;
-      return`<span class="season-pill${isFuture?" upcoming":""}">${isFuture?"📅 ":""}S${s.season_number} · ${isFuture?s.air_date?.slice(0,7)+" yakında":s.episode_count+" bölüm"}</span>`;
-    }).join("");
-    // Modal için veriyi hazırla
-    initSeasonModal(d.id, title, realSeasons);
-    seasonsCard.classList.remove("hidden");
-  }else seasonsCard.classList.add("hidden");
+  // Similar
+  const simHtml=(recs||[]).slice(0,10).map(x=>{
+    const t=x.title||x.name||"",mt=x.media_type||type,sc2=x.vote_average?x.vote_average.toFixed(1):"—";
+    const po=x.poster_path?`<img class="sim-poster" src="${IM}${x.poster_path}" alt="${t}" loading="lazy">`:`<div class="sim-ph">🎬</div>`;
+    return`<div class="sim-card" onclick="openDetail(${x.id},'${mt}',false)" onmouseenter="prefetchDetail(${x.id},'${mt}')" ontouchstart="prefetchDetail(${x.id},'${mt}')">${po}<div class="sim-info"><div class="sim-title">${t}</div><div class="sim-sc">★ ${sc2}</div></div></div>`;
+  }).join("");
+  // Prefetch first few similar items to make clicks instant
+  (recs||[]).slice(0,6).forEach(x=>{const mt=x.media_type||type;try{prefetchDetail(x.id,mt)}catch(e){}});
 
   // Platforms
   const trP=watch.results?.TR;
-  // Provider logolarini platform butonlari icin cache'le
-  const allProviders=[...(trP?.flatrate||[]),...(trP?.rent||[]),...(trP?.buy||[])];
-  updatePlatLogos(allProviders);
-  const fl=trP?.flatrate||[];const re=trP?.rent||[];const bu=trP?.buy||[];
-  const all=[...fl,...re,...bu].filter((p,i,a)=>a.findIndex(x=>x.provider_id===p.provider_id)===i).slice(0,8);
-  document.getElementById("d-plat").innerHTML=all.length
-    ?all.map(p=>{
-        const rt=fl.find(x=>x.provider_id===p.provider_id)?"Abonelik":re.find(x=>x.provider_id===p.provider_id)?"Kiralık":"Satın Al";
-        const lg=p.logo_path?`<img class="plat-logo" src="https://image.tmdb.org/t/p/w92${p.logo_path}" alt="" onerror="this.style.display='none'">`:`<div class="plat-logo" style="display:flex;align-items:center;justify-content:center;font-size:14px">📺</div>`;
-        return`<div class="plat-row">${lg}<div><div class="plat-name">${p.provider_name}</div><div class="plat-type">${rt}</div></div></div>`;
-      }).join("")
-    :`<div class="no-plat">Türkiye'de bilgi bulunamadı</div>`;
+  const fl=trP?.flatrate||[],re=trP?.rent||[],bu=trP?.buy||[];
+  const allP=[...fl,...re,...bu].filter((p,i,a)=>a.findIndex(x=>x.provider_id===p.provider_id)===i).slice(0,8);
+  const platHtml=allP.length?allP.map(p=>{
+    const rt=fl.find(x=>x.provider_id===p.provider_id)?"Abonelik":re.find(x=>x.provider_id===p.provider_id)?"Kiralık":"Satın Al";
+    const lg=p.logo_path?`<img class="plat-logo-sm" src="https://image.tmdb.org/t/p/w92${p.logo_path}" alt="">`:`<div class="plat-logo-sm" style="display:flex;align-items:center;justify-content:center;font-size:13px">📺</div>`;
+    return`<div class="plat-row">${lg}<div><div class="plat-name">${p.provider_name}</div><div class="plat-type">${rt}</div></div></div>`;
+  }).join(""):`<div class="no-plat">Türkiye'de bilgi yok</div>`;
 
-  // Watch
+  // Watch links
   const tid=d.id;
-  const wl=[
-    {l:"Cineby",s:"Türkçe altyazı · ücretsiz",u:iM?`https://www.cineby.app/movie/${tid}`:`https://www.cineby.app/tv/${tid}`,c:"#3dd68c"},
+  const watchLinks=[
+    {l:"Cineby",s:"Türkçe altyazı · ücretsiz",u:iM?`https://www.cineby.app/movie/${tid}`:`https://www.cineby.app/tv/${tid}`,c:"#00c030"},
     {l:"VidSrc",s:"Alternatif kaynak",u:iM?`https://vidsrc.to/embed/movie/${tid}`:`https://vidsrc.to/embed/tv/${tid}`,c:"#4f8ef7"},
   ];
-  if(imdbId)wl.push({l:"IMDb",s:"Puan & detay",u:`https://www.imdb.com/title/${imdbId}`,c:"#f5a623"});
-  document.getElementById("d-watch").innerHTML=wl.map(w=>`
-    <a href="${w.u}" target="_blank" rel="noreferrer" class="watch-a">
-      <div class="watch-dot" style="background:${w.c};box-shadow:0 0 7px ${w.c}80"></div>
-      <div><div class="watch-label">${w.l}</div><div class="watch-sub">${w.s}</div></div>
-    </a>`).join("");
+  if(imdbId)watchLinks.push({l:"IMDb",s:"Puan & detay",u:`https://www.imdb.com/title/${imdbId}`,c:"#f5a623"});
+  const watchHtml=watchLinks.map(w=>`<a href="${w.u}" target="_blank" rel="noreferrer" class="watch-a"><div class="w-dot" style="background:${w.c};box-shadow:0 0 6px ${w.c}70"></div><div><div class="w-lbl">${w.l}</div><div class="w-sub">${w.s}</div></div></a>`).join("");
+
+  const bg=d.backdrop_path?`url(${IO}${d.backdrop_path})`:"none";
+  const poster=d.poster_path?`<img class="poster-img" src="${IM}${d.poster_path}" alt="${title}" loading="lazy">`:`<div class="poster-ph">🎬</div>`;
+  const orig2=orig&&orig!==title?`<div class="hero-orig">${orig}</div>`:"";
+  const tags=(d.genres||[]).slice(0,5).map(g=>`<span class="htag">${g.name}</span>`).join("");
+
+  // PC: btn-again in det-actions
+  const actions=`<div class="det-actions">
+    <button class="btn-again" id="btn-again" onclick="doDiscover()">🎲 Başka Öner</button>
+    <span class="seen-pill" id="seen-count"></span>
+  </div>`;
+
+  return `
+    ${isPC()?actions:""}
+    <div class="hero">
+      <div class="hero-bg" style="background-image:${bg}"></div>
+      <div class="hero-grad"></div>
+      <div class="hero-body">
+        <div class="poster-w">${poster}</div>
+        <div class="hero-info">
+          <div class="hbadges">${bdg}</div>
+          <div class="hero-title">${title}</div>
+          ${orig2}
+          <div class="hero-tags">${tags}</div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-top">
+        <div class="scores">${sc}</div>
+      </div>
+      <div class="detail-tabs" role="tablist" aria-label="Detay sekmeleri">
+        <button class="detail-tab on" role="tab" aria-selected="true" onclick="setDetTab('konu',this)">
+          <span class="dt-ic">📄</span><span class="dt-tx">Konu</span>
+        </button>
+        <button class="detail-tab" role="tab" aria-selected="false" onclick="setDetTab('kunye',this)">
+          <span class="dt-ic">ℹ️</span><span class="dt-tx">Künye</span>
+        </button>
+        <button class="detail-tab" role="tab" aria-selected="false" onclick="setDetTab('oyuncu',this)">
+          <span class="dt-ic">👥</span><span class="dt-tx">Oyuncular</span>
+        </button>
+        <button class="detail-tab" role="tab" aria-selected="false" onclick="setDetTab('izle',this)">
+          <span class="dt-ic">▶</span><span class="dt-tx">İzle</span>
+        </button>
+      </div>
+      <div class="detail-panels">
+        <section class="detail-panel on" data-tab="konu" role="tabpanel">
+          ${sznHtml}
+          ${d.overview?`<div class="card"><div class="card-h">Konu</div><div class="ov">${d.overview}</div></div>`:""}
+          ${simHtml?`<div class="card"><div class="card-h">Benzer İçerikler</div><div class="sim-grid">${simHtml}</div></div>`:""}
+        </section>
+        <section class="detail-panel" data-tab="kunye" role="tabpanel">
+          ${crd.length?`<div class="card"><div class="card-h">Künye</div><div class="cred-grid">${crd.map(c=>`<div class="cred-item"><div class="cred-k">${c.k}</div><div class="cred-v">${c.v}</div></div>`).join("")}</div></div>`:`<div class="card"><div class="card-h">Künye</div><div class="ov" style="border-left:none;padding-left:0">Bilgi yok</div></div>`}
+        </section>
+        <section class="detail-panel" data-tab="oyuncu" role="tabpanel">
+          ${cast.length?`<div class="card"><div class="card-h">Oyuncular</div><div class="cast-scroll cast-vert">${castHtml}</div></div>`:`<div class="card"><div class="card-h">Oyuncular</div><div class="ov" style="border-left:none;padding-left:0">Bilgi yok</div></div>`}
+        </section>
+        <section class="detail-panel" data-tab="izle" role="tabpanel">
+          <div class="card">
+            <div class="card-h">İzle</div>
+            <div class="watch-list watch-tiles">${watchHtml}</div>
+            <div class="card-h">Türkiye'de</div>
+            <div class="plat-list plat-tiles">${platHtml}</div>
+          </div>
+        </section>
+      </div>
+    </div>`;
 }
 
-rGenres();rLangs();
-
-// Platform logolarini ilk acilan kunye watch/providers verisinden cache'le
-const LOGO_CACHE={};
-function updatePlatLogos(providers){
-  [{pid:8,name:"Netflix"},{pid:119,name:"Prime"},{pid:337,name:"Disney+"}].forEach(({pid,name})=>{
-    if(LOGO_CACHE[pid])return;
-    const p=providers.find(x=>x.provider_id===pid);
-    if(p?.logo_path){
-      LOGO_CACHE[pid]=p.logo_path;
-      const btn=document.getElementById("pb-"+pid);
-      if(btn) btn.innerHTML=`<img src="https://image.tmdb.org/t/p/w92${p.logo_path}" style="width:36px;height:36px;border-radius:8px;object-fit:cover">${name}`;
-    }
+function setDetTab(key,btn){
+  const root=(btn?.closest&&btn.closest(".detail-card"))||document;
+  root.querySelectorAll(".detail-tab").forEach(b=>{
+    const on=b===btn;
+    b.classList.toggle("on",on);
+    b.setAttribute("aria-selected",on?"true":"false");
   });
+  root.querySelectorAll(".detail-panel").forEach(p=>p.classList.toggle("on",p.getAttribute("data-tab")===key));
 }
 
-
-let trendType="movie";
-
-function switchTrendTab(t){
-  trendType=t;
-  document.getElementById("trend-tab-movie").className="tbtn"+(t==="movie"?" active":"");
-  document.getElementById("trend-tab-tv").className="tbtn"+(t==="tv"?" active":"");
-  loadTrends(t);
-}
-
-let modalTvId=null,modalTvTitle="",modalSeasons=[],modalEpCache={};
-
-function openSeasonModal(){
-  document.getElementById("season-modal-overlay").classList.remove("hidden");
-  document.body.style.overflow="hidden";
-}
-function closeSeasonModal(e){
-  if(e&&e.target!==document.getElementById("season-modal-overlay"))return;
-  document.getElementById("season-modal-overlay").classList.add("hidden");
-  document.body.style.overflow="";
-}
-function initSeasonModal(tvId,title,seasons){
-  modalTvId=tvId; modalTvTitle=title; modalSeasons=seasons; modalEpCache={};
-  document.getElementById("modal-show-title").textContent=title+" — Bölümler";
-  document.getElementById("modal-season-list").innerHTML=seasons.map((s,i)=>`
-    <button class="modal-s-btn${i===0?" active":""}" onclick="loadModalSeason(${s.season_number},this)">
-      S${s.season_number}
-      <div style="font-size:10px;color:inherit;opacity:.7;margin-top:2px">${s.episode_count} bölüm</div>
+// Modal
+function openModal(){document.getElementById("modal-ov").classList.remove("hidden");document.body.style.overflow="hidden";rModalSeasons()}
+function closeModal(e){if(e&&e.target!==document.getElementById("modal-ov"))return;document.getElementById("modal-ov").classList.add("hidden");document.body.style.overflow=""}
+function rModalSeasons(){
+  document.getElementById("modal-seasons").innerHTML=modalSeasons.map((s,i)=>`
+    <button class="modal-s-btn${i===0?" on":""}" onclick="loadModalSeason(${s.season_number},this)">
+      S${s.season_number}<div class="sc">${s.episode_count} bölüm</div>
     </button>`).join("");
-  if(seasons.length>0) loadModalSeason(seasons[0].season_number, document.querySelector(".modal-s-btn"));
+  if(modalSeasons.length)loadModalSeason(modalSeasons[0].season_number,document.querySelector(".modal-s-btn"));
 }
-async function loadModalSeason(seasonNum,btn){
-  document.querySelectorAll(".modal-s-btn").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-  const epList=document.getElementById("modal-ep-list");
-  if(modalEpCache[seasonNum]){epList.innerHTML=modalEpCache[seasonNum];return}
-  epList.innerHTML=`<div class="modal-ep-loading"><div class="spinner" style="width:24px;height:24px;border-width:2px;margin:0 auto 8px"></div>Yükleniyor...</div>`;
+async function loadModalSeason(num,btn){
+  document.querySelectorAll(".modal-s-btn").forEach(b=>b.classList.remove("on"));
+  if(btn)btn.classList.add("on");
+  const el=document.getElementById("modal-eps");
+  if(EP_CACHE[`${modalTvId}_${num}`]){el.innerHTML=EP_CACHE[`${modalTvId}_${num}`];return}
+  el.innerHTML=`<div class="ep-load"><div class="spinner" style="width:24px;height:24px;border-width:2px;margin:0 auto 8px"></div>Yükleniyor...</div>`;
   try{
-    const[trData,enData]=await Promise.all([
-      tmdb(`/tv/${modalTvId}/season/${seasonNum}?language=tr-TR`),
-      tmdb(`/tv/${modalTvId}/season/${seasonNum}?language=en-US`)
-    ]);
-    const today=new Date();
-    const eps=trData.episodes||[];
-    const enEps=enData.episodes||[];
+    const[tr,en]=await Promise.all([tmdb(`/tv/${modalTvId}/season/${num}?language=tr-TR`),tmdb(`/tv/${modalTvId}/season/${num}?language=en-US`)]);
+    const today=new Date(),eps=tr.episodes||[],enEps=en.episodes||[];
     const html=eps.map((ep,i)=>{
       const enEp=enEps[i]||{};
-      const airDate=ep.air_date?new Date(ep.air_date):null;
-      const isFuture=airDate&&airDate>today;
-      const isToday=airDate&&airDate.toDateString()===today.toDateString();
-      const dateStr=airDate?airDate.toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"}):"";
-      const dur=ep.runtime?ep.runtime+" dk":"";
-      const trTitle=ep.name||"";
-      const enTitle=enEp.name||"";
-      const showOrig=enTitle&&enTitle!==trTitle;
-      const ov=ep.overview||"";
-      let datePart="";
-      if(isToday) datePart=`<span class="modal-ep-upcoming">🔴 Bugün yayında!</span>`;
-      else if(isFuture) datePart=`<span class="modal-ep-upcoming">📅 ${dateStr}'de yayınlanacak</span>`;
-      else if(dateStr) datePart=`<span class="modal-ep-date">📅 ${dateStr}</span>`;
-      return`<div class="modal-ep">
-        <div class="modal-ep-top">
-          <div class="modal-ep-num">${ep.episode_number}.</div>
-          <div class="modal-ep-info">
-            <div class="modal-ep-title">${trTitle||enTitle||"Bölüm "+ep.episode_number}</div>
-            ${showOrig?`<div class="modal-ep-orig">${enTitle}</div>`:""}
-            <div class="modal-ep-meta">
-              ${datePart}
-              ${dur?`<span class="modal-ep-dur">⏱ ${dur}</span>`:""}
-            </div>
+      const ad=ep.air_date?new Date(ep.air_date):null;
+      const fut=ad&&ad>today,tod=ad&&ad.toDateString()===today.toDateString();
+      const ds=ad?ad.toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"}):"";
+      const trT=ep.name||"",enT=enEp.name||"",showO=enT&&enT!==trT;
+      let datePart=tod?`<span class="ep-up">🔴 Bugün!</span>`:fut?`<span class="ep-up">📅 ${ds}'de</span>`:ds?`<span class="ep-date">📅 ${ds}</span>`:"";
+      return`<div class="ep">
+        <div class="ep-top">
+          <div class="ep-n">${ep.episode_number}.</div>
+          <div class="ep-info">
+            <div class="ep-title">${trT||enT||"Bölüm "+ep.episode_number}</div>
+            ${showO?`<div class="ep-orig">${enT}</div>`:""}
+            <div class="ep-meta">${datePart}${ep.runtime?`<span class="ep-dur">⏱ ${ep.runtime} dk</span>`:""}</div>
           </div>
         </div>
-        ${ov?`<div class="modal-ep-overview">${ov}</div>`:""}
+        ${ep.overview?`<div class="ep-ov">${ep.overview}</div>`:""}
       </div>`;
     }).join("");
-    modalEpCache[seasonNum]=html;
-    epList.innerHTML=html;
-  }catch(e){
-    epList.innerHTML=`<div class="modal-ep-loading" style="color:var(--red)">Yüklenemedi</div>`;
-  }
+    EP_CACHE[`${modalTvId}_${num}`]=html;
+    el.innerHTML=html;
+  }catch(e){el.innerHTML=`<div class="ep-load" style="color:var(--red)">Yüklenemedi</div>`}
 }
 
-async function showTrends(){
-  trendType="movie";
-  document.getElementById("trend-tab-movie").className="tbtn active";
-  document.getElementById("trend-tab-tv").className="tbtn";
-  showSection("trends");
-  loadTrends("movie");
-}
+// Trends
+function showTrends(){closeMobFilter();trendType="movie";document.getElementById("tt-movie").className="ttab on";document.getElementById("tt-tv").className="ttab";goSec("trends");loadTrends("movie")}
+function switchTrend(t){trendType=t;document.getElementById("tt-movie").className="ttab"+(t==="movie"?" on":"");document.getElementById("tt-tv").className="ttab"+(t==="tv"?" on":"");loadTrends(t)}
 
 async function loadTrends(type){
   document.getElementById("trend-loading").classList.remove("hidden");
   document.getElementById("trend-grid").classList.add("hidden");
   try{
-    // Film için vizyondaki ID'leri paralel çek
-    const [trendData, nowPlayingData] = await Promise.all([
+    const[trendData,npData]=await Promise.all([
       tmdb(`/trending/${type}/week?language=tr-TR`),
-      type==="movie"
-        ? tmdb(`/movie/now_playing?language=tr-TR&region=TR&page=1`).catch(()=>({results:[]}))
-        : Promise.resolve({results:[]})
+      type==="movie"?tmdb(`/movie/now_playing?language=tr-TR&region=TR`).catch(()=>({results:[]})):Promise.resolve({results:[]})
     ]);
-
-    const nowPlayingIds=new Set((nowPlayingData.results||[]).map(x=>x.id));
+    const npIds=new Set((npData.results||[]).map(x=>x.id));
     const items=(trendData.results||[]).slice(0,20);
-
-    // Dizi için bölüm bilgisi paralel çek (son sezon/bölüm)
-    let tvDetails={};
+    let tvDets={};
     if(type==="tv"){
-      const details=await Promise.all(
-        items.map(x=>tmdb(`/tv/${x.id}?language=tr-TR`).catch(()=>null))
-      );
-      details.forEach((d,i)=>{if(d)tvDetails[items[i].id]=d});
+      const dets=await Promise.all(items.map(x=>tmdb(`/tv/${x.id}?language=tr-TR`).catch(()=>null)));
+      dets.forEach((d,i)=>{if(d)tvDets[items[i].id]=d});
     }
-
     document.getElementById("trend-grid").innerHTML=items.map((x,i)=>{
       const title=type==="movie"?x.title:x.name;
       const year=((type==="movie"?x.release_date:x.first_air_date)||"").slice(0,4);
-      const score=x.vote_average?x.vote_average.toFixed(1):"—";
-      const po=x.poster_path
-        ?`<img class="trend-poster" src="${IM}${x.poster_path}" alt="${title}" onerror="this.outerHTML='<div class=trend-poster-ph>🎬</div>'">`
-        :`<div class="trend-poster-ph">🎬</div>`;
-
-      // Badges
+      const sc=x.vote_average?x.vote_average.toFixed(1):"—";
+      const po=x.poster_path?`<img class="tposter" src="${IM}${x.poster_path}" alt="${title}" loading="lazy">`:`<div class="tposter-ph">🎬</div>`;
       let badge="";
-      if(type==="movie"&&nowPlayingIds.has(x.id)){
-        badge=`<div class="trend-badge trend-badge-now">🎬 Vizyonda</div>`;
-      }
+      if(type==="movie"&&npIds.has(x.id))badge=`<div class="tbadge tbadge-now">🎬 Vizyonda</div>`;
       if(type==="tv"){
-        const det=tvDetails[x.id];
+        const det=tvDets[x.id];
         if(det){
-          const isOngoing=det.status==="Returning Series"||det.status==="In Production";
-          const seasons=det.number_of_seasons||0;
-          const nextEp=det.next_episode_to_air;
-          const lastAir=det.last_episode_to_air;
-          if(isOngoing&&nextEp){
-            // Sonraki bölüm bilgisi var
-            const airDate=new Date(nextEp.air_date);
-            const today=new Date();
-            const diff=Math.ceil((airDate-today)/(1000*60*60*24));
-            const label=diff<=0?"Yeni bölüm yayında!":diff===1?"Yarın yayında":diff<=7?`${diff} günde yayında`:`S${nextEp.season_number}B${nextEp.episode_number} · `+airDate.toLocaleDateString("tr-TR",{day:"numeric",month:"short"});
-            badge=`<div class="trend-badge trend-badge-ep">▶ ${label}</div>`;
-          }else if(isOngoing&&lastAir){
-            // Son yayınlanan bölüm
-            badge=`<div class="trend-badge trend-badge-on">▶ S${lastAir.season_number}B${lastAir.episode_number}</div>`;
-          }else if(isOngoing){
-            badge=`<div class="trend-badge trend-badge-on">▶ Devam Ediyor</div>`;
-          }else if(seasons>0){
-            badge=`<div class="trend-badge trend-badge-end">✓ ${seasons} Sezon</div>`;
-          }
+          const on=det.status==="Returning Series"||det.status==="In Production";
+          const next=det.next_episode_to_air,last=det.last_episode_to_air;
+          if(on&&next){
+            const ad=new Date(next.air_date),diff=Math.ceil((ad-new Date())/(864e5));
+            const lbl=diff<=0?"Yeni bölüm!":diff===1?"Yarın":diff<=7?`${diff} günde`:`S${next.season_number}B${next.episode_number}`;
+            badge=`<div class="tbadge tbadge-ep">▶ ${lbl}</div>`;
+          }else if(on&&last)badge=`<div class="tbadge tbadge-on">▶ S${last.season_number}B${last.episode_number}</div>`;
+          else if(on)badge=`<div class="tbadge tbadge-on">▶ Devam</div>`;
+          else if(det.number_of_seasons)badge=`<div class="tbadge tbadge-end">✓ ${det.number_of_seasons} Sezon</div>`;
         }
       }
-
-      return`<div class="trend-card" onclick="openDetail(${x.id},'${type}',false)">
-        <div style="position:relative">${po}${badge}</div>
-        <div class="trend-info">
-          <div class="trend-rank">#${i+1}</div>
-          <div class="trend-name">${title}</div>
-          <div class="trend-score">★ ${score}${year?" · "+year:""}</div>
-        </div>
-      </div>`;
+      return`<div class="tcard" onclick="openDetail(${x.id},'${type}',false)"><div style="position:relative">${po}${badge}</div><div class="tinfo"><div class="trank">#${i+1}</div><div class="tname">${title}</div><div class="tsc">★ ${sc}${year?" · "+year:""}</div></div></div>`;
     }).join("");
-
     document.getElementById("trend-loading").classList.add("hidden");
     document.getElementById("trend-grid").classList.remove("hidden");
-  }catch(e){
-    document.getElementById("trend-loading").innerHTML=`<div style="color:var(--red);font-size:14px;padding:20px 0">Yüklenemedi: ${e.message}</div>`;
-  }
+  }catch(e){document.getElementById("trend-loading").innerHTML=`<div style="color:var(--red);padding:20px;text-align:center">${e.message}</div>`}
 }
 
 
+// Mobile bottom sheet filtre
+function toggleMobFilter(){
+  const panel=document.getElementById("sheet-panel");
+  const overlay=document.getElementById("sheet-overlay");
+  const btn=document.getElementById("mob-filter-btn");
+  if(panel.classList.contains("open")){closeMobFilter();return}
+  // Sidebar içeriğini sheet'e kopyala
+  const sc=document.getElementById("sheet-content");
+  sc.innerHTML=document.getElementById("sidebar").innerHTML;
+  // Event listener'lar çalışmaz, klonlanmış HTML'deki onclick'ler çalışır (inline)
+  panel.classList.add("open");
+  overlay.classList.add("open");
+  btn.classList.add("active");
+  document.body.style.overflow="hidden";
+}
+function closeMobFilter(){
+  document.getElementById("sheet-panel").classList.remove("open");
+  document.getElementById("sheet-overlay").classList.remove("open");
+  document.getElementById("mob-filter-btn").classList.remove("active");
+  document.body.style.overflow="";
+}
+
+rGenres();rLangs();
 </script>
-<!-- ══ SEASON MODAL ══ -->
-<div id="season-modal-overlay" class="hidden" onclick="closeSeasonModal(event)" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px">
-  <div onclick="event.stopPropagation()" style="background:var(--s1);border:1px solid var(--b2);border-radius:20px;width:100%;max-width:700px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--b1);flex-shrink:0">
-      <div id="modal-show-title" style="font-size:16px;font-weight:700;color:var(--t1)"></div>
-      <button onclick="closeSeasonModal()" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--b1);background:transparent;color:var(--t2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">✕</button>
+
+<!-- Mobile Filter Bottom Sheet -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="closeMobFilter()"></div>
+<div class="sheet-panel" id="sheet-panel">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <div class="sheet-title">Filtreler</div>
+    <button class="sheet-close" onclick="closeMobFilter()">✕</button>
+  </div>
+  <!-- Sidebar içeriği JS ile buraya kopyalanacak -->
+  <div id="sheet-content"></div>
+</div>
+
+<!-- Season modal -->
+<div id="modal-ov" class="modal-ov hidden" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-top">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-x" onclick="closeModal()">✕</button>
     </div>
-    <div style="display:flex;flex:1;overflow:hidden;min-height:0">
-      <div id="modal-season-list" style="flex:0 0 100px;border-right:1px solid var(--b1);overflow-y:auto;padding:8px 0"></div>
-      <div id="modal-ep-list" style="flex:1;overflow-y:auto;padding:8px"></div>
+    <div class="modal-body">
+      <div class="modal-seasons" id="modal-seasons"></div>
+      <div class="modal-eps" id="modal-eps"></div>
     </div>
   </div>
 </div>
