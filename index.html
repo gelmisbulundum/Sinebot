@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="SineBot">
 <link rel="manifest" href="manifest.json">
 <title>SineBot</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -29,7 +30,7 @@
   --r:8px;--r2:12px;--r3:16px;
 }
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-height:100vh;font-size:15px;overflow-x:hidden}
+body{background:var(--bg);color:var(--t1);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;font-size:16px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--s1)}::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
 button,a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 input,select{font-size:16px!important}
@@ -47,23 +48,29 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .hdr{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
 
 /* ── HEADER ── */
-.hdr{background:var(--s1);border-bottom:1px solid var(--b1);padding:0 20px;position:sticky;top:0;z-index:200;backdrop-filter:blur(10px)}
+.hdr{background:rgba(27,34,40,0.65);border-bottom:1px solid rgba(255,255,255,0.06);padding:0 20px;position:sticky;top:0;z-index:200;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .hdr-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;height:58px;gap:14px}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
 .logo-ic{font-size:20px}
 .logo-tx{font-size:18px;font-weight:800;color:var(--grn);letter-spacing:-.3px}
 .logo-tx span{color:var(--t1)}
-.nav{display:flex;gap:2px;margin-left:auto}
-.ntab{padding:6px 14px;border:none;background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border-radius:var(--r);transition:all .15s}
-.ntab.on{background:rgba(0,192,48,0.12);color:var(--grn)}
+.nav{display:flex;gap:4px;margin-left:auto}
+.ntab{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 0;width:64px;border:none;background:transparent;color:var(--t2);font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.2px;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .2s}
+.ntab svg{flex-shrink:0;transition:all .2s}
+.ntab-lbl{line-height:1}
+.ntab.on{background:transparent;color:var(--grn)}
+.ntab#nav-disc.on{color:var(--grn)}
+.ntab#nav-search.on{color:var(--blue)}
 .ntab:hover:not(.on){color:var(--t1);background:var(--s2)}
+.ntab#nav-disc.on svg,.ntab#nav-disc:hover svg{stroke:var(--grn)}
+.ntab#nav-search.on svg,.ntab#nav-search:hover svg{stroke:var(--blue)}
 
 /* ── LAYOUT ── */
 .wrap{max-width:1280px;margin:0 auto;padding:20px 20px 80px}
 
 /* PC: sidebar + main */
 .app-grid{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
-.sidebar{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r3);padding:18px 16px;position:sticky;top:76px;max-height:none;overflow-y:visible;margin:0 4px;width:320px;min-width:320px;box-sizing:border-box}
+.sidebar{background:rgba(27,34,40,0.4);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r3);padding:18px 16px;position:sticky;top:76px;max-height:none;overflow-y:visible;margin:0 4px;width:320px;min-width:320px;box-sizing:border-box}
 .sidebar::-webkit-scrollbar{width:3px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--s3)}
 .main-panel{min-width:0}
@@ -75,21 +82,24 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 }
 
 /* ── FILTER ELEMENTS ── */
-.flabel{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--t2);margin:16px 0 10px}
+.flabel{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--t1);margin:18px 0 12px}
 .flabel:first-child{margin-top:0}
 
 /* Type toggle */
 .ftype{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:4px}
-.ftbtn{padding:9px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:var(--r);transition:all .15s;text-align:center}
+.ftbtn{padding:10px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;border-radius:var(--r);transition:all .15s;text-align:center}
 .ftbtn.on{background:rgba(0,192,48,0.12);border-color:rgba(0,192,48,0.4);color:var(--grn)}
 .ftbtn:hover:not(.on){border-color:var(--b2);color:var(--t1)}
 
 /* Genre grid 3x3 */
 .genre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
-.genre-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:11px 4px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;line-height:1.2;gap:3px;min-height:60px;text-align:center}
-.genre-btn:hover{border-color:var(--b2);color:var(--t1)}
-.genre-btn.on{background:var(--grn);border-color:var(--grn);color:#000;font-weight:800;box-shadow:0 3px 10px rgba(0,192,48,.2)}
-.genre-btn .g-ic{font-size:18px}
+.genre-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 4px;background:rgba(255,255,255,0.03);border:1px solid var(--b1);border-radius:var(--r2);color:var(--t2);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s cubic-bezier(0.4, 0, 0.2, 1);line-height:1.2;gap:6px;min-height:72px;text-align:center;position:relative;overflow:hidden}
+.genre-btn::before{content:'';position:absolute;inset:0;background:var(--gc);opacity:0;transition:opacity .2s}
+.genre-btn:hover{border-color:var(--b2);color:var(--t1);transform:translateY(-2px);background:rgba(255,255,255,0.06)}
+.genre-btn.on{background:color-mix(in srgb, var(--gc) 12%, rgba(27,34,40,0.4));border-color:color-mix(in srgb, var(--gc) 40%, transparent);color:var(--t1);font-weight:800;box-shadow:0 8px 20px color-mix(in srgb, var(--gc) 15%, transparent)}
+.genre-btn.on .g-ic{transform:scale(1.15);filter:drop-shadow(0 0 8px color-mix(in srgb, var(--gc) 60%, transparent))}
+.genre-btn .g-ic{font-size:24px;transition:transform .2s;z-index:1}
+.genre-btn span:not(.g-ic){z-index:1}
 /* Old chips style kept for compatibility */
 .chips{display:flex;flex-wrap:wrap;gap:5px}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:var(--s2);border:1px solid var(--b1);border-radius:50px;color:var(--t2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;user-select:none}
@@ -104,13 +114,13 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* Platform filter - puan sistemi gibi */
 .plat-presets{display:flex;flex-direction:column;gap:6px;margin:10px 0}
-.plat-btn-all{width:100%;padding:12px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;transition:all .12s}
+.plat-btn-all{width:100%;padding:14px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--s2);border:1.5px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;min-height:56px}
 .plat-btn-all:hover{border-color:var(--b2);color:var(--t1)}
-.plat-btn-all.on{background:var(--t2);border-color:var(--t2);color:#000;font-weight:700}
+.plat-btn-all.on{background:color-mix(in srgb, var(--grn) 15%, transparent);border-color:color-mix(in srgb, var(--grn) 40%, transparent);color:var(--grn);box-shadow:0 3px 12px color-mix(in srgb, var(--grn) 15%, transparent)}
 .plat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.platbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 4px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;text-align:center;line-height:1.2;min-height:70px}
+.platbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 4px;background:var(--s2);border:1.5px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;transition:all .12s;text-align:center;line-height:1.2;min-height:72px}
 .platbtn:hover{border-color:var(--b2);color:var(--t1)}
-.platbtn.on{background:var(--grn);border-color:var(--grn);color:#000;font-weight:700;box-shadow:0 3px 10px rgba(0,192,48,.2)}
+.platbtn.on{background:rgba(0,192,48,0.12);border-color:rgba(0,192,48,0.4);color:var(--grn);box-shadow:0 3px 12px rgba(0,192,48,0.15)}
 .plat-logo{width:28px;height:28px;border-radius:6px;object-fit:cover;display:block}
 .plat-logo-svg{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
 .plat-logo-svg img{width:32px;height:32px;object-fit:contain;display:block;border-radius:4px}
@@ -118,14 +128,14 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* TV/Dizi butonlari - filmdeki standartlara uygun */
 .tv-presets{display:flex;flex-direction:column;gap:6px;margin:10px 0}
-.tv-btn-all{width:100%;padding:12px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;transition:all .12s}
+.tv-btn-all{width:100%;padding:14px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--s2);border:1.5px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;min-height:56px}
 .tv-btn-all:hover{border-color:var(--b2);color:var(--t1)}
-.tv-btn-all.on{background:var(--t2);border-color:var(--t2);color:#000;font-weight:700}
+.tv-btn-all.on{background:color-mix(in srgb, var(--grn) 15%, transparent);border-color:color-mix(in srgb, var(--grn) 40%, transparent);color:var(--grn);box-shadow:0 3px 12px color-mix(in srgb, var(--grn) 15%, transparent)}
 .tv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 .tv-grid-2{grid-template-columns:repeat(2,1fr)}
-.tvbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;text-align:center;min-height:70px;line-height:1.2}
+.tvbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 4px;background:var(--s2);border:1.5px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;transition:all .12s;text-align:center;min-height:72px;line-height:1.2}
 .tvbtn:hover{border-color:var(--b2);color:var(--t1)}
-.tvbtn.on{background:var(--grn);border-color:var(--grn);color:#000;font-weight:700;box-shadow:0 3px 10px rgba(0,192,48,.2)}
+.tvbtn.on{background:rgba(0,192,48,0.12);border-color:rgba(0,192,48,0.4);color:var(--grn);box-shadow:0 3px 12px rgba(0,192,48,0.15)}
 .tvbtn:disabled{opacity:0.4;cursor:not-allowed;pointer-events:none}
 .tv-presets.disabled{opacity:0.5;pointer-events:none}
 
@@ -137,21 +147,32 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* Region/Ekol tiles */
 .reg-presets{display:flex;flex-direction:column;gap:6px;margin:10px 0}
-.reg-btn-all{width:100%;padding:12px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;transition:all .12s}
+.reg-btn-all{width:100%;padding:14px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--s2);border:1.5px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;min-height:56px}
 .reg-btn-all:hover{border-color:var(--b2);color:var(--t1)}
-.reg-btn-all.on{background:var(--t2);border-color:var(--t2);color:#000;font-weight:700}
+.reg-btn-all.on{background:color-mix(in srgb, var(--grn) 15%, transparent);border-color:color-mix(in srgb, var(--grn) 40%, transparent);color:var(--grn);box-shadow:0 3px 12px color-mix(in srgb, var(--grn) 15%, transparent)}
 .reg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:6px 0}
-.regbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;text-align:center;min-height:64px;line-height:1.2}
-.regbtn .ic{font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;height:20px;margin-bottom:2px}
+.regbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 4px;background:var(--s2);border:1.5px solid var(--b1);border-radius:var(--r);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;transition:all .12s;text-align:center;min-height:72px;line-height:1.2}
+.regbtn:hover{border-color:var(--b2);color:var(--t1)}
+.regbtn.on{background:color-mix(in srgb, var(--rc) 15%, transparent);border-color:color-mix(in srgb, var(--rc) 40%, transparent);color:var(--rc);box-shadow:0 3px 12px color-mix(in srgb, var(--rc) 15%, transparent)}
+.regbtn .ic{font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;height:22px;margin-bottom:2px}
 .regbtn .ic img{display:block;border-radius:2px;object-fit:cover}
 .regbtn:hover{border-color:var(--b2);color:var(--t1)}
 /* Region specific colors - 6 kategori */
-.regbtn.tr.on{background:#e30a17;border-color:#e30a17;color:#fff}
-.regbtn.hw.on{background:#e50914;border-color:#e50914;color:#fff}
-.regbtn.asia.on{background:#c41e3a;border-color:#c41e3a;color:#fff}
-.regbtn.in.on{background:#ff9932;border-color:#ff9932;color:#000}
-.regbtn.eu.on{background:#174a9d;border-color:#174a9d;color:#fff}
-.regbtn.mid.on{background:#0d7a47;border-color:#0d7a47;color:#fff}
+.regbtn.tr{ --rc:#ef4444 }
+.regbtn.en{ --rc:#3b82f6 }
+.regbtn.ko{ --rc:#8b5cf6 }
+.regbtn.fr{ --rc:#6366f1 }
+.regbtn.es{ --rc:#f59e0b }
+.regbtn.ja{ --rc:#ec4899 }
+.regbtn.it{ --rc:#10b981 }
+.regbtn.de{ --rc:#6b7280 }
+.regbtn.hi{ --rc:#f97316 }
+.regbtn.ru{ --rc:#1e40af }
+.regbtn.fa{ --rc:#a855f7 }
+.regbtn.nordic{ --rc:#06b6d4 }
+.regbtn.zh{ --rc:#dc2626 }
+.regbtn.pt{ --rc:#22c55e }
+.regbtn.ar{ --rc:#059669 }
 
 /* Rating range */
 .rr-wrap{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r2);padding:10px 12px}
@@ -159,24 +180,24 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .rr-val{font-size:12px;font-weight:800;color:var(--t1)}
 .rr-sub{font-size:10px;color:var(--t3);font-weight:700;letter-spacing:1.2px;text-transform:uppercase}
 .rating-presets{display:flex;flex-direction:column;gap:6px;margin:10px 0}
-.rating-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 10px;border:1px solid var(--b1);border-radius:var(--r);background:var(--s2);color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;line-height:1.3;gap:5px}
+.rating-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 6px;border:1.5px solid var(--b1);border-radius:var(--r);background:var(--s2);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;transition:all .12s;line-height:1.3;gap:4px;min-height:68px}
 .rating-btn:hover{border-color:var(--b2);color:var(--t1)}
-.rating-btn.on{font-weight:800;box-shadow:0 3px 10px rgba(0,0,0,.2)}
-.rating-btn .r-label{font-size:13px;letter-spacing:.2px;font-weight:700}
-.rating-btn .r-range{font-size:11px;opacity:.8;font-weight:600;margin-top:2px}
+.rating-btn.on{font-weight:800;background:color-mix(in srgb, var(--rc) 15%, transparent);border-color:color-mix(in srgb, var(--rc) 40%, transparent);color:var(--rc);box-shadow:0 3px 12px color-mix(in srgb, var(--rc) 15%, transparent)}
+.rating-btn .r-label{font-size:14px;letter-spacing:.2px;font-weight:800}
+.rating-btn .r-range{font-size:12px;opacity:.8;font-weight:700;margin-top:1px}
 .rating-btn.on .r-range{opacity:1}
 /* Full width for 'All' button */
-.rating-btn.all{width:100%;padding:14px;flex-direction:row;gap:10px}
+.rating-btn.all{width:100%;padding:14px;flex-direction:row;gap:12px;min-height:56px;--rc:var(--grn)}
 .rating-btn.all .r-label{font-size:15px}
-.rating-btn.all .r-range{font-size:12px}
+.rating-btn.all .r-range{font-size:13px}
 /* Grid for 4 rating levels */
 .rating-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 /* Each rating level with its own color */
-.rating-btn.low.on{background:#e05050;border-color:#e05050;color:#fff}
-.rating-btn.mid.on{background:#f5a623;border-color:#f5a623;color:#000}
-.rating-btn.good.on{background:#90d659;border-color:#90d659;color:#000}
-.rating-btn.high.on{background:#00c030;border-color:#00c030;color:#000}
-.rating-btn.all.on{background:var(--t2);border-color:var(--t2);color:#000}
+.rating-btn.low{ --rc:#ef4444 }
+.rating-btn.mid{ --rc:#f59e0b }
+.rating-btn.good{ --rc:#84cc16 }
+.rating-btn.high{ --rc:#22c55e }
+.rating-btn.all{ --rc:var(--grn) }
 .rating-val{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px;font-size:12px;font-weight:600;color:var(--t3)}
 .rating-val .r-current{color:var(--t1);font-weight:700}
 
@@ -195,11 +216,11 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .fsel option{background:var(--s2)}
 
 /* CTA */
-.cta{width:100%;padding:12px;border:none;border-radius:var(--r2);background:var(--grn);color:#000;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:12px;letter-spacing:-.2px}
-.cta:hover:not(:disabled){background:var(--grn2);transform:translateY(-1px)}
-.cta:disabled{opacity:0.4;cursor:not-allowed;transform:none}
-.trend-btn{width:100%;padding:12px;border:1px solid var(--b2);border-radius:var(--r2);background:var(--s2);color:var(--t1);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:8px}
-.trend-btn:hover{border-color:var(--amber);background:rgba(245,166,35,0.08);color:var(--amber)}
+.cta{width:100%;padding:13px 16px;border:none;border-radius:var(--r2);background:linear-gradient(135deg,var(--grn),var(--grn2));color:#000;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:12px;letter-spacing:-.2px;display:flex;align-items:center;justify-content:center;gap:8px}
+.cta:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,192,48,.35)}
+.cta:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+.trend-btn{width:100%;padding:13px 16px;border:none;border-radius:var(--r2);background:linear-gradient(135deg,#b07d2a,#8a5f1a);color:#000;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
+.trend-btn:hover{filter:brightness(1.12);transform:translateY(-1px);box-shadow:0 6px 20px rgba(160,110,30,.45)}
 .err{margin-top:10px;padding:10px 12px;border:1px solid rgba(224,80,80,0.3);background:rgba(224,80,80,0.07);border-radius:var(--r);font-size:12px;color:#fca5a5}
 
 /* ── MAIN PANEL STATES ── */
@@ -208,11 +229,12 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .empty-t{font-size:17px;font-weight:700;color:var(--t2);margin-bottom:6px}
 .empty-s{font-size:13px;color:var(--t3);line-height:1.7}
 
-/* Loading */
-.load-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;gap:14px}
-.spinner{width:40px;height:40px;border:3px solid var(--s3);border-top-color:var(--grn);border-radius:50%;animation:spin .7s linear infinite}
+/* Loading & Skeleton */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.load-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;gap:14px;width:100%}
+.spinner{width:50px;height:50px;border:4px solid rgba(0,192,48,.15);border-left-color:var(--grn);border-radius:50%;animation:spin 1s cubic-bezier(0.5,0,0.5,1) infinite;box-shadow:0 0 15px rgba(0,192,48,.2)}
 @keyframes spin{to{transform:rotate(360deg)}}
-.load-t{font-size:15px;font-weight:600;color:var(--t1)}
+.load-t{font-size:15px;font-weight:600;color:var(--t1);margin-top:10px}
 .load-s{font-size:12px;color:var(--t3)}
 
 /* ── DETAIL CARD (in main panel) ── */
@@ -224,7 +246,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .btn-again:disabled{opacity:.4;cursor:not-allowed}
 .btn-back{padding:9px 14px;border:1px solid var(--b2);background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border-radius:var(--r);cursor:pointer;transition:all .15s}
 .btn-back:hover{border-color:var(--b2);color:var(--t1)}
-.seen-pill{font-size:12px;color:var(--t3);font-weight:500;background:var(--s2);padding:5px 10px;border-radius:50px}
+
 
 /* Hero */
 .hero{position:relative;border-radius:var(--r3);overflow:hidden;margin-bottom:12px;min-height:320px;background:var(--s1)}
@@ -232,8 +254,12 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .hero-grad{position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,rgba(20,24,28,.7) 40%,transparent 100%)}
 .hero-body{position:relative;z-index:2;display:flex;gap:18px;padding:20px;align-items:flex-end;min-height:320px}
 .poster-w{flex:0 0 170px}
-@media(max-width:500px){.poster-w{flex:0 0 110px}}
-.poster-img{width:100%;border-radius:var(--r2);display:block;box-shadow:0 12px 40px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.08)}
+@media(max-width:500px){
+  .hero-body{flex-direction:row;align-items:flex-end;padding:20px 16px;gap:14px}
+  .poster-w{flex:0 0 125px;width:125px}
+}
+.poster-img{width:100%;border-radius:var(--r2);display:block;box-shadow:0 12px 40px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.1);opacity:0;transition:opacity .4s ease-in}
+.poster-img.loaded{opacity:1}
 .poster-ph{width:100%;aspect-ratio:2/3;background:var(--s2);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;font-size:32px}
 .hero-info{flex:1;min-width:0;overflow:hidden}
 .hbadges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
@@ -337,9 +363,10 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* Sim grid */
 .sim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
-.sim-card{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .15s}
-.sim-card:hover{border-color:var(--grn);transform:translateY(-2px)}
-.sim-poster{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3)}
+.sim-card{background:var(--s2);border:1px solid var(--b1);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s ease,border-color .3s ease}
+.sim-card:hover{border-color:var(--grn);transform:translateY(-4px) scale(1.03);box-shadow:0 10px 24px rgba(0,192,48,.15);z-index:2;position:relative}
+.sim-poster{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3);opacity:0;transition:opacity .3s ease-in}
+.sim-poster.loaded{opacity:1}
 .sim-ph{width:100%;aspect-ratio:2/3;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:20px}
 .sim-info{padding:6px 7px}
 .sim-title{font-size:11px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;line-clamp:2;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;max-height:calc(1.3em * 2)}
@@ -375,9 +402,9 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .sri:last-child{border-bottom:none}
 .sri:hover{background:var(--s2)}
 .sri-poster{width:34px;height:51px;object-fit:cover;border-radius:5px;flex-shrink:0;background:var(--s3)}
-.sri-title{font-size:13px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sri-meta{font-size:11px;color:var(--t3);margin-top:2px}
-.sri-sc{font-size:13px;font-weight:700;color:var(--amber);margin-left:auto;flex-shrink:0;padding-left:8px}
+.sri-title{font-size:14px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sri-meta{font-size:12px;color:var(--t3);margin-top:2px;font-weight:500}
+.sri-sc{font-size:14px;font-weight:800;color:var(--amber);margin-left:auto;flex-shrink:0;padding-left:8px}
 
 /* ── TRENDS ── */
 .trend-tabs{display:flex;gap:6px;margin-bottom:16px}
@@ -386,15 +413,16 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .ttab:hover:not(.on){border-color:var(--b2);color:var(--t1)}
 .trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
 @media(max-width:480px){.trend-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}}
-.tcard{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .18s}
-.tcard:hover{border-color:var(--grn);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.tposter{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3)}
+.tcard{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s ease,border-color .3s ease}
+.tcard:hover{border-color:var(--grn);transform:translateY(-5px) scale(1.02);box-shadow:0 12px 30px rgba(0,192,48,.2);z-index:2;position:relative}
+.tposter{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s3);opacity:0;transition:opacity .3s ease-in}
+.tposter.loaded{opacity:1}
 .tposter-ph{width:100%;aspect-ratio:2/3;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:28px}
 .tinfo{padding:9px 10px}
-.trank{font-size:10px;font-weight:700;color:var(--grn);margin-bottom:3px}
-.tname{font-size:12px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;line-clamp:2;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;max-height:calc(1.3em * 2)}
-.tsc{font-size:11px;color:var(--amber);font-weight:600;margin-top:3px}
-.tbadge{position:absolute;bottom:5px;left:5px;right:5px;font-size:10px;font-weight:700;padding:3px 6px;border-radius:5px;text-align:center;backdrop-filter:blur(4px)}
+.trank{font-size:11px;font-weight:800;color:var(--grn);margin-bottom:3px}
+.tname{font-size:14px;font-weight:700;color:var(--t1);line-height:1.3;display:-webkit-box;line-clamp:2;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;max-height:calc(1.3em * 2)}
+.tsc{font-size:12px;color:var(--amber);font-weight:700;margin-top:3px}
+.tbadge{position:absolute;bottom:5px;left:5px;right:5px;font-size:11px;font-weight:800;padding:4px 6px;border-radius:6px;text-align:center;backdrop-filter:blur(4px)}
 .tbadge-now{background:rgba(79,142,247,.85);color:#fff}
 .tbadge-ep{background:rgba(0,192,48,.85);color:#000}
 .tbadge-on{background:rgba(0,192,48,.65);color:#000}
@@ -430,13 +458,17 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 /* ── MOBİL BOTTOM SHEET ── */
 .mob-filter-btn{
   display:none;align-items:center;gap:6px;
-  padding:8px 14px;background:var(--s2);border:1px solid var(--b2);
-  border-radius:var(--r);color:var(--t1);font-family:'Inter',sans-serif;
+  padding:8px 14px;background:var(--s2);border:1px solid var(--b1);
+  border-radius:var(--r);color:var(--t2);font-family:inherit;
   font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
   margin-left:8px;transition:all .15s;flex-shrink:0;
 }
-.mob-filter-btn:hover{border-color:var(--grn);color:var(--grn)}
-.mob-filter-btn.active{background:rgba(0,192,48,.12);border-color:rgba(0,192,48,.4);color:var(--grn)}
+.mob-filter-btn:hover{background:var(--b2);color:var(--t1)}
+.mob-filter-btn.active{background:rgba(0,192,48,0.1);border-color:rgba(0,192,48,0.4);color:var(--grn);}
+@media(max-width:480px){
+  .mob-filter-btn{padding:8px 11px}
+  .mob-filter-btn .mob-filter-lbl{display:none}
+}
 
 /* Bottom sheet overlay */
 .sheet-overlay{
@@ -448,7 +480,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 /* Bottom sheet panel */
 .sheet-panel{
   position:fixed;bottom:0;left:0;right:0;z-index:301;
-  background:var(--s1);border-top:1px solid var(--b2);
+  background:rgba(27,34,40,0.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,0.08);
   border-radius:20px 20px 0 0;
   max-height:82vh;overflow-y:auto;
   transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
@@ -456,10 +488,11 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   -webkit-overflow-scrolling:touch;
 }
 .sheet-panel.open{transform:translateY(0)}
-.sheet-handle{width:40px;height:4px;background:var(--s3);border-radius:2px;margin:12px auto 16px}
-.sheet-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:var(--s1);padding:12px 0 8px;border-bottom:1px solid var(--b1)}
-.sheet-title{font-size:16px;font-weight:800;color:var(--t1)}
-.sheet-close{width:30px;height:30px;border-radius:50%;border:1px solid var(--b1);background:transparent;color:var(--t2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sheet-handle{width:36px;height:4px;background:var(--s3);border-radius:2px;margin:12px auto 0}
+.sheet-header{display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:16px;padding:16px 0;border-bottom:1px solid var(--b1)}
+.sheet-title{font-size:15px;font-weight:700;color:var(--t1);letter-spacing:0.5px}
+.sheet-close{position:absolute;right:0;top:50%;transform:translateY(-50%);width:32px;height:32px;border:none;border-radius:50%;background:var(--s2);color:var(--t2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.sheet-close:hover{background:var(--b2);color:var(--t1)}
 
 /* Mobil main panel — tam ekran kart */
 @media(max-width:860px){
@@ -482,12 +515,12 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* PC: font boyutları büyüt */
 @media(min-width:861px){
-  .flabel{font-size:12px;font-weight:800;letter-spacing:1.3px;color:var(--t1)}
+  .flabel{font-size:13px;font-weight:800;letter-spacing:1.5px;color:var(--t1)}
   .chip{font-size:13px;padding:7px 13px}
   .lchip{font-size:13px;padding:7px 13px}
   .rbtn{font-size:13px;padding:7px 14px}
-  .ftbtn{font-size:14px;padding:11px}
-  .stbtn{font-size:12px;padding:8px}
+  .ftbtn{font-size:15px;padding:12px}
+  .stbtn{font-size:13px;padding:8px}
   .cta{font-size:15px;padding:13px;font-weight:800;margin-top:12px}
   .trend-btn{font-size:15px;padding:13px;font-weight:700;margin-top:8px}
   .plat-btn-all{padding:13px;font-size:14px}
@@ -524,31 +557,31 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .mob-bottom-actions{display:none}
 @media(max-width:480px){
   .sidebar{width:auto;min-width:auto;margin:0 8px;padding:14px 12px}
-  .flabel{font-size:10px;font-weight:800;color:var(--t1);margin:14px 0 8px}
+  .flabel{font-size:12px;font-weight:800;color:var(--t1);margin:14px 0 10px}
   .plat-presets{gap:5px}
-  .plat-btn-all{padding:10px;font-size:12px}
-  .plat-grid{grid-template-columns:repeat(3,1fr);gap:4px}
-  .platbtn{padding:9px 3px;font-size:10px;min-height:72px;gap:5px}
+  .plat-btn-all{padding:12px;font-size:13px}
+  .plat-grid{grid-template-columns:repeat(3,1fr);gap:6px}
+  .platbtn{padding:10px 4px;font-size:12px;min-height:76px;gap:5px;font-weight:700}
   .plat-logo-svg{width:34px;height:34px}
   .plat-logo-svg img{width:30px;height:30px}
   .tv-presets{gap:5px}
-  .tv-btn-all{padding:10px;font-size:12px}
-  .tv-grid{grid-template-columns:repeat(3,1fr);gap:4px}
+  .tv-btn-all{padding:12px;font-size:13px}
+  .tv-grid{grid-template-columns:repeat(3,1fr);gap:6px}
   .tv-grid-2{grid-template-columns:repeat(2,1fr)}
-  .tvbtn{padding:9px 3px;font-size:10px;min-height:68px}
+  .tvbtn{padding:10px 4px;font-size:12px;min-height:72px;font-weight:700}
   .reg-presets{gap:5px}
-  .reg-btn-all{padding:10px;font-size:12px}
-  .reg-grid{grid-template-columns:repeat(3,1fr);gap:4px}
-  .regbtn{padding:10px 3px;font-size:10px;min-height:56px}
-  .regbtn .ic{font-size:15px}
-  .genre-grid{grid-template-columns:repeat(3,1fr);gap:4px}
-  .genre-btn{padding:9px 3px;font-size:10px;font-weight:600;min-height:52px}
+  .reg-btn-all{padding:12px;font-size:13px}
+  .reg-grid{grid-template-columns:repeat(3,1fr);gap:6px}
+  .regbtn{padding:10px 4px;font-size:12px;min-height:64px;font-weight:700}
+  .regbtn .ic{font-size:16px}
+  .genre-grid{grid-template-columns:repeat(3,1fr);gap:6px}
+  .genre-btn{padding:10px 4px;font-size:12px;font-weight:700;min-height:60px}
   .genre-btn .g-ic{font-size:15px}
   .rating-presets{gap:5px}
-  .rating-btn{padding:11px 6px;font-size:11px}
-  .rating-btn .r-label{font-size:12px}
-  .rating-btn .r-range{font-size:10px}
-  .rating-btn.all{padding:12px}
+  .rating-btn{padding:12px 6px;font-size:12px;min-height:64px}
+  .rating-btn .r-label{font-size:13px}
+  .rating-btn .r-range{font-size:11px}
+  .rating-btn.all{padding:12px;min-height:50px}
   .rating-btn.all .r-label{font-size:14px}
   .rating-btn.all .r-range{font-size:12px}
   .rating-grid{gap:4px}
@@ -556,7 +589,6 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   .btn-again{padding:11px 20px;font-size:14px;width:100%;justify-content:center}
   .btn-back{padding:11px 16px;font-size:14px}
   .det-actions{display:none}
-  .seen-pill{display:none}
   .mob-bottom-actions{display:flex;position:fixed;bottom:0;left:0;right:0;padding:12px 16px 20px;background:linear-gradient(transparent,rgba(20,24,28,0) 0%,var(--bg) 15%);z-index:100;gap:10px;align-items:center;justify-content:center}
   .btn-mob-back{flex:1;max-width:120px;padding:14px 16px;border:1px solid var(--b2);background:var(--s2);color:var(--t1);font-size:15px;font-weight:600;border-radius:12px;cursor:pointer}
   .btn-mob-again{flex:2;padding:14px 20px;border:none;background:linear-gradient(135deg,var(--grn),var(--grn2));color:#000;font-size:15px;font-weight:700;border-radius:12px;cursor:pointer;box-shadow:0 4px 12px rgba(0,192,48,.35)}
@@ -593,17 +625,23 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 <header class="hdr">
   <div class="hdr-in">
     <a class="logo" href="#" onclick="goSec('disc');return false;">
-      <span class="logo-ic">🎬</span>
+      <span class="logo-ic"><i class="ph-bold ph-film-strip" style="font-size:22px;color:var(--grn)"></i></span>
       <span class="logo-tx">Sine<span>Bot</span></span>
     </a>
     <nav class="nav">
-      <button class="ntab on" id="nav-disc" onclick="goSec('disc')">Keşfet</button>
-      <button class="ntab" id="nav-search" onclick="goSec('search')">Arama</button>
+      <button class="ntab on" id="nav-disc" onclick="goSec('disc')">
+        <i class="ph-bold ph-compass" style="font-size:20px"></i>
+        <span class="ntab-lbl">Keşfet</span>
+      </button>
+      <button class="ntab" id="nav-search" onclick="goSec('search')">
+        <i class="ph-bold ph-magnifying-glass" style="font-size:20px"></i>
+        <span class="ntab-lbl">Arama</span>
+      </button>
     </nav>
     <!-- Mobilde filtre butonu -->
     <button class="mob-filter-btn" id="mob-filter-btn" onclick="toggleMobFilter()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-      Filtrele
+      <i class="ph-bold ph-funnel" style="font-size:17px"></i>
+      <span class="mob-filter-lbl">Filtrele</span>
     </button>
   </div>
 </header>
@@ -617,40 +655,80 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
       <div class="flabel">İçerik Türü</div>
       <div class="ftype">
-        <button class="ftbtn on" id="ft-movie" onclick="switchType('movie')">🎬 Film</button>
-        <button class="ftbtn" id="ft-tv" onclick="switchType('tv')">📺 Dizi</button>
+        <button class="ftbtn on" id="ft-movie" onclick="switchType('movie')">
+          <i class="ph-bold ph-film-strip" style="font-size:15px"></i> Film
+        </button>
+        <button class="ftbtn" id="ft-tv" onclick="switchType('tv')">
+          <i class="ph-bold ph-television" style="font-size:15px"></i> Dizi
+        </button>
       </div>
 
-      <div class="flabel" id="reg-label">SİNEMA EKOLÜ VE BÖLGE</div>
+      <div class="flabel" id="reg-label">SİNEMA EKOLÜ VE DİL</div>
       <div class="reg-presets">
         <button class="reg-btn-all on" id="reg-all" onclick="setRegion('',this)">
-          <span style="font-size:16px">🌍</span>
+          <span style="font-size:18px;line-height:1"><i class="ph-bold ph-globe" style="font-size:20px"></i></span>
           <span>Tüm Dünya Sineması</span>
         </button>
         <div class="reg-grid">
           <button class="regbtn tr" id="reg-tr" onclick="setRegion('tr',this)">
-            <span class="ic"><img src="https://flagcdn.com/w40/tr.png" width="20" height="14" alt="TR" style="border-radius:2px;object-fit:cover;display:block"></span>
-            <span>Yerli</span>
+            <span class="ic"><img src="https://flagcdn.com/w40/tr.png" width="20" height="14" alt="TR"></span>
+            <span>Türkçe</span>
           </button>
-          <button class="regbtn hw" id="reg-hw" onclick="setRegion('hollywood',this)">
-            <span class="ic"><img src="https://flagcdn.com/w40/us.png" width="20" height="14" alt="US" style="border-radius:2px;object-fit:cover;display:block"></span>
-            <span>Hollywood / Batı</span>
+          <button class="regbtn en" id="reg-en" onclick="setRegion('en',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/us.png" width="20" height="14" alt="US"></span>
+            <span>İngilizce</span>
           </button>
-          <button class="regbtn asia" id="reg-asia" onclick="setRegion('asia',this)">
-            <span class="ic"><img src="https://flagcdn.com/w40/jp.png" width="20" height="14" alt="JP" style="border-radius:2px;object-fit:cover;display:block"></span>
-            <span>Asya</span>
+          <button class="regbtn ko" id="reg-ko" onclick="setRegion('ko',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/kr.png" width="20" height="14" alt="KR"></span>
+            <span>Korece</span>
           </button>
-          <button class="regbtn in" id="reg-in" onclick="setRegion('hindistan',this)">
-            <span class="ic">🇮🇳</span>
-            <span>Hindistan</span>
+          <button class="regbtn fr" id="reg-fr" onclick="setRegion('fr',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/fr.png" width="20" height="14" alt="FR"></span>
+            <span>Fransızca</span>
           </button>
-          <button class="regbtn eu" id="reg-eu" onclick="setRegion('europe',this)">
-            <span class="ic" style="font-size:18px;font-weight:900;color:#174a9d">EU</span>
-            <span>Avrupa</span>
+          <button class="regbtn es" id="reg-es" onclick="setRegion('es',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/es.png" width="20" height="14" alt="ES"></span>
+            <span>İspanyolca</span>
           </button>
-          <button class="regbtn mid" id="reg-mid" onclick="setRegion('middleeast',this)">
-            <span class="ic"><img src="https://flagcdn.com/w40/ps.png" width="20" height="14" alt="PS" style="border-radius:2px;object-fit:cover;display:block"></span>
-            <span>Ortadoğu & Diğer</span>
+          <button class="regbtn ja" id="reg-ja" onclick="setRegion('ja',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/jp.png" width="20" height="14" alt="JP"></span>
+            <span>Japonca</span>
+          </button>
+          <button class="regbtn it" id="reg-it" onclick="setRegion('it',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/it.png" width="20" height="14" alt="IT"></span>
+            <span>İtalyanca</span>
+          </button>
+          <button class="regbtn de" id="reg-de" onclick="setRegion('de',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/de.png" width="20" height="14" alt="DE"></span>
+            <span>Almanca</span>
+          </button>
+          <button class="regbtn hi" id="reg-hi" onclick="setRegion('hi',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/in.png" width="20" height="14" alt="IN"></span>
+            <span>Hintçe</span>
+          </button>
+          <button class="regbtn ru" id="reg-ru" onclick="setRegion('ru',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/ru.png" width="20" height="14" alt="RU"></span>
+            <span>Rusça</span>
+          </button>
+          <button class="regbtn fa" id="reg-fa" onclick="setRegion('fa',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/ir.png" width="20" height="14" alt="IR"></span>
+            <span>Farsça</span>
+          </button>
+          <button class="regbtn nordic" id="reg-nordic" onclick="setRegion('nordic',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/se.png" width="20" height="14" alt="SE"></span>
+            <span>İskandinav</span>
+          </button>
+          <button class="regbtn zh" id="reg-zh" onclick="setRegion('zh',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/cn.png" width="20" height="14" alt="CN"></span>
+            <span>Çince</span>
+          </button>
+          <button class="regbtn pt" id="reg-pt" onclick="setRegion('pt',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/br.png" width="20" height="14" alt="BR"></span>
+            <span>Portekizce</span>
+          </button>
+          <button class="regbtn ar" id="reg-ar" onclick="setRegion('ar',this)">
+            <span class="ic"><img src="https://flagcdn.com/w40/sa.png" width="20" height="14" alt="AR"></span>
+            <span>Arapça</span>
           </button>
         </div>
       </div>
@@ -662,15 +740,15 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         <div class="flabel">Durum</div>
         <div class="tv-presets">
           <button class="tv-btn-all on" id="st-all" onclick="setStatus('',this)">
-            <span style="font-size:16px">📺</span>
+            <span style="font-size:16px"><i class="ph-bold ph-television" style="font-size:18px"></i></span>
             <span>Tüm Durumlar</span>
           </button>
           <div class="tv-grid tv-grid-2">
             <button class="tvbtn" id="st-on" onclick="setStatus('on',this)">
-              <span style="font-size:16px">▶</span>
+              <span style="font-size:16px"><i class="ph-bold ph-play" style="font-size:18px"></i></span>
               <span>Devam ediyor</span></button>
             <button class="tvbtn" id="st-off" onclick="setStatus('ended',this)">
-              <span style="font-size:16px">✓</span>
+              <span style="font-size:16px"><i class="ph-bold ph-check" style="font-size:18px"></i></span>
               <span>Final Yaptı</span></button>
           </div>
         </div>
@@ -700,7 +778,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
       <div class="flabel">Platform (TR)</div>
       <div class="plat-presets">
         <button class="plat-btn-all on" data-pid="0" onclick="togglePlat(0,this)" id="pb-all">
-          <span style="font-size:16px">🌐</span>
+          <span style="font-size:18px;line-height:1"><i class="ph-bold ph-devices" style="font-size:20px"></i></span>
           <span>Tüm Platformlar</span>
         </button>
         <div class="plat-grid">
@@ -749,8 +827,14 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         <div class="fbox"><div class="fbox-lbl">Bitiş</div><select class="fsel" id="f-to"><option value="">Şimdiye</option></select></div>
       </div>
 
-      <button class="cta" id="cta-btn" onclick="startDiscover()">🎲 Rastgele Öner</button>
-      <button class="trend-btn" onclick="showTrends()">📈 Haftanın Trendleri</button>
+      <button class="cta" id="cta-btn" onclick="startDiscover()">
+        <i class="ph-bold ph-shuffle" style="font-size:18px"></i>
+        Rastgele Öner
+      </button>
+      <button class="trend-btn" onclick="showTrends()">
+        <i class="ph-bold ph-trend-up" style="font-size:18px"></i>
+        Haftanın Trendleri
+      </button>
       <div class="err hidden" id="err-box"></div>
 
     </aside><!-- /sidebar -->
@@ -758,10 +842,19 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <!-- Main panel -->
     <div class="main-panel" id="main-panel">
       <div class="empty-state" id="disc-empty">
-        <div class="empty-ic">🎬</div>
+        <div class="empty-ic"><i class="ph-bold ph-popcorn" style="font-size:52px;opacity:.2"></i></div>
         <div class="empty-t">Ne izleyeceksin?</div>
         <div class="empty-s">Filtreleri ayarla ve rastgele öneri al</div>
-        <button onclick="startDiscover()" style="margin-top:20px;padding:13px 28px;background:var(--grn);border:none;border-radius:var(--r2);color:#000;font-family:'Inter',sans-serif;font-size:15px;font-weight:800;cursor:pointer">🎲 Rastgele Öner</button>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;width:100%;max-width:260px">
+          <button onclick="startDiscover()" class="cta" style="margin-top:0">
+            <i class="ph-bold ph-shuffle" style="font-size:18px"></i>
+            Rastgele Öner
+          </button>
+          <button onclick="showTrends()" class="trend-btn" style="margin-top:0">
+            <i class="ph-bold ph-trend-up" style="font-size:18px"></i>
+            Haftanın Trendleri
+          </button>
+        </div>
       </div>
     </div>
 
@@ -777,13 +870,17 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     </div>
     <div class="stype-row">
       <button class="stype on" id="stype-multi" onclick="setST('multi')">Hepsi</button>
-      <button class="stype" id="stype-movie" onclick="setST('movie')">🎬 Film</button>
-      <button class="stype" id="stype-tv" onclick="setST('tv')">📺 Dizi</button>
+      <button class="stype" id="stype-movie" onclick="setST('movie')">
+        <i class="ph-bold ph-film-strip" style="font-size:14px"></i> Film
+      </button>
+      <button class="stype" id="stype-tv" onclick="setST('tv')">
+        <i class="ph-bold ph-television" style="font-size:14px"></i> Dizi
+      </button>
     </div>
     <div class="s-results hidden" id="s-results"></div>
   </div>
   <div id="s-hint" style="text-align:center;padding:60px 0;color:var(--t3)">
-    <div style="font-size:48px;opacity:.15;margin-bottom:12px">🔍</div>
+    <div style="opacity:.15;margin-bottom:12px"><i class="ph-bold ph-magnifying-glass" style="font-size:52px"></i></div>
     <div style="font-size:17px;font-weight:700;color:var(--t2);margin-bottom:6px">Film veya dizi ara</div>
     <div style="font-size:13px">İsim yaz, sonuçlara tıkla</div>
   </div>
@@ -794,12 +891,20 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 <!-- ══ TRENDS ══ -->
 <div id="sec-trends" class="wrap hidden">
   <div class="sticky-bar-trends" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div style="font-size:18px;font-weight:800">📈 Haftanın Trendleri</div>
-    <button class="btn-back" onclick="goSec('disc')">← Geri</button>
+    <div style="display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800">
+      <i class="ph-bold ph-trend-up" style="font-size:22px;color:var(--amber)"></i> Haftanın Trendleri
+    </div>
+    <button class="btn-back" onclick="goSec('disc')">
+      <i class="ph-bold ph-arrow-left" style="font-size:15px"></i> Geri
+    </button>
   </div>
   <div class="trend-tabs">
-    <button class="ttab on" id="tt-movie" onclick="switchTrend('movie')">🎬 Filmler</button>
-    <button class="ttab" id="tt-tv" onclick="switchTrend('tv')">📺 Diziler</button>
+    <button class="ttab on" id="tt-movie" onclick="switchTrend('movie')">
+      <i class="ph-bold ph-film-strip" style="font-size:14px"></i> Filmler
+    </button>
+    <button class="ttab" id="tt-tv" onclick="switchTrend('tv')">
+      <i class="ph-bold ph-television" style="font-size:14px"></i> Diziler
+    </button>
   </div>
   <div id="trend-loading" style="text-align:center;padding:60px 0">
     <div class="spinner" style="margin:0 auto 14px"></div>
@@ -846,20 +951,19 @@ const CY=new Date().getFullYear();
 const RELIABLE=[8,119,337];
 
 const GM=[
-  {id:28,ic:"⚔️",n:"Aksiyon"},{id:12,ic:"🗺️",n:"Macera"},{id:16,ic:"✏️",n:"Animasyon"},
-  {id:35,ic:"😂",n:"Komedi"},{id:80,ic:"🔫",n:"Suç"},{id:99,ic:"🎥",n:"Belgesel"},
-  {id:18,ic:"🎭",n:"Drama"},{id:14,ic:"🧙",n:"Fantezi"},{id:36,ic:"🏛️",n:"Tarih"},
-  {id:27,ic:"👻",n:"Korku"},{id:9648,ic:"🔍",n:"Gizem"},{id:10749,ic:"❤️",n:"Romantik"},
-  {id:878,ic:"🚀",n:"Bil.Kurgu"},{id:53,ic:"😨",n:"Gerilim"},{id:10752,ic:"💂",n:"Savaş"},
-  {id:37,ic:"🤠",n:"Western"}
+  {id:28,ic:"🧨",n:"Aksiyon",c:"#ef4444"},{id:18,ic:"🎭",n:"Drama",c:"#8b5cf6"},{id:35,ic:"😂",n:"Komedi",c:"#eab308"},
+  {id:27,ic:"👻",n:"Korku",c:"#991b1b"},{id:10749,ic:"❤️",n:"Romantik",c:"#f472b6"},{id:878,ic:"🚀",n:"Bilim Kurgu",c:"#06b6d4"},
+  {id:14,ic:"🪄",n:"Fantastik",c:"#d946ef"},{id:80,ic:"⚖️",n:"Suç",c:"#475569"},{id:53,ic:"😱",n:"Gerilim",c:"#f97316"},
+  {id:12,ic:"🗺️",n:"Macera",c:"#10b981"},{id:9648,ic:"🔍",n:"Gizem",c:"#6366f1"},{id:16,ic:"🎨",n:"Animasyon",c:"#3b82f6"},
+  {id:10751,ic:"👨‍👩‍👧‍👦",n:"Aile",c:"#84cc16"},{id:36,ic:"🏛️",n:"Tarih",c:"#78350f"},{id:10752,ic:"🎖️",n:"Savaş",c:"#57534e"},
+  {id:99,ic:"📹",n:"Belgesel",c:"#14b8a6"},{id:37,ic:"🌵",n:"Western",c:"#a16207"}
 ];
 const GT=[
-  {id:10759,ic:"⚔️",n:"Aksiyon"},{id:16,ic:"✏️",n:"Animasyon"},{id:35,ic:"😂",n:"Komedi"},
-  {id:80,ic:"🔫",n:"Suç"},{id:99,ic:"🎥",n:"Belgesel"},{id:18,ic:"🎭",n:"Drama"},
-  {id:10751,ic:"👨‍👩‍👧",n:"Aile"},{id:14,ic:"🧙",n:"Fantezi"},{id:36,ic:"🏛️",n:"Tarih"},
-  {id:27,ic:"👻",n:"Korku"},{id:9648,ic:"🔍",n:"Gizem"},{id:10749,ic:"❤️",n:"Romantik"},
-  {id:10765,ic:"🚀",n:"Sci-Fi"},{id:53,ic:"😨",n:"Gerilim"},
-  {id:10768,ic:"🏛️",n:"Savaş"},{id:37,ic:"🤠",n:"Western"}
+  {id:10759,ic:"⚔️",n:"Aksiyon & Macera",c:"#ef4444"},{id:18,ic:"🎭",n:"Drama",c:"#8b5cf6"},{id:35,ic:"😂",n:"Komedi",c:"#eab308"},
+  {id:27,ic:"👻",n:"Korku",c:"#991b1b"},{id:10749,ic:"❤️",n:"Romantik",c:"#f472b6"},{id:10765,ic:"🛸",n:"Bilim Kurgu & Fantastik",c:"#06b6d4"},
+  {id:80,ic:"⚖️",n:"Suç",c:"#475569"},{id:53,ic:"😱",n:"Gerilim",c:"#f97316"},{id:9648,ic:"🔍",n:"Gizem",c:"#6366f1"},
+  {id:16,ic:"🎨",n:"Animasyon",c:"#3b82f6"},{id:10751,ic:"👨‍👩‍👧‍👦",n:"Aile",c:"#84cc16"},{id:36,ic:"🏛️",n:"Tarih",c:"#78350f"},
+  {id:10768,ic:"🎖️",n:"Savaş & Politik",c:"#57534e"},{id:99,ic:"📹",n:"Belgesel",c:"#14b8a6"},{id:37,ic:"🌵",n:"Western",c:"#a16207"}
 ];
 const LL=[
   {c:"tr",f:"🇹🇷",n:"Türkçe"},{c:"en",f:"🇺🇸",n:"İngilizce"},{c:"ko",f:"🇰🇷",n:"Korece"},
@@ -877,8 +981,27 @@ const PREFETCHING=new Set();
 const TV_MINI_CACHE={};
 let modalTvId=null,modalSeasons=[];
 let SIDEBAR_HOME_PARENT=null,SIDEBAR_HOME_NEXT=null;
+window.currentDetailId=null; window.currentDetailType=null;
+
+function enforceCacheLimit(cacheObj, limit=50) {
+  const keys = Object.keys(cacheObj);
+  if(keys.length > limit) {
+    keys.slice(0, Math.floor(limit/2)).forEach(k => delete cacheObj[k]);
+  }
+}
+
+function runGarbageCollector() {
+  enforceCacheLimit(CACHE, 50);
+  enforceCacheLimit(WD_CACHE, 50);
+  enforceCacheLimit(EXT_CACHE, 50);
+  enforceCacheLimit(RECS_CACHE, 50);
+  enforceCacheLimit(OMDB_CACHE, 50);
+  enforceCacheLimit(TV_MINI_CACHE, 50);
+  enforceCacheLimit(EP_CACHE, 20);
+}
 
 function prefetchDetail(id,type){
+  runGarbageCollector();
   const ck=`${type}_${id}`;
   if(PREFETCHING.has(ck))return;
   if(CACHE[ck]?.credits&&WD_CACHE[ck]&&EXT_CACHE[ck]&&RECS_CACHE[ck])return;
@@ -915,7 +1038,7 @@ const isPC=()=>window.innerWidth>860;
 function rGenres(){
   const L=MT==="movie"?GM:GT,sg=getSG();
   document.getElementById("genres-wrap").innerHTML=L.map(g=>
-    `<button class="genre-btn${sg.includes(g.id)?" on":""}" onclick="tG(${g.id},this)"><span class="g-ic">${g.ic}</span><span>${g.n}</span></button>`
+    `<button class="genre-btn${sg.includes(g.id)?" on":""}" onclick="tG(${g.id},this)" style="--gc:${g.c}"><span class="g-ic">${g.ic}</span><span>${g.n}</span></button>`
   ).join("");
 }
 function tG(id,el){const sg=getSG();setSG(sg.includes(id)?sg.filter(x=>x!==id):[...sg,id]);el.classList.toggle("on")}
@@ -947,6 +1070,7 @@ function switchType(t){
   rGenres();
 }
 function setStatus(s,el){
+  if(TVS===s){TVS="";const parent=el?.closest('.tv-presets');if(parent)parent.querySelectorAll('.tv-btn-all, .tvbtn').forEach(b=>b.classList.remove("on"));document.getElementById('st-all')?.classList.add("on");return}
   TVS=s;
   const parent=el?.closest('.tv-presets');
   if(parent) parent.querySelectorAll('.tv-btn-all, .tvbtn').forEach(b=>b.classList.remove("on"));
@@ -954,6 +1078,7 @@ function setStatus(s,el){
   else document.getElementById('st-all')?.classList.add("on");
 }
 function setSezon(min,max,el){
+  if(S_MIN===(min||"")&&S_MAX===(max||"")&&el?.classList.contains("on")){S_MIN="";S_MAX="";const parent=el?.closest('.tv-presets');if(parent)parent.querySelectorAll('.tv-btn-all, .tvbtn').forEach(b=>b.classList.remove("on"));document.getElementById('sez-all')?.classList.add("on");return}
   S_MIN=min||"";
   S_MAX=max||"";
   const parent=el?.closest('.tv-presets');
@@ -962,26 +1087,25 @@ function setSezon(min,max,el){
   else document.getElementById('sez-all')?.classList.add("on");
 }
 function setRegion(k,el){
+  if(k&&REGION===k){k=null;el=null;} // toggle off
   REGION=k||"";
   document.querySelectorAll(".regbtn").forEach(b=>b.classList.remove("on"));
   document.querySelectorAll(".reg-btn-all").forEach(b=>b.classList.remove("on"));
   if(el) el.classList.add("on");
   else document.getElementById("reg-all")?.classList.add("on");
-  // Auto-manage language filter based on region
-  const langSec=document.getElementById("lang-section");
+  
+  // Clear other language filters if region is set
   LL.forEach(l=>LS[l.c]=null);
-  if(k==="tr"){LS["tr"]="inc";}
-  else if(k==="hollywood"){LS["en"]="inc";}
-  else if(k==="asia"){LS["ko"]="inc";LS["ja"]="inc";LS["zh"]="inc";}
-  else if(k==="hindistan"){LS["hi"]="inc";}
-  else if(k==="europe"){LS["fr"]="inc";LS["de"]="inc";LS["es"]="inc";LS["it"]="inc";}
-  else if(k==="middleeast"){LS["ar"]="inc";LS["fa"]="inc";}
-  // Always hide lang section - no need to show it
-  if(langSec)langSec.classList.add("hidden");
+  if(REGION) LS[REGION]="inc";
   rLangs();
 }
 // Rating preset buttons
 function setRatingPreset(min,max,el){
+  // toggle: if already selected same preset (not the 'all' button), reset to all
+  if(el && el.id!=="r-btn-all" && CR_MIN===min && CR_MAX===max){
+    setRatingPreset(0,10,document.getElementById("r-btn-all"));
+    return;
+  }
   CR_MIN=min;
   CR_MAX=max;
   // Update display text based on selection
@@ -1033,7 +1157,7 @@ document.addEventListener("click",e=>{if(!document.getElementById("sec-search")?
 async function doSearch(){
   const q=sI.value.trim();if(!q)return;
   const sr=document.getElementById("s-results");
-  sr.innerHTML=`<div style="padding:12px;text-align:center;color:var(--t3)">Aranıyor...</div>`;
+  sr.innerHTML=`<div style="padding:30px;text-align:center"><div class="spinner" style="margin:0 auto 14px;width:34px;height:34px;border-width:3px"></div><div style="color:var(--t2);font-size:14px;font-weight:600">Aranıyor...</div></div>`;
   sr.classList.remove("hidden");
   document.getElementById("s-hint").classList.add("hidden");
   try{
@@ -1052,8 +1176,8 @@ async function doSearch(){
     sr.innerHTML=merged.map(x=>{
       const t=x.title||x.name||"",y=(x.release_date||x.first_air_date||"").slice(0,4);
       const mt=x.media_type||(ST_!=="multi"?ST_:"movie"),sc=x.vote_average?x.vote_average.toFixed(1):"—";
-      const po=x.poster_path?`<img class="sri-poster" src="${IM}${x.poster_path}" alt="" loading="lazy" decoding="async">`:`<div class="sri-poster" style="display:flex;align-items:center;justify-content:center">🎬</div>`;
-      return`<div class="sri" onclick="openDetail(${x.id},'${mt}',false)">${po}<div style="flex:1;min-width:0"><div class="sri-title">${t}</div><div class="sri-meta">${mt==="movie"?"Film":"Dizi"}${y?" · "+y:""}</div></div><div class="sri-sc">★ ${sc}</div></div>`;
+      const po=x.poster_path?`<img class="sri-poster" src="${IM}${x.poster_path}" alt="" loading="lazy" decoding="async" onload="this.style.opacity=1" style="opacity:0;transition:opacity .3s ease-in">`:`<div class="sri-poster" style="display:flex;align-items:center;justify-content:center"><i class="ph-bold ph-film-strip" style="font-size:20px;opacity:.3"></i></div>`;
+      return`<div class="sri" onclick="openDetail(${x.id},'${mt}',false)">${po}<div style="flex:1;min-width:0"><div class="sri-title">${t}</div><div class="sri-meta">${mt==="movie"?"Film":"Dizi"}${y?" · "+y:""}</div></div><div class="sri-sc"><i class="ph-fill ph-star" style="color:#f5c518"></i> ${sc}</div></div>`;
     }).join("");
   }catch(e){sr.innerHTML=`<div style="padding:12px;text-align:center;color:var(--red)">${e.message}</div>`}
 }
@@ -1078,21 +1202,9 @@ function buildUrl(page,usePlat){
   if(tM>0)u+=`&vote_average.gte=${tM}`;
   if(tX<10)u+=`&vote_average.lte=${tX}`;
 
-  // Bölge / ekol - 6 kategori
-  const regionMap={
-    tr:{countries:"TR",lang:"tr"},
-    hollywood:{countries:"US|GB|CA|AU|NZ",lang:"en"},
-    asia:{countries:"KR|JP|CN|HK|TW|TH|SG|MY|ID|PH|VN",lang:""},
-    hindistan:{countries:"IN",lang:"hi"},
-    europe:{countries:"FR|DE|ES|IT|SE|DK|NO|NL|BE|PL|AT|CH|FI|PT|GR|CZ|HU|RO",lang:""},
-    middleeast:{countries:"SA|AE|QA|JO|LB|EG|IR|TR",lang:""}
-  };
-  if(REGION && regionMap[REGION]){
-    const rc=regionMap[REGION].countries;
-    if(rc) u+=`&with_origin_country=${encodeURIComponent(rc)}`;
-    const rl=regionMap[REGION].lang;
-    if(rl) u+=`&with_original_language=${rl}`;
-  }
+  // Sinema Ekolü / Dil filtresi
+  if(REGION === 'nordic') u+=`&with_original_language=sv|no|da`;
+  else if(REGION) u+=`&with_original_language=${REGION}`;
 
   const sg=getSG();if(sg.length)u+=`&with_genres=${sg.join(",")}`;
   if(usePlat&&CP)u+=`&with_watch_providers=${CP}&watch_region=TR`;
@@ -1108,11 +1220,12 @@ function buildUrl(page,usePlat){
 }
 
 function showLoad(txt="Aranıyor..."){
+  const anim = `<div class="spinner" style="width:64px;height:64px;border-width:4px"></div>`;
   if(isPC()){
-    document.getElementById("main-panel").innerHTML=`<div class="load-state"><div class="spinner"></div><div class="load-t">${txt}</div><div class="load-s" id="load-sub"></div></div>`;
+    document.getElementById("main-panel").innerHTML=`<div class="load-state" style="padding-top:40px">${anim}<div class="load-t">${txt}</div><div class="load-s" id="load-sub"></div></div>`;
   }else{
     goSec("detail");
-    document.getElementById("detail-content").innerHTML=`<div class="load-state"><div class="spinner"></div><div class="load-t">${txt}</div><div class="load-s" id="load-sub"></div></div>`;
+    document.getElementById("detail-content").innerHTML=`<div class="load-state" style="padding:40px 20px">${anim}<div class="load-t">${txt}</div><div class="load-s" id="load-sub"></div></div>`;
   }
 }
 function setSub(t){const el=document.getElementById("load-sub");if(el)el.textContent=t}
@@ -1288,18 +1401,19 @@ async function openDetail(id,type,fromD=false,cnt=0){
       else{setSub("IMDb · RT · MC...");omdb=await omdbF(ext.imdb_id);OMDB_CACHE[ext.imdb_id]=omdb}
     }
     const html=renderDetail(det,wd,ext,omdb,type,recs?.results||[],enDet);
+    window.currentDetailId = id; window.currentDetailType = type;
     if(isPC()&&FS==="disc"){
       document.getElementById("main-panel").innerHTML=`<div class="det-wrap">${html}</div>`;
       const ba=document.getElementById("btn-again");
       if(ba){ba.classList.toggle("hidden",!fromD);ba.disabled=false}
-      const sc=document.getElementById("seen-count");
-      if(sc){sc.classList.toggle("hidden",!(fromD&&cnt>0));if(fromD&&cnt>0)sc.textContent=`👁 ${cnt}`}
+
     }else{
       document.getElementById("detail-content").innerHTML=`<div class="det-wrap">${html}</div>`;
       const ba=document.getElementById("btn-again");if(ba){ba.classList.toggle("hidden",!fromD);ba.disabled=false}
       if(fromD)FS="disc";
       goSec("detail");
     }
+    runGarbageCollector();
     window.scrollTo({top:0,behavior:"instant"});
     // Modal init
     if(det.seasons?.length){
@@ -1330,8 +1444,8 @@ function renderDetail(d,watch,ext,omdb,type,recs,enDet){
   // Badges with proper spacing
   let bdg="";
   if(seasons>0)bdg+=`<span class="hbadge hb-i">${seasons} Sezon</span>`;
-  if(!iM&&status){const on=status==="Returning Series"||status==="In Production";bdg+=`<span class="hbadge ${on?"hb-on":"hb-off"}">${on?"▶ Devam ediyor":"✓ Final Yaptı"}</span>`}
-  if(omdb?.Awards?.toLowerCase().includes("oscar"))bdg+=`<span class="hbadge hb-aw">🏆 Oscar</span>`;
+  if(!iM&&status){const on=status==="Returning Series"||status==="In Production";bdg+=`<span class="hbadge ${on?"hb-on":"hb-off"}">${on?"<i class='ph-bold ph-play'></i> Devam ediyor":"<i class='ph-bold ph-check'></i> Final Yaptı"}</span>`}
+  if(omdb?.Awards?.toLowerCase().includes("oscar"))bdg+=`<span class="hbadge hb-aw"><i class='ph-bold ph-trophy'></i> Oscar</span>`;
 
   // Scores
   const imdbR=omdb?.imdbRating&&omdb.imdbRating!=="N/A"?omdb.imdbRating:null;
@@ -1339,9 +1453,9 @@ function renderDetail(d,watch,ext,omdb,type,recs,enDet){
   const rtR=omdb?.Ratings?.find(r=>r.Source==="Rotten Tomatoes");
   const mcS=omdb?.Metascore&&omdb.Metascore!=="N/A"?parseInt(omdb.Metascore):null;
   let sc="";
-  if(imdbR){const lnk=imdbId?`href="https://www.imdb.com/title/${imdbId}" target="_blank" rel="noreferrer"`:"";sc+=`<a class="stile si${imdbId?" lnk":""}" ${lnk}><div class="st-src">IMDb</div><div class="st-val">★ ${imdbR}</div><div class="st-sub">${imdbV||""}</div></a>`}
+  if(imdbR){const lnk=imdbId?`href="https://www.imdb.com/title/${imdbId}" target="_blank" rel="noreferrer"`:"";sc+=`<a class="stile si${imdbId?" lnk":""}" ${lnk}><div class="st-src">IMDb</div><div class="st-val"><i class="ph-fill ph-star" style="color:#f5c518"></i> ${imdbR}</div><div class="st-sub">${imdbV||""}</div></a>`}
   sc+=`<div class="stile st"><div class="st-src">TMDB</div><div class="st-val">${score.toFixed(1)}</div><div class="st-sub">${(d.vote_count||0).toLocaleString("tr-TR")} oy</div></div>`;
-  if(rtR){const rv=parseInt(rtR.Value);sc+=`<div class="stile ${rv>=60?"rg":"rb"}"><div class="st-src">Rotten Tomatoes</div><div class="st-val">${rv>=60?"🍅":"🤢"} ${rtR.Value}</div><div class="st-sub">${rv>=60?"Taze":"Çürük"}</div></div>`}
+  if(rtR){const rv=parseInt(rtR.Value);sc+=`<div class="stile ${rv>=60?"rg":"rb"}"><div class="st-src">Rotten Tomatoes</div><div class="st-val"><i class="ph-bold ${rv>=60?"ph-thumbs-up":"ph-thumbs-down"}"></i> ${rtR.Value}</div><div class="st-sub">${rv>=60?"Taze":"Çürük"}</div></div>`}
   if(mcS!==null){const mc=mcS>=61?"mg":mcS>=40?"mm":"mb";sc+=`<div class="stile ${mc}"><div class="st-src">Metacritic</div><div class="st-val">${mcS}/100</div></div>`}
 
   // Seasons pills
@@ -1349,7 +1463,7 @@ function renderDetail(d,watch,ext,omdb,type,recs,enDet){
   let sznHtml="";
   if(!iM&&d.seasons?.length){
     const real=d.seasons.filter(s=>s.season_number>0);
-    const pills=real.map(s=>{const ad=s.air_date?new Date(s.air_date):null;const up=ad&&ad>today;return`<span class="szn-pill${up?" up":""}">${up?"📅 ":""}S${s.season_number} · ${up?s.air_date?.slice(0,7)+" yakında":s.episode_count+" bölüm"}</span>`}).join("");
+    const pills=real.map(s=>{const ad=s.air_date?new Date(s.air_date):null;const up=ad&&ad>today;return`<span class="szn-pill${up?" up":""}">${up?"<i class='ph-bold ph-calendar-blank'></i> ":""}S${s.season_number} · ${up?s.air_date?.slice(0,7)+" yakında":s.episode_count+" bölüm"}</span>`}).join("");
     sznHtml=`<div class="szn-row"><div class="szn-pills">${pills}</div><button class="szn-btn" onclick="openModal()">Tüm bölümler →</button></div>`;
   }
 
@@ -1372,15 +1486,15 @@ function renderDetail(d,watch,ext,omdb,type,recs,enDet){
   // Cast
   const cast=(d.credits?.cast||[]).slice(0,14);
   const castHtml=cast.map(c=>{
-    const ph=c.profile_path?`<img class="cast-photo" src="${IF}${c.profile_path}" alt="${c.name}" loading="lazy" decoding="async" onerror="this.outerHTML='<div class=cast-ph>👤</div>'">`:`<div class="cast-ph">👤</div>`;
+    const ph=c.profile_path?`<img class="cast-photo" src="${IF}${c.profile_path}" alt="${c.name}" loading="lazy" decoding="async" onerror="this.outerHTML='<div class=cast-ph><i class=\\'ph-bold ph-user\\'></i></div>'">`:`<div class="cast-ph"><i class="ph-bold ph-user"></i></div>`;
     return`<div class="cast-item">${ph}<div class="cast-tx"><div class="cast-name">${c.name}</div><div class="cast-char">${c.character||""}</div></div></div>`;
   }).join("");
 
   // Similar
   const simHtml=(recs||[]).slice(0,10).map(x=>{
     const t=x.title||x.name||"",mt=x.media_type||type,sc2=x.vote_average?x.vote_average.toFixed(1):"—";
-    const po=x.poster_path?`<img class="sim-poster" src="${IM}${x.poster_path}" alt="${t}" loading="lazy" decoding="async">`:`<div class="sim-ph">🎬</div>`;
-    return`<div class="sim-card" onclick="openDetail(${x.id},'${mt}',false)" onmouseenter="prefetchDetail(${x.id},'${mt}')" ontouchstart="prefetchDetail(${x.id},'${mt}')">${po}<div class="sim-info"><div class="sim-title">${t}</div><div class="sim-sc">★ ${sc2}</div></div></div>`;
+    const po=x.poster_path?`<img class="sim-poster" src="${IM}${x.poster_path}" alt="${t}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`:`<div class="sim-ph"><i class="ph-bold ph-film-strip" style="font-size:24px;opacity:.3"></i></div>`;
+    return`<div class="sim-card" onclick="openDetail(${x.id},'${mt}',false)" onmouseenter="prefetchDetail(${x.id},'${mt}')" ontouchstart="prefetchDetail(${x.id},'${mt}')">${po}<div class="sim-info"><div class="sim-title">${t}</div><div class="sim-sc"><i class="ph-fill ph-star" style="color:#f5c518"></i> ${sc2}</div></div></div>`;
   }).join("");
   // Prefetch first few similar items to make clicks instant
   (recs||[]).slice(0,6).forEach(x=>{const mt=x.media_type||type;try{prefetchDetail(x.id,mt)}catch(e){}});
@@ -1419,7 +1533,7 @@ function renderDetail(d,watch,ext,omdb,type,recs,enDet){
   // Runtime below poster - larger, standalone
   const posterMeta=runtimeFormatted?`<div style="text-align:center;margin-top:14px;font-size:18px;font-weight:700;color:var(--amber);letter-spacing:0.5px">${runtimeFormatted}</div>`:"";
   const poster=d.poster_path
-    ?`<img class="poster-img" src="${IMH}${d.poster_path}" alt="${title}" loading="eager" fetchpriority="high" decoding="async">${posterMeta}`
+    ?`<img class="poster-img" src="${IMH}${d.poster_path}" alt="${title}" loading="eager" fetchpriority="high" decoding="async" onload="this.classList.add('loaded')">${posterMeta}`
     :`<div class="poster-ph">🎬</div>${posterMeta}`;
   const orig2=orig&&orig!==title?`<div class="hero-orig">${orig}</div>`:"";
   const tags=(d.genres||[]).slice(0,5).map(g=>`<span class="htag">${g.name}</span>`).join("");
@@ -1427,7 +1541,6 @@ function renderDetail(d,watch,ext,omdb,type,recs,enDet){
   // PC: btn-again in det-actions
   const actions=`<div class="det-actions">
     <button class="btn-again" id="btn-again" onclick="doDiscover()">🎲 Başka Öner</button>
-    <span class="seen-pill" id="seen-count"></span>
   </div>`;
 
   return `
@@ -1566,9 +1679,9 @@ async function loadTrends(type){
       const title=type==="movie"?x.title:x.name;
       const year=((type==="movie"?x.release_date:x.first_air_date)||"").slice(0,4);
       const sc=x.vote_average?x.vote_average.toFixed(1):"—";
-      const po=x.poster_path?`<img class="tposter" src="${IM}${x.poster_path}" alt="${title}" loading="lazy" decoding="async">`:`<div class="tposter-ph">🎬</div>`;
+      const po=x.poster_path?`<img class="tposter" src="${IM}${x.poster_path}" alt="${title}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`:`<div class="tposter-ph"><i class="ph-bold ph-film-slate"></i></div>`;
       let badge="";
-      if(type==="movie"&&npIds.has(x.id))badge=`<div class="tbadge tbadge-now">🎬 Vizyonda</div>`;
+      if(type==="movie"&&npIds.has(x.id))badge=`<div class="tbadge tbadge-now"><i class='ph-bold ph-ticket'></i> Vizyonda</div>`;
       if(type==="tv"){
         const det=tvDets[x.id];
         if(det){
@@ -1577,13 +1690,13 @@ async function loadTrends(type){
           if(on&&next){
             const ad=new Date(next.air_date),diff=Math.ceil((ad-new Date())/(864e5));
             const lbl=diff<=0?"Yeni bölüm!":diff===1?"Yarın":diff<=7?`${diff} günde`:`S${next.season_number}B${next.episode_number}`;
-            badge=`<div class="tbadge tbadge-ep">▶ ${lbl}</div>`;
-          }else if(on&&last)badge=`<div class="tbadge tbadge-on">▶ S${last.season_number}B${last.episode_number}</div>`;
-          else if(on)badge=`<div class="tbadge tbadge-on">▶ Devam ediyor</div>`;
-          else if(det.number_of_seasons)badge=`<div class="tbadge tbadge-end">✓ ${det.number_of_seasons} Sezon</div>`;
+            badge=`<div class="tbadge tbadge-ep"><i class='ph-bold ph-play'></i> ${lbl}</div>`;
+          }else if(on&&last)badge=`<div class="tbadge tbadge-on"><i class='ph-bold ph-play'></i> S${last.season_number}B${last.episode_number}</div>`;
+          else if(on)badge=`<div class="tbadge tbadge-on"><i class='ph-bold ph-play'></i> Devam ediyor</div>`;
+          else if(det.number_of_seasons)badge=`<div class="tbadge tbadge-end"><i class='ph-bold ph-check'></i> ${det.number_of_seasons} Sezon</div>`;
         }
       }
-      return`<div class="tcard" onclick="openDetail(${x.id},'${type}',false)"><div style="position:relative">${po}${badge}</div><div class="tinfo"><div class="trank">#${i+1}</div><div class="tname">${title}</div><div class="tsc">★ ${sc}${year?" · "+year:""}</div></div></div>`;
+      return`<div class="tcard" onclick="openDetail(${x.id},'${type}',false)"><div style="position:relative">${po}${badge}</div><div class="tinfo"><div class="trank">#${i+1}</div><div class="tname">${title}</div><div class="tsc"><i class="ph-fill ph-star" style="color:#f5c518"></i> ${sc}${year?" · "+year:""}</div></div></div>`;
     }).join("");
     document.getElementById("trend-loading").classList.add("hidden");
     document.getElementById("trend-grid").classList.remove("hidden");
@@ -1649,7 +1762,7 @@ setRatingRange(0,10);
   <div class="sheet-handle"></div>
   <div class="sheet-header">
     <div class="sheet-title">Filtreler</div>
-    <button class="sheet-close" onclick="closeMobFilter()">✕</button>
+    <button class="sheet-close" onclick="closeMobFilter()"><i class="ph-bold ph-x"></i></button>
   </div>
   <!-- Sidebar içeriği JS ile buraya kopyalanacak -->
   <div id="sheet-content"></div>
