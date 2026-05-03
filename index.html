@@ -96,8 +96,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .genre-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 4px;background:rgba(255,255,255,0.03);border:1px solid var(--b1);border-radius:var(--r2);color:var(--t2);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s cubic-bezier(0.4, 0, 0.2, 1);line-height:1.2;gap:6px;min-height:72px;text-align:center;position:relative;overflow:hidden}
 .genre-btn::before{content:'';position:absolute;inset:0;background:var(--gc);opacity:0;transition:opacity .2s}
 .genre-btn:hover{border-color:var(--b2);color:var(--t1);transform:translateY(-2px);background:rgba(255,255,255,0.06)}
-.genre-btn.on{background:color-mix(in srgb, var(--gc) 12%, rgba(27,34,40,0.4));border-color:color-mix(in srgb, var(--gc) 40%, transparent);color:var(--t1);font-weight:800;box-shadow:0 8px 20px color-mix(in srgb, var(--gc) 15%, transparent)}
-.genre-btn.on .g-ic{transform:scale(1.15);filter:drop-shadow(0 0 8px color-mix(in srgb, var(--gc) 60%, transparent))}
+.genre-btn.on{background:color-mix(in srgb, var(--gc) 18%, rgba(27,34,40,0.4));border-color:color-mix(in srgb, var(--gc) 60%, transparent);color:#fff;font-weight:800;box-shadow:0 10px 25px color-mix(in srgb, var(--gc) 25%, transparent);transform:translateY(-3px)}
+.genre-btn.on .g-ic{transform:scale(1.25);filter:drop-shadow(0 0 12px color-mix(in srgb, var(--gc) 85%, transparent))}
 .genre-btn .g-ic{font-size:24px;transition:transform .2s;z-index:1}
 .genre-btn span:not(.g-ic){z-index:1}
 /* Old chips style kept for compatibility */
@@ -951,19 +951,19 @@ const CY=new Date().getFullYear();
 const RELIABLE=[8,119,337];
 
 const GM=[
-  {id:28,ic:"🧨",n:"Aksiyon",c:"#ef4444"},{id:18,ic:"🎭",n:"Drama",c:"#8b5cf6"},{id:35,ic:"😂",n:"Komedi",c:"#eab308"},
+  {id:28,ic:"🧨",n:"Aksiyon",c:"#ef4444"},{id:18,ic:"🎭",n:"Drama",c:"#8b5cf6"},{id:35,ic:"😂",n:"Komedi",c:"#f59e0b"},
   {id:27,ic:"👻",n:"Korku",c:"#991b1b"},{id:10749,ic:"❤️",n:"Romantik",c:"#f472b6"},{id:878,ic:"🚀",n:"Bilim Kurgu",c:"#06b6d4"},
-  {id:14,ic:"🪄",n:"Fantastik",c:"#d946ef"},{id:80,ic:"⚖️",n:"Suç",c:"#475569"},{id:53,ic:"😱",n:"Gerilim",c:"#f97316"},
-  {id:12,ic:"🗺️",n:"Macera",c:"#10b981"},{id:9648,ic:"🔍",n:"Gizem",c:"#6366f1"},{id:16,ic:"🎨",n:"Animasyon",c:"#3b82f6"},
-  {id:10751,ic:"👨‍👩‍👧‍👦",n:"Aile",c:"#84cc16"},{id:36,ic:"🏛️",n:"Tarih",c:"#78350f"},{id:10752,ic:"🎖️",n:"Savaş",c:"#57534e"},
+  {id:14,ic:"🪄",n:"Fantastik",c:"#d946ef"},{id:80,ic:"⚖️",n:"Suç",c:"#6366f1"},{id:53,ic:"😱",n:"Gerilim",c:"#f97316"},
+  {id:12,ic:"🗺️",n:"Macera",c:"#10b981"},{id:9648,ic:"🔍",n:"Gizem",c:"#4f46e5"},{id:16,ic:"🎨",n:"Animasyon",c:"#3b82f6"},
+  {id:10751,ic:"👨‍👩‍👧‍👦",n:"Aile",c:"#84cc16"},{id:36,ic:"🏛️",n:"Tarih",c:"#b45309"},{id:10752,ic:"🎖️",n:"Savaş",c:"#be123c"},
   {id:99,ic:"📹",n:"Belgesel",c:"#14b8a6"},{id:37,ic:"🌵",n:"Western",c:"#a16207"}
 ];
 const GT=[
-  {id:10759,ic:"⚔️",n:"Aksiyon & Macera",c:"#ef4444"},{id:18,ic:"🎭",n:"Drama",c:"#8b5cf6"},{id:35,ic:"😂",n:"Komedi",c:"#eab308"},
+  {id:10759,ic:"⚔️",n:"Aksiyon & Macera",c:"#ef4444"},{id:18,ic:"🎭",n:"Drama",c:"#8b5cf6"},{id:35,ic:"😂",n:"Komedi",c:"#f59e0b"},
   {id:27,ic:"👻",n:"Korku",c:"#991b1b"},{id:10749,ic:"❤️",n:"Romantik",c:"#f472b6"},{id:10765,ic:"🛸",n:"Bilim Kurgu & Fantastik",c:"#06b6d4"},
-  {id:80,ic:"⚖️",n:"Suç",c:"#475569"},{id:53,ic:"😱",n:"Gerilim",c:"#f97316"},{id:9648,ic:"🔍",n:"Gizem",c:"#6366f1"},
-  {id:16,ic:"🎨",n:"Animasyon",c:"#3b82f6"},{id:10751,ic:"👨‍👩‍👧‍👦",n:"Aile",c:"#84cc16"},{id:36,ic:"🏛️",n:"Tarih",c:"#78350f"},
-  {id:10768,ic:"🎖️",n:"Savaş & Politik",c:"#57534e"},{id:99,ic:"📹",n:"Belgesel",c:"#14b8a6"},{id:37,ic:"🌵",n:"Western",c:"#a16207"}
+  {id:80,ic:"⚖️",n:"Suç",c:"#6366f1"},{id:53,ic:"😱",n:"Gerilim",c:"#f97316"},{id:9648,ic:"🔍",n:"Gizem",c:"#4f46e5"},
+  {id:16,ic:"🎨",n:"Animasyon",c:"#3b82f6"},{id:10751,ic:"👨‍👩‍👧‍👦",n:"Aile",c:"#84cc16"},{id:36,ic:"🏛️",n:"Tarih",c:"#b45309"},
+  {id:10768,ic:"🎖️",n:"Savaş & Politik",c:"#be123c"},{id:99,ic:"📹",n:"Belgesel",c:"#14b8a6"},{id:37,ic:"🌵",n:"Western",c:"#a16207"}
 ];
 const LL=[
   {c:"tr",f:"🇹🇷",n:"Türkçe"},{c:"en",f:"🇺🇸",n:"İngilizce"},{c:"ko",f:"🇰🇷",n:"Korece"},
@@ -1051,14 +1051,17 @@ function rLangs(){
 function tL(c){LS[c]=LS[c]==="inc"?null:"inc";rLangs()}
 
 // Navigation
-function goSec(s){
+function goSec(s,push=true){
+  const isSame = (s === FS);
+  if(push && !isSame) history.pushState({sec:s},"", "");
+  if(isSame && !push) return;
   FS=s;
   ["disc","search","trends","detail"].forEach(n=>document.getElementById("sec-"+n)?.classList.toggle("hidden",n!==s));
   ["disc","search"].forEach(n=>document.getElementById("nav-"+n)?.classList.toggle("on",n===s));
   document.getElementById("err-box")?.classList.add("hidden");
   window.scrollTo({top:0,behavior:"instant"});
 }
-function goBack(){goSec(FS==="detail"?"disc":FS)}
+function goBack(){ if(window.history.length>1) history.back(); else goSec("disc"); }
 
 function switchType(t){
   MT=t;
@@ -1231,7 +1234,7 @@ function showLoad(txt="Aranıyor..."){
 function setSub(t){const el=document.getElementById("load-sub");if(el)el.textContent=t}
 function showErr(m){const e=document.getElementById("err-box");e.textContent="⚠ "+m;e.classList.remove("hidden")}
 
-async function startDiscover(){document.getElementById("err-box").classList.add("hidden");closeMobFilter();await doDiscover()}
+async function startDiscover(){document.getElementById("err-box").classList.add("hidden");closeMobFilter(true);await doDiscover()}
 
 async function doDiscover(){
   document.getElementById("cta-btn").disabled=true;
@@ -1410,8 +1413,7 @@ async function openDetail(id,type,fromD=false,cnt=0){
     }else{
       document.getElementById("detail-content").innerHTML=`<div class="det-wrap">${html}</div>`;
       const ba=document.getElementById("btn-again");if(ba){ba.classList.toggle("hidden",!fromD);ba.disabled=false}
-      if(fromD)FS="disc";
-      goSec("detail");
+      goSec("detail",true);
     }
     runGarbageCollector();
     window.scrollTo({top:0,behavior:"instant"});
@@ -1614,8 +1616,20 @@ function setDetTab(key,btn){
 }
 
 // Modal
-function openModal(){document.getElementById("modal-ov").classList.remove("hidden");document.body.style.overflow="hidden";rModalSeasons()}
-function closeModal(e){if(e&&e.target!==document.getElementById("modal-ov"))return;document.getElementById("modal-ov").classList.add("hidden");document.body.style.overflow=""}
+function openModal(){
+  document.getElementById("modal-ov").classList.remove("hidden");
+  document.body.style.overflow="hidden";
+  rModalSeasons();
+  history.pushState({sec:FS,modal:true},"", "");
+}
+function closeModal(e){
+  if(e && e.target && e.target!==document.getElementById("modal-ov") && !e.target.closest(".modal-x")) return;
+  const m=document.getElementById("modal-ov");
+  if(!m || m.classList.contains("hidden")) return;
+  m.classList.add("hidden");
+  document.body.style.overflow="";
+  if(!window._isPopping) history.back();
+}
 function rModalSeasons(){
   document.getElementById("modal-seasons").innerHTML=modalSeasons.map((s,i)=>`
     <button class="modal-s-btn${i===0?" on":""}" onclick="loadModalSeason(${s.season_number},this)">
@@ -1657,7 +1671,7 @@ async function loadModalSeason(num,btn){
 }
 
 // Trends
-function showTrends(){closeMobFilter();trendType="movie";document.getElementById("tt-movie").className="ttab on";document.getElementById("tt-tv").className="ttab";goSec("trends");loadTrends("movie")}
+function showTrends(){closeMobFilter(true);trendType="movie";document.getElementById("tt-movie").className="ttab on";document.getElementById("tt-tv").className="ttab";goSec("trends");loadTrends("movie")}
 function switchTrend(t){trendType=t;document.getElementById("tt-movie").className="ttab"+(t==="movie"?" on":"");document.getElementById("tt-tv").className="ttab"+(t==="tv"?" on":"");loadTrends(t)}
 
 async function loadTrends(type){
@@ -1726,10 +1740,12 @@ function toggleMobFilter(){
   overlay.classList.add("open");
   btn.classList.add("active");
   document.body.style.overflow="hidden";
-  // Rating presets already initialized
+  history.pushState({sec:FS,sheet:true},"", "");
 }
-function closeMobFilter(){
-  document.getElementById("sheet-panel").classList.remove("open");
+function closeMobFilter(isProg){
+  const panel=document.getElementById("sheet-panel");
+  if(!panel || !panel.classList.contains("open")) return;
+  panel.classList.remove("open");
   document.getElementById("sheet-overlay").classList.remove("open");
   document.getElementById("mob-filter-btn").classList.remove("active");
   document.body.style.overflow="";
@@ -1745,15 +1761,26 @@ function closeMobFilter(){
     }
   }
   if(sc && sc.firstElementChild && sc.firstElementChild.id==="sidebar"){
-    // noop; sidebar taşındıysa burada kalmaz
   }else if(sc){
     sc.replaceChildren();
   }
+  if(!isProg && !window._isPopping) history.back();
 }
 
 rGenres();rLangs();
-// Default rating range: all
 setRatingRange(0,10);
+
+history.replaceState({sec:"disc"},"", "");
+window.onpopstate=function(e){
+  window._isPopping=true;
+  const m=document.getElementById("modal-ov");
+  if(m && !m.classList.contains("hidden")) closeModal(null);
+  const s=document.getElementById("sheet-panel");
+  if(s && s.classList.contains("open")) closeMobFilter(true);
+  if(e.state && e.state.sec) goSec(e.state.sec, false);
+  else goSec("disc", false);
+  window._isPopping=false;
+};
 </script>
 
 <!-- Mobile Filter Bottom Sheet -->
